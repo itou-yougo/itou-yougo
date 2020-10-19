@@ -1,40 +1,19 @@
-﻿  bg.cpp
-  bomb.cpp
-  bombexplosion.cpp
-  bossattack.cpp
-  bullet.cpp
-  charge.cpp
-  chargeshot.cpp
-  effect.cpp
-  enemy.cpp
-  enemyexplosion.cpp
-  explosion.cpp
-  extraattack.cpp
+﻿  chargeshot.cpp
   fade.cpp
   game.cpp
   gattyann.cpp
-  gauge.cpp
   input.cpp
-  life.cpp
-  lifepolygon.cpp
-  main.cpp
-  コンパイル中...
   manager.cpp
-  ojamaplayer.cpp
-  ojamaplayer2.cpp
   player.cpp
   player2.cpp
-  renderer.cpp
-  scene.cpp
   scene2d.cpp
   select.cpp
-  sound.cpp
-  text.cpp
-  title.cpp
   titlelogo.cpp
   tutroial.cpp
   コード生成しています。
-  All 430 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 430 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  StarGlitter.vcxproj -> c:\users\student\documents\visual studio 2015\Projects\StarGlitter\Release\StarGlitter.exe
-  StarGlitter.vcxproj -> c:\users\student\documents\visual studio 2015\Projects\StarGlitter\Release\StarGlitter.pdb (Full PDB)
+  StarGlitter.vcxproj -> C:\Users\student\Desktop\itou-yougo\吉田学園情報ビジネス専門学校_伊藤陽梧\01_スターグリッター\02_開発環境\StarGlitter\Release\StarGlitter.exe
+  StarGlitter.vcxproj -> C:\Users\student\Desktop\itou-yougo\吉田学園情報ビジネス専門学校_伊藤陽梧\01_スターグリッター\02_開発環境\StarGlitter\Release\StarGlitter.pdb (Full PDB)
