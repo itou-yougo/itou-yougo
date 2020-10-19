@@ -1,0 +1,34 @@
+﻿text.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+titlelogo.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+player.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+player2.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+charge.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+select.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+gauge.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+lifepolygon.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+ojamaplayer2.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+ojamaplayer.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+enemyexplosion.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+explosion.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+extraattack.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+gattyann.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+bullet.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+chargeshot.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+effect.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+enemy.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+bg.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+bomb.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+bombexplosion.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+bossattack.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+input.obj : error LNK2019: 未解決の外部シンボル DirectInput8Create が関数 "public: virtual long __cdecl CInput::Init(struct HINSTANCE__ *,struct HWND__ *)" (?Init@CInput@@UEAAJPEAUHINSTANCE__@@PEAUHWND__@@@Z) で参照されました。
+input.obj : error LNK2001: 外部シンボル "IID_IDirectInput8A" は未解決です。
+input.obj : error LNK2001: 外部シンボル "GUID_SysKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIJoystick2" は未解決です。
+renderer.obj : error LNK2019: 未解決の外部シンボル Direct3DCreate9 が関数 "public: long __cdecl CRenderer::Init(struct HWND__ *,bool)" (?Init@CRenderer@@QEAAJPEAUHWND__@@_N@Z) で参照されました。
+renderer.obj : error LNK2019: 未解決の外部シンボル D3DXCreateFontA が関数 "public: long __cdecl CRenderer::Init(struct HWND__ *,bool)" (?Init@CRenderer@@QEAAJPEAUHWND__@@_N@Z) で参照されました。
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\d3d9.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx9.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\dxguid.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\dinput8.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Users\student\Desktop\吉田学園情報ビジネス専門学校_伊藤陽梧\01_スターグリッター\02_開発環境\StarGlitter\x64\Debug\StarGlitter.exe : fatal error LNK1120: 8 件の未解決の外部参照

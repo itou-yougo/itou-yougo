@@ -1,0 +1,51 @@
+﻿  barrier.cpp
+  bg.cpp
+  bomb.cpp
+  bombexplosion.cpp
+  bossattack.cpp
+  bullet.cpp
+  chargeshot.cpp
+  controller.cpp
+  effect.cpp
+  enemy.cpp
+  enemyexplosion.cpp
+  explosion.cpp
+  extraattack.cpp
+  fade.cpp
+  game.cpp
+  gattyann.cpp
+  gauge.cpp
+  life.cpp
+  input.cpp
+  inputkeyboard.cpp
+  コンパイル中...
+  lifepolygon.cpp
+  main.cpp
+  manager.cpp
+  mode.cpp
+  number.cpp
+  ojamaplayer2.cpp
+  ojamaplayer.cpp
+  player.cpp
+  player2.cpp
+  charge.cpp
+  renderer.cpp
+  result.cpp
+  scene.cpp
+  scene2d.cpp
+  score.cpp
+  select.cpp
+  sound.cpp
+  text.cpp
+  title.cpp
+  titlelogo.cpp
+  コンパイル中...
+  tutroial.cpp
+barrier.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIJoystick2" は未解決です。
+input.obj : error LNK2001: 外部シンボル "GUID_SysKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "IID_IDirectInput8A" は未解決です。
+input.obj : error LNK2001: 外部シンボル "DirectInput8Create" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "Direct3DCreate9" は未解決です。
+C:\Users\student\documents\visual studio 2015\Projects\shooting score\x64\Release\shooting score.exe : fatal error LNK1120: 7 件の未解決の外部参照
