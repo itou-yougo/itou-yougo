@@ -14,7 +14,6 @@
 #include"renderer.h"
 #include"manager.h"
 #include"input.h"
-#include"inputkeyboard.h"
 
 //=============================================================================
 // オブジェクトクラスのコンストラクタ

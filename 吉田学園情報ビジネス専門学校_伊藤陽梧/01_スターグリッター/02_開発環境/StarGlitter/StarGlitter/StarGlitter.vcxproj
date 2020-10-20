@@ -189,7 +189,6 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="charge.h" />
     <ClInclude Include="chargeshot.h" />
-    <ClInclude Include="controller.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyexplosion.h" />
@@ -200,7 +199,6 @@
     <ClInclude Include="gattyann.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="inputkeyboard.h" />
     <ClInclude Include="life.h" />
     <ClInclude Include="lifepolygon.h" />
     <ClInclude Include="main.h" />

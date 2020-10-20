@@ -13,7 +13,6 @@
 #include "scene2d.h"
 #include "renderer.h"
 #include "manager.h"
-#include "inputkeyboard.h"
 #include "fade.h"
 #include "bg.h"
 #include "titlelogo.h"
