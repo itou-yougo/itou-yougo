@@ -38,28 +38,30 @@ public:
 		LOGOTYPE_MAX,
 	}LOGOTYPE;
 
-	CTitleLogo();
-	~CTitleLogo();
+	CTitleLogo();  // コンストラク
+	~CTitleLogo(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CTitleLogo *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, LOGOTYPE logoType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	static CTitleLogo *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, LOGOTYPE logoType); // クリエイト
 
-	void SetText(D3DXVECTOR3 pos, float fSizeX, float fSizeY, LOGOTYPE logoType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY; m_LogoType = logoType;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+	HRESULT Init(void); // 初期化処理
+	void Uninit(void);	// 終了処理
+	void Update(void);	// 更新処理
+	void Draw(void);	// 描画処理
+
+	void SetTitleLogo(D3DXVECTOR3 pos, D3DXVECTOR3 size, LOGOTYPE logoType) { // タイトルロゴの設定
+		m_pos = pos; m_size = size; m_LogoType = logoType;
+		SetPosition(pos); SetSize(size);
 	}
 
+	void TitleLogo(void); // タイトルロゴの処理
+	void PlessEnter(void); // プレスエンターの処理
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture[MAX_LOGO_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3				  m_pos;	  // 座標
-	float					  m_fSizeX;   // 横の大きさ
-	float					  m_fSizeY;   // 縦の大きさ
+	D3DXVECTOR3				  m_size;	  // 大きさ
 	int						  m_nCount;	  // カウント
 	int						  m_nAlpha;	  // 透明度
 	bool					  m_bUse;	  // 使用可能かの判定

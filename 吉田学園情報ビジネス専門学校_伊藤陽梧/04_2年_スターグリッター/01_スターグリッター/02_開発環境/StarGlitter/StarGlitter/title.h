@@ -18,15 +18,15 @@
 class CTitle
 {
 public:
-	CTitle();
-	~CTitle();
+	CTitle();  // コンストラク
+	~CTitle(); // デストラクタ
 
-	static CTitle *Create();
+	static CTitle *Create(); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 private:
 
 };

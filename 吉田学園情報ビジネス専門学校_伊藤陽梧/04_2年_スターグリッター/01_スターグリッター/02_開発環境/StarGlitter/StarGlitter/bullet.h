@@ -12,6 +12,7 @@
 //=============================================================================
 #include "main.h"
 #include "scene2d.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -27,9 +28,9 @@ public:
 	typedef enum
 	{
 		BULLET_TYPE_NONE = 0,
-		BULLET_TYPE_PLAYER,  // PLAYER1の弾
-		BULLET_TYPE_PLAYER2, // PLAYER2の弾
-		BULLET_TYPE_BOSS,	 // ボスの弾
+		BULLET_TYPE_1P,   // PLAYER1の弾
+		BULLET_TYPE_2P,   // PLAYER2の弾
+		BULLET_TYPE_BOSS, // ボスの弾
 		BULLET_TYPE_MAX,
 	}BULLETTYPE;
 
@@ -43,38 +44,40 @@ public:
 		CHARGEBULLET_TYPE_MAX,
 	}CHARGEBULLETTYPE;
 
-	CBullet();
-	~CBullet();
+	CBullet();  // コンストラク
+	~CBullet();	// デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,
+		int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType) {
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
-		m_pos = pos; m_move = move;
-		m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,
+		int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType) { // 弾の設定
+		SetPosition(pos); SetSize(size);
+		m_pos = pos; m_move = move; m_size = size;
 		m_nLife = nLife; m_nDamage = nDamage;
 		m_BulletType = BulletType; m_ChargeBulletType = ChargeBulletType;
 		SetObjType(objType);
 	}
 
-	BULLETTYPE GetBulletType(void);
-	CHARGEBULLETTYPE GetChargeBulletType(void);
+	void Move(void); // 動く処理
+	void BulletNomal(BULLETTYPE BulletType); // 弾の処理
+	void BulletCharge(BULLETTYPE BulletType); // チャージ弾の処理
+	void BulletLaser(CPlayer::PLAYERNUM PlayerNum, BULLETTYPE BulletType); // レーザー弾の処理
+	void BulletBossLaser(void); // レーザー弾の処理
+	BULLETTYPE GetBulletType(void); // 弾のタイプを返す
+	CHARGEBULLETTYPE GetChargeBulletType(void); // チャージ弾のタイプを返す
 private:
 	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_BULLET_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3	m_pos;					 // 球の位置
 	D3DXVECTOR3	m_move;					 // 球の速さ
-	D3DXVECTOR3 m_Getpos;				 // 受け取った座標
-	float	m_fSizeX;					 // ポリゴンの横の大きさ
-	float	m_fSizeY;					 // ポリゴンの縦の大きさ
-	float	m_fGetSizeX;				 // ポリゴンの横の大きさ
-	float	m_fGetSizeY;				 // ポリゴンの縦の大きさ
+	D3DXVECTOR3 m_size;					 // 大きさ
 	int     m_nLife;					 // 弾の体力
 	int     m_nGetLife;					 // 受け取った体力
 	int		m_nDamage;					 // 弾のダメージ

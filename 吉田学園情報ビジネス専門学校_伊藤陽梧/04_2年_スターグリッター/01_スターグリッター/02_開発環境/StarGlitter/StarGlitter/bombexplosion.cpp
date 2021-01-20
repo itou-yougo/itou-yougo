@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "sound.h"
 #include "bullet.h"
+#include "collision.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -26,11 +27,6 @@ LPDIRECT3DTEXTURE9 CBombexplosion::m_pTexture = NULL;
 CBombexplosion::CBombexplosion() :CScene2D(OBJTYPE_EXPLOSION)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Getpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
-	m_fGetSizeX = 0.0f;
-	m_fGetSizeY = 0.0f;
 	m_nLife = 0;
 	m_BombExplosionType = BOMBEXPLOSION_NONE;
 }
@@ -91,7 +87,7 @@ CBombexplosion* CBombexplosion::Create(D3DXVECTOR3 pos, int nLife, BOMBEXPLOSION
 	if (pBombExplosion != NULL)
 	{
 		// ボムの爆発のセット
-		pBombExplosion->SetExplosion(pos, nLife, bombexplosiontype, objType);
+		pBombExplosion->SetBombexplosion(pos, nLife, bombexplosiontype, objType);
 
 		// 初期化処理
 		pBombExplosion->Init();
@@ -138,79 +134,50 @@ void CBombexplosion::Update(void)
 	// CScene2Dの更新処理
 	CScene2D::Update();
 
-	switch (m_BombExplosionType)
+	// 敵のシーンの受け取り
+	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_ENEMY);
+
+	do
 	{
-		// プレイヤー1のボムの爆発
-	case BOMBEXPLOSION_PLAYER:
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
+		if (pScene != NULL)
 		{
-			// シーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
+			// オブジェタイプの受け取り
+			OBJTYPE objType = pScene->GetObjType();
+			if (objType == OBJTYPE_ENEMY)
 			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
+				switch (m_BombExplosionType)
 				{
-					// 座標やサイズの受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-					m_fGetSizeX = ((CScene2D*)pScene)->GetSizeX();
-					m_fGetSizeY = ((CScene2D*)pScene)->GetSizeY();
-					if (m_Getpos.y + m_fGetSizeY >= 0)
+					// プレイヤー1のボムの爆発
+				case BOMBEXPLOSION_PLAYER:
+
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, D3DXVECTOR3(BOMBEXPLOSION_SIZE_X, BOMBEXPLOSION_SIZE_Y, 0.0f), pScene) == true)
 					{
-						// 当たり判定
-						if (m_pos.x - (BOMBEXPLOSION_SIZE_X / 2) <= m_Getpos.x + (m_fGetSizeX / 2) &&
-							m_pos.x + (BOMBEXPLOSION_SIZE_X / 2) >= m_Getpos.x - (m_fGetSizeX / 2) &&
-							m_pos.y - (BOMBEXPLOSION_SIZE_Y / 2) <= m_Getpos.y + (m_fGetSizeY / 2) &&
-							m_pos.y + (BOMBEXPLOSION_SIZE_Y / 2) >= m_Getpos.y - (m_fGetSizeY / 2))
-						{
-							// 敵のダメージ
-							((CEnemy*)pScene)->EnemyDamage(100, CEnemy::DAMAGE_TYPE_BULLET, CBullet::BULLET_TYPE_PLAYER);
-							break;
-						}
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(100, CEnemy::DAMAGE_TYPE_BULLET, CBullet::BULLET_TYPE_1P);
+						break;
 					}
+					break;
+
+					// プレイヤー2のボムの爆発
+				case BOMBEXPLOSION_PLAYER2:
+
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, D3DXVECTOR3(BOMBEXPLOSION_SIZE_X, BOMBEXPLOSION_SIZE_Y, 0.0f), pScene) == true)
+					{
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(100, CEnemy::DAMAGE_TYPE_BULLET, CBullet::BULLET_TYPE_2P);
+						break;
+					}
+					break;
+
+				default:
+					break;
 				}
 			}
+			pScene = pScene->GetSceneNext();
 		}
-		break;
-
-		// プレイヤー2のボムの爆発
-	case BOMBEXPLOSION_PLAYER2:
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-		{
-			// シーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
-			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
-				{
-					// 座標やサイズの受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-					m_fGetSizeX = ((CScene2D*)pScene)->GetSizeX();
-					m_fGetSizeY = ((CScene2D*)pScene)->GetSizeY();
-					if (m_Getpos.y + m_fGetSizeY >= 0)
-					{
-						// 当たり判定
-						if (m_pos.x - (BOMBEXPLOSION_SIZE_X / 2) <= m_Getpos.x + (m_fGetSizeX / 2) &&
-							m_pos.x + (BOMBEXPLOSION_SIZE_X / 2) >= m_Getpos.x - (m_fGetSizeX / 2) &&
-							m_pos.y - (BOMBEXPLOSION_SIZE_Y / 2) <= m_Getpos.y + (m_fGetSizeY / 2) &&
-							m_pos.y + (BOMBEXPLOSION_SIZE_Y / 2) >= m_Getpos.y - (m_fGetSizeY / 2))
-						{
-							// 敵のダメージ
-							((CEnemy*)pScene)->EnemyDamage(100, CEnemy::DAMAGE_TYPE_BULLET, CBullet::BULLET_TYPE_PLAYER2);
-							break;
-						}
-					}
-				}
-			}
-		}
-		break;
-
-	default:
-		break;
-	}
+	} while (pScene != NULL);
 
 	// 体力が0以下になったら終了
 	if (m_nLife <= 0)
@@ -227,4 +194,3 @@ void CBombexplosion::Draw(void)
 	// CScene2Dの描画処理
 	CScene2D::Draw();
 }
-

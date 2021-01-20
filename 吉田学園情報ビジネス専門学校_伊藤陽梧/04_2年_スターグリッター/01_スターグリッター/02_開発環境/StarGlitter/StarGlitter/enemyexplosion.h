@@ -43,31 +43,32 @@ public:
 		EXPLOSIONTEXTURE_2,		// 爆発に当たって倒されたときのテクスチャ
 	}EXPLOSIONTEXTURE;
 
-	CEnemyexplosion();
-	~CEnemyexplosion();
+	CEnemyexplosion();  // コンストラク
+	~CEnemyexplosion();	// デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CEnemyexplosion *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType);
-	void SetExplosion(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CEnemyexplosion *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, 
+		EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType); // クリエイト
+	void SetExplosion(D3DXVECTOR3 pos, D3DXVECTOR3 size, 
+		EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType) { // 敵の爆発の処理
+		m_pos = pos; m_size = size;
 		m_ExplosionType = ExplosionType; m_ExplosionTexture = ExplosionTexture;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+		SetPosition(pos); SetSize(size);
 		SetObjType(objType);
 	}
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	EXPLOSIONTYPE GetExplosionType(void);
+	void Hit(void); // 当たったときの処理
+	EXPLOSIONTYPE GetExplosionType(void); // 爆発のタイプを返す
 private:
 	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_ENEMYEXPLOSION_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3		  m_pos;			  // 座標
-	D3DXVECTOR3		  m_Getpos;			  // 受け取った座標
-	float			  m_fSizeX;			  // 横の大きさ
-	float			  m_fSizeY;			  // 縦の大きさ
+	D3DXVECTOR3		  m_size;			  // 大きさ
 	int				  m_nCounterAnim;	  // アニメーションのカウント
 	int				  m_nPatternAnim;	  // アニメーションのパターン
 	int				  m_nTimeAnim;		  // アニメーションの時間

@@ -26,8 +26,7 @@ LPDIRECT3DTEXTURE9 CGattyann::m_pTexture[MAX_GATTYANN_TEXTURE] = {};
 CGattyann::CGattyann() :CScene2D(OBJTYPE_GATTYANN)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCount = 0;
 	m_GattyannType = GATTYANN_1;
 }
@@ -83,7 +82,7 @@ void CGattyann::Unload(void)
 //=============================================================================
 // ガッチャンクラスのインスタンス生成
 //=============================================================================
-CGattyann * CGattyann::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, GATTYANNTYPE GattyannType)
+CGattyann * CGattyann::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, GATTYANNTYPE GattyannType)
 {
 	// CGattyannのポインタ
 	CGattyann *pText = NULL;
@@ -95,7 +94,7 @@ CGattyann * CGattyann::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, GATTY
 	if (pText != NULL)
 	{
 		// 座標やサイズのセット
-		pText->SetGattyann(pos, fSizeX, fSizeY, GattyannType);
+		pText->SetGattyann(pos, size, GattyannType);
 
 		// 初期化処理
 		pText->Init();
@@ -142,68 +141,32 @@ void CGattyann::Update(void)
 
 	m_pos = GetPosition();
 
+	// 閉じる処理
+	CloseMove();
+
+	// 開く処理
+	OpenMove();
+
+	// 座標のセット
+	SetPosition(m_pos);
+}
+
+//=============================================================================
+// ガッチャンクラスの描画処理
+//=============================================================================
+void CGattyann::Draw(void)
+{
+	// CScene2Dの描画処理
+	CScene2D::Draw();
+}
+
+//=============================================================================
+// ガッチャンクラスの閉じる処理
+//=============================================================================
+void CGattyann::CloseMove(void)
+{
 	switch (m_GattyannType)
 	{
-		// 1枚目
-	case GATTYANN_1:
-		// カウントの加算
-		m_nCount++;
-		if (m_nCount >= GATTYANN_OPEN_SPEED)
-		{
-			// GATTYANN_SPEED分加算
-			m_pos.y += -GATTYANN_SPEED;
-			if (m_pos.y <= -m_fSizeY)
-			{
-				Uninit();
-			}
-		}
-		break;
-
-		// 2枚目
-	case GATTYANN_2:
-		// カウントの加算
-		m_nCount++;
-		if (m_nCount >= GATTYANN_OPEN_SPEED)
-		{
-			// GATTYANN_SPEED分加算
-			m_pos.x += (GATTYANN_SPEED + 5.0f);
-			if (m_fSizeX >= m_fSizeX + SCREEN_WIDTH)
-			{
-				Uninit();
-			}
-		}
-		break;
-
-		// 3枚目
-	case GATTYANN_3:
-		// カウントの加算
-		m_nCount++;
-		if (m_nCount >= GATTYANN_OPEN_SPEED)
-		{
-			// GATTYANN_SPEED分加算
-			m_pos.x += -(GATTYANN_SPEED + 5.0f);
-			if (m_pos.x <= -m_fSizeX)
-			{
-				Uninit();
-			}
-		}
-		break;
-
-		// 4枚目
-	case GATTYANN_4:
-		// カウントの加算
-		m_nCount++;
-		if (m_nCount >= GATTYANN_OPEN_SPEED)
-		{
-			// GATTYANN_SPEED分加算
-			m_pos.y += GATTYANN_SPEED;
-			if (m_fSizeY >= m_fSizeY + SCREEN_HEIGHT)
-			{
-				Uninit();
-			}
-		}
-		break;
-
 		// 5枚目
 	case GATTYANN_5:
 		// GATTYANN_SPEED分加算
@@ -215,16 +178,16 @@ void CGattyann::Update(void)
 			// カウントの加算
 			m_nCount++;
 
-			if (m_nCount == GATTYANN_OPEN_SPEED * 2)
+			if (m_nCount == GATTYANN_SPEED * 2)
 			{
 				// モードのセット
 				CManager::SetMode(CManager::MODE_GAME);
 
 				// 次の四枚を生成
-				Create(D3DXVECTOR3(SCREEN_CENTER_X / 2, SCREEN_CENTER_Y / 2, 0.0f), 864.0f, 540.0f, GATTYANN_1);
-				Create(D3DXVECTOR3(SCREEN_WIDTH - SCREEN_CENTER_X / 2, SCREEN_CENTER_Y / 2, 0.0f), 864.0f, 540.0f, GATTYANN_2);
-				Create(D3DXVECTOR3(SCREEN_CENTER_X / 2, SCREEN_HEIGHT - SCREEN_CENTER_Y / 2, 0.0f), 864.0f, 540.0f, GATTYANN_3);
-				Create(D3DXVECTOR3(SCREEN_WIDTH - SCREEN_CENTER_X / 2, SCREEN_HEIGHT - SCREEN_CENTER_Y / 2, 0.0f), 864.0f, 540.0f, GATTYANN_4);
+				Create(D3DXVECTOR3(SCREEN_CENTER_X / 2, SCREEN_CENTER_Y / 2, 0.0f), D3DXVECTOR3(864.0f, 540.0f, 0.0f), GATTYANN_1);
+				Create(D3DXVECTOR3(SCREEN_WIDTH - SCREEN_CENTER_X / 2, SCREEN_CENTER_Y / 2, 0.0f), D3DXVECTOR3(864.0f, 540.0f, 0.0f), GATTYANN_2);
+				Create(D3DXVECTOR3(SCREEN_CENTER_X / 2, SCREEN_HEIGHT - SCREEN_CENTER_Y / 2, 0.0f), D3DXVECTOR3(864.0f, 540.0f, 0.0f), GATTYANN_3);
+				Create(D3DXVECTOR3(SCREEN_WIDTH - SCREEN_CENTER_X / 2, SCREEN_HEIGHT - SCREEN_CENTER_Y / 2, 0.0f), D3DXVECTOR3(864.0f, 540.0f, 0.0f), GATTYANN_4);
 				m_nCount = 0;
 			}
 		}
@@ -272,16 +235,76 @@ void CGattyann::Update(void)
 	default:
 		break;
 	}
-
-	// 座標のセット
-	SetPosition(m_pos);
 }
 
 //=============================================================================
-// ガッチャンクラスの描画処理
+// ガッチャンクラスの開く処理
 //=============================================================================
-void CGattyann::Draw(void)
+void CGattyann::OpenMove(void)
 {
-	// CScene2Dの描画処理
-	CScene2D::Draw();
+	switch (m_GattyannType)
+	{
+		// 1枚目
+	case GATTYANN_1:
+		// カウントの加算
+		m_nCount++;
+		if (m_nCount >= GATTYANN_SPEED)
+		{
+			// GATTYANN_SPEED分加算
+			m_pos.y += -GATTYANN_SPEED;
+			if (m_pos.y <= -m_size.y)
+			{
+				Uninit();
+			}
+		}
+		break;
+
+		// 2枚目
+	case GATTYANN_2:
+		// カウントの加算
+		m_nCount++;
+		if (m_nCount >= GATTYANN_SPEED)
+		{
+			// GATTYANN_SPEED分加算
+			m_pos.x += (GATTYANN_SPEED + 5.0f);
+			if (m_pos.x >= m_size.y + SCREEN_WIDTH)
+			{
+				Uninit();
+			}
+		}
+		break;
+
+		// 3枚目
+	case GATTYANN_3:
+		// カウントの加算
+		m_nCount++;
+		if (m_nCount >= GATTYANN_SPEED)
+		{
+			// GATTYANN_SPEED分加算
+			m_pos.x += -(GATTYANN_SPEED + 5.0f);
+			if (m_pos.x <= -m_size.y)
+			{
+				Uninit();
+			}
+		}
+		break;
+
+		// 4枚目
+	case GATTYANN_4:
+		// カウントの加算
+		m_nCount++;
+		if (m_nCount >= GATTYANN_SPEED)
+		{
+			// GATTYANN_SPEED分加算
+			m_pos.y += GATTYANN_SPEED;
+			if (m_pos.y >= m_size.y + SCREEN_HEIGHT)
+			{
+				Uninit();
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
 }

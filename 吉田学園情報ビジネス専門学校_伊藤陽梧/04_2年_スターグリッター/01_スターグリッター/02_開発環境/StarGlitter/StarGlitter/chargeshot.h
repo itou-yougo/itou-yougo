@@ -32,32 +32,32 @@ public:
 		CHARGESHOTTYPE_PLAYER2, // PLAYER2のチャージショット
 	}CHARGESHOTTYPE;
 
-	CChargeshot();
-	~CChargeshot();
+	CChargeshot();  // コンストラク
+	~CChargeshot();	// デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CChargeshot *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, CHARGESHOTTYPE chargeshottype, OBJTYPE objType);
-	void SetChargeShot(D3DXVECTOR3 pos, float fSizeX, float fSizeY, CHARGESHOTTYPE chargeshottype, OBJTYPE objType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+
+	static CChargeshot *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, CHARGESHOTTYPE chargeshottype, OBJTYPE objType); // クリエイト
+	void SetChargeShot(D3DXVECTOR3 pos, D3DXVECTOR3 size, CHARGESHOTTYPE chargeshottype, OBJTYPE objType) { // チャージショットの設定
+		m_pos = pos; m_size = size;
 		m_chargeshottype = chargeshottype; SetObjType(objType);
 	}
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	CGauge* GetGauge(void);
-	CCharge* GetCharge(void);
+	CGauge* GetGauge(void); // ゲージのポインタを返す
+	CCharge* GetCharge(void); // チャージのポインタを返す
 private:
 	CGauge *pGauge;							  // ゲージのポインタ
 	CCharge *pCharge;						  // チャージのポインタ
 	static LPDIRECT3DTEXTURE9 m_pTexture;	  // テクスチャのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		  // 頂点バッファへのポインタ
 	D3DXVECTOR3				m_pos;			  // 球の位置
-	float					m_fSizeX;		  // ポリゴンの横の大きさ
-	float					m_fSizeY;		  // ポリゴンの縦の大きさ
+	D3DXVECTOR3				m_size;			  // 球の位置
 	CHARGESHOTTYPE			m_chargeshottype; // チャージショットのタイプ
 };
 #endif

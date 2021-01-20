@@ -12,7 +12,6 @@
 #include "renderer.h"
 #include "manager.h"
 #include "player.h"
-#include "player2.h"
 #include "select.h"
 
 //=============================================================================
@@ -32,10 +31,9 @@ LPDIRECT3DTEXTURE9 CText::m_apTexture[MAX_TEXT_TEXTURE] = {};
 CText::CText() :CScene2D(OBJTYPE_TEXT)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nAlpha = 255;
 	m_nCount = 0;
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
 	m_bUse = true;
 	m_TextType = TEXTTYPE_MAX;
 }
@@ -90,7 +88,7 @@ void CText::Unload(void)
 //=============================================================================
 // テキストのインスタンス生成
 //=============================================================================
-CText * CText::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, TEXTTYPE TextType)
+CText * CText::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, TEXTTYPE TextType)
 {
 	// CTextのポインタ
 	CText *pText = NULL;
@@ -102,7 +100,7 @@ CText * CText::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, TEXTTYPE Text
 	if (pText != NULL)
 	{
 		// 座標やサイズのセット
-		pText->SetText(pos, fSizeX, fSizeY, TextType);
+		pText->SetText(pos, size, TextType);
 
 		// 初期化処理
 		pText->Init();
@@ -163,139 +161,31 @@ void CText::Update(void)
 	CScene2D::Update();
 
 	// サイズの受け取り
-	m_fSizeY = GetSizeY();
+	m_size = GetSize();
 
 	switch (m_TextType)
 	{
 		// READYの文字
 	case TEXTTYPE_READY:
-		// m_bUseが使用状態の時
-		if (m_bUse == true)
-		{
-			m_fSizeY += 3.0f;
-
-			// サイズがMAX_SIZE_Yより大きくなったら
-			if (m_fSizeY >= MAX_SIZE_Y)
-			{
-				// m_bUseを使用しない状態にする
-				m_bUse = false;
-			}
-		}
-		// m_bUseが使用しない状態の時
-		else if (m_bUse == false)
-		{
-			m_fSizeY -= 3.0f;
-
-			// サイズがMAX_SIZE_Yより小さくなったら
-			if (m_fSizeY <= 0.0f)
-			{
-				// GOのクリエイト
-				Create(m_pos, 632.0f, 232.0f, TEXTTYPE_GO);
-
-				// 終了処理
-				Uninit();
-				return;
-			}
-		}
+		// Readyの文字の処理
+		Ready();
 		break;
 
 		// GOの文字
 	case TEXTTYPE_GO:
-		m_nCount++;
-
-		// m_nCountがMAX_TIMEより大きいとき
-		if (m_nCount >= MAX_TIME)
-		{
-			//ゲームの状態をGAMESTATE_STARTにする
-			CGame::SetGameState(CGame::GAMESTATE_START);
-
-			// 終了処理
-			Uninit();
-		}
+		// Goの文字の処理
+		Go();
 		break;
 
 		// KOの文字
 	case TEXTTYPE_KO:
-		m_nCount++;
-
-		// m_nCountがMAX_TIMEより大きいとき
-		if (m_nCount >= MAX_TIME)
-		{
-			// m_bUseが使用状態の時
-			if (m_bUse == true)
-			{
-				for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-				{
-					// PLAYERのシーンの受け取り
-					CScene *pScene = CScene::GetScene(CScene::OBJTYPE_PLAYER, nCntScene);
-					if (pScene != NULL)
-					{
-						// オブジェタイプの受け取り
-						CScene::OBJTYPE objType = pScene->GetObjType();
-						if (objType == CScene::OBJTYPE_PLAYER)
-						{
-							//PLAYER1がPLAYERSTATE_LOSEだったら
-							if (((CPlayer*)pScene)->GetPlayerState() == CPlayer::PLAYERSTATE_LOSE)
-							{
-								// LOSTのテキストの生成
-								CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), 652.0f, 232.0f, CText::TEXTTYPE_LOST);
-							}
-							else
-							{
-								// WONのテキストの生成
-								CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), 592.0f, 232.0f, CText::TEXTTYPE_WON);
-							}
-						}
-					}
-
-					// PLAYER2のシーンの受け取り
-					pScene = CScene::GetScene(CScene::OBJTYPE_PLAYER2, nCntScene);
-					if (pScene != NULL)
-					{
-						// オブジェタイプの受け取り
-						CScene::OBJTYPE objType = pScene->GetObjType();
-						if (objType == CScene::OBJTYPE_PLAYER2)
-						{
-							//PLAYER2がPLAYERSTATE_LOSEだったら
-							if (((CPlayer2*)pScene)->GetPlayer2State() == CPlayer2::PLAYERSTATE_LOSE)
-							{
-								// LOSTのテキストの生成
-								CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), 652.0f, 232.0f, CText::TEXTTYPE_LOST);
-							}
-							else
-							{
-								// WONのテキストの生成
-								CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), 592.0f, 232.0f, CText::TEXTTYPE_WON);
-							}
-						}
-					}
-				}
-
-				// m_bUseを使用しない状態にする
-				m_bUse = false;
-
-				// 終了処理
-				Uninit();
-			}
-		}
+		// Koの文字の処理
+		Ko();
 		break;
 
 	case TEXTTYPE_WON:
-		m_nCount++;
-		// カウントがMAX_TIMEの２倍の値より大きいとき
-		if (m_nCount >= MAX_TIME * 2)
-		{
-			// m_bUseが使用状態の時
-			if (m_bUse == true)
-			{
-				// 黒い背景とメニューの生成
-				CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT, CSelect::SELECTTYPE_KUROHAIKEI);
-				CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), 850.0f, 625.0f, CSelect::SELECTTYPE_MENU);
-
-				// m_bUseを使用しない状態にする
-				m_bUse = false;
-			}
-		}
+		// Wonの文字の処理
+		Won();
 		break;
 
 	default:
@@ -303,7 +193,7 @@ void CText::Update(void)
 	}
 
 	// サイズのセット
-	SetSize(m_fSizeX, m_fSizeY);
+	SetSize(m_size);
 }
 
 //=============================================================================
@@ -313,4 +203,146 @@ void CText::Draw(void)
 {
 	// CScene2Dの描画処理
 	CScene2D::Draw();
+}
+
+//=============================================================================
+// Readyの文字の処理
+//=============================================================================
+void CText::Ready(void)
+{
+	// m_bUseが使用状態の時
+	if (m_bUse == true)
+	{
+		m_size.y += 3.0f;
+
+		// サイズがMAX_SIZE_Yより大きくなったら
+		if (m_size.y >= MAX_SIZE_Y)
+		{
+			// m_bUseを使用しない状態にする
+			m_bUse = false;
+		}
+	}
+	// m_bUseが使用しない状態の時
+	else if (m_bUse == false)
+	{
+		m_size.y -= 3.0f;
+
+		// サイズがMAX_SIZE_Yより小さくなったら
+		if (m_size.y <= 0.0f)
+		{
+			// GOのクリエイト
+			Create(m_pos, D3DXVECTOR3(632.0f, 232.0f, 0.0f), TEXTTYPE_GO);;
+
+			// 終了処理
+			Uninit();
+			return;
+		}
+	}
+}
+
+//=============================================================================
+// Goの文字の処理
+//=============================================================================
+void CText::Go(void)
+{
+	m_nCount++;
+
+	// m_nCountがMAX_TIMEより大きいとき
+	if (m_nCount >= MAX_TIME)
+	{
+		//ゲームの状態をGAMESTATE_STARTにする
+		CGame::SetGameState(CGame::GAMESTATE_START);
+
+		// 終了処理
+		Uninit();
+		return;
+	}
+}
+
+//=============================================================================
+// Koの文字の処理
+//=============================================================================
+void CText::Ko(void)
+{
+	m_nCount++;
+
+	// m_nCountがMAX_TIMEより大きいとき
+	if (m_nCount >= MAX_TIME)
+	{
+		// m_bUseが使用状態の時
+		if (m_bUse == true)
+		{
+			// プレイヤーのシーンの受け取り
+			CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
+			do
+			{
+				if (pScene != NULL)
+				{
+					// オブジェタイプの受け取り
+					CScene::OBJTYPE objType = pScene->GetObjType();
+					if (objType == CScene::OBJTYPE_PLAYER)
+					{
+						switch (((CPlayer*)pScene)->GetPlayerNum())
+						{
+						case CPlayer::PLAYER_1P:
+							//PLAYER1がPLAYERSTATE_LOSEだったら
+							if (((CPlayer*)pScene)->GetPlayerState() == CPlayer::PLAYERSTATE_LOSE)
+							{
+								// LOSTのテキストの生成
+								CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(652.0f, 232.0f, 0.0f), CText::TEXTTYPE_LOST);
+							}
+							else
+							{
+								// WONのテキストの生成
+								CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(592.0f, 232.0f, 0.0f), CText::TEXTTYPE_WON);
+							}
+							break;
+
+						case CPlayer::PLAYER_2P:
+							//PLAYER2がPLAYERSTATE_LOSEだったら
+							if (((CPlayer*)pScene)->GetPlayerState() == CPlayer::PLAYERSTATE_LOSE)
+							{
+								// LOSTのテキストの生成
+								CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(652.0f, 232.0f, 0.0f), CText::TEXTTYPE_LOST);
+							}
+							else
+							{
+								// WONのテキストの生成
+								CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(592.0f, 232.0f, 0.0f), CText::TEXTTYPE_WON);
+							}
+							break;
+
+						default:
+							break;
+						}
+					}
+					pScene = pScene->GetSceneNext();
+				}
+			} while (pScene != NULL);
+
+			// m_bUseを使用しない状態にする
+			m_bUse = false;
+
+			// 終了処理
+			Uninit();
+			return;
+		}
+	}
+}
+
+//=============================================================================
+// Wonの文字の処理
+//=============================================================================
+void CText::Won(void)
+{
+	m_nCount++;
+	if (m_nCount >= 120)
+	{
+		if (m_bUse == true)
+		{
+			CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CSelect::SELECTTYPE_KUROHAIKEI);
+			CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(850.0f, 625.0f, 0.0f), CSelect::SELECTTYPE_MENU);
+			m_bUse = false;
+		}
+	}
 }

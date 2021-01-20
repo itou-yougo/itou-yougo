@@ -25,9 +25,8 @@ CCharge::CCharge()
 	m_pTexture = NULL;
 	m_pVtxBuff = NULL;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCountColor = 0;
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
 	m_fExtendX = 0.0f;
 	m_fExtendY = 0.0f;
 	m_fMaxExtendX = 0.0f;
@@ -76,7 +75,7 @@ void CCharge::Unload(void)
 //=============================================================================
 // チャージクラスのインスタンス生成
 //=============================================================================
-CCharge* CCharge::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY)
+CCharge* CCharge::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	// CChargeのポインタ
 	CCharge *pGauge = NULL;
@@ -87,7 +86,7 @@ CCharge* CCharge::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY)
 	// pGaugeがNULLじゃないとき
 	if (pGauge != NULL)
 	{
-		pGauge->SetCharge(pos, fSizeX, fSizeY);
+		pGauge->SetCharge(pos, size);
 
 		// 初期化処理
 		pGauge->Init();
@@ -175,7 +174,39 @@ void CCharge::Update(void)
 	{
 		m_fExtendX = 0.0f;
 	}
+	// 色と長さを変える処理
+	ChangeColor();
+}
 
+//=============================================================================
+// チャージクラスの描画処理
+//=============================================================================
+void CCharge::Draw(void)
+{
+	// インスタンス生成したものを受け取る
+	CRenderer *pRenderer = CManager::GetRenderer();
+
+	// デバイスを受け取る
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+
+	// 頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));
+
+	// 頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	// テクスチャの設定
+	pDevice->SetTexture(0, m_pTexture);
+
+	// ポリゴンの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
+}
+
+//=============================================================================
+// チャージクラスの色と長さを変える処理
+//=============================================================================
+void CCharge::ChangeColor(void)
+{
 	// VERTEX_2Dのポインタ
 	VERTEX_2D *pVtx;
 
@@ -183,10 +214,10 @@ void CCharge::Update(void)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点情報を設定
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_fExtendX / m_fMaxExtendX) * m_fMaxExtendX, m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x, m_pos.y + (m_fSizeY / 2), 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_fExtendX / m_fMaxExtendX) * m_fMaxExtendX, m_pos.y + (m_fSizeY / 2), 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_fExtendX / m_fMaxExtendX) * m_fMaxExtendX, m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x, m_pos.y + (m_size.y / 2), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_fExtendX / m_fMaxExtendX) * m_fMaxExtendX, m_pos.y + (m_size.y / 2), 0.0f);
 
 	// m_fExtendXが0.0f以上92.0fより小さかったら
 	if (m_fExtendX >= 0.0f && m_fExtendX < 92.0f)
@@ -273,30 +304,6 @@ void CCharge::Update(void)
 
 	//頂点データをアンロックする
 	m_pVtxBuff->Unlock();
-}
-
-//=============================================================================
-// チャージクラスの描画処理
-//=============================================================================
-void CCharge::Draw(void)
-{
-	// インスタンス生成したものを受け取る
-	CRenderer *pRenderer = CManager::GetRenderer();
-
-	// デバイスを受け取る
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));
-
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-
-	// テクスチャの設定
-	pDevice->SetTexture(0, m_pTexture);
-
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
 }
 
 //=============================================================================

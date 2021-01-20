@@ -33,7 +33,7 @@ CBg::CBg() :CScene(OBJTYPE_BG)
 	{
 		m_apScene[nCount] = NULL;
 	}
-	m_bgtype = BGTYPE_GAME;
+	m_BgType = BGTYPE_GAME;
 }
 
 //=============================================================================
@@ -109,84 +109,34 @@ CBg *CBg::Create(BGTYPE bgtype, OBJTYPE objType)
 //=============================================================================
 HRESULT CBg::Init()
 {
-	switch (m_bgtype)
+	switch (m_BgType)
 	{
 		// ƒ`ƒ…[ƒgƒŠƒAƒ‹‚Ì”wŒi
 	case BGTYPE_TUTORIAL:
-		m_apScene[m_bgtype] = CScene2D::Create();
-
-		// CScene2D‚Ì‰Šú‰»ˆ—
-		m_apScene[m_bgtype]->Init();
-
-		m_apScene[m_bgtype]->SetObjType(OBJTYPE_SCENE);
-
-		// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
-		m_apScene[m_bgtype]->BindTexture(m_apTexture[m_bgtype]);
-
-		// À•W‚Æc‚Æ‰¡‚Ì’·‚³‚ð“n‚·
-		m_apScene[m_bgtype]->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f));
-		m_apScene[m_bgtype]->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+		BgCreate(m_BgType);
 		break;
 
 		// ƒQ[ƒ€‚Ì”wŒi
 	case BGTYPE_GAME:
-		m_apScene[m_bgtype] = CScene2D::Create();
-
-		// CScene2D‚Ì‰Šú‰»ˆ—
-		m_apScene[m_bgtype]->Init();
-
-		m_apScene[m_bgtype]->SetObjType(OBJTYPE_SCENE);
-
-		// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
-		m_apScene[m_bgtype]->BindTexture(m_apTexture[m_bgtype]);
-
-		// À•W‚Æc‚Æ‰¡‚Ì’·‚³‚ð“n‚·
-		m_apScene[m_bgtype]->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f));
-		m_apScene[m_bgtype]->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		BgCreate(m_BgType);
 
 		// bg‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒZƒbƒg
-		m_apScene[0]->SetScroll(0.0f, BG1_SCROLL_SPEED);
+		m_apScene[m_BgType]->SetScroll(0.0f, BG1_SCROLL_SPEED);
 		break;
 
 		// ƒQ[ƒ€‚Ì˜g
 	case BGTYPE_FRAME:
-		m_apScene[m_bgtype] = CScene2D::Create();
-
-		// CScene2D‚Ì‰Šú‰»ˆ—
-		m_apScene[m_bgtype]->Init();
-
-		m_apScene[m_bgtype]->SetObjType(OBJTYPE_SCENE);
-
-		// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
-		m_apScene[m_bgtype]->BindTexture(m_apTexture[m_bgtype]);
-
-		// À•W‚Æc‚Æ‰¡‚Ì’·‚³‚ð“n‚·
-		m_apScene[m_bgtype]->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f));
-		m_apScene[m_bgtype]->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		BgCreate(m_BgType);
 		break;
 
 		// ƒŠƒUƒ‹ƒg‚Ì”wŒi
 	case BGTYPE_RESULT:
-		m_apScene[m_bgtype] = CScene2D::Create();
-
-		// CScene2D‚Ì‰Šú‰»ˆ—
-		m_apScene[m_bgtype]->Init();
-
-		m_apScene[m_bgtype]->SetObjType(OBJTYPE_SCENE);
-
-		// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
-		m_apScene[m_bgtype]->BindTexture(m_apTexture[m_bgtype]);
-
-		// À•W‚Æc‚Æ‰¡‚Ì’·‚³‚ð“n‚·
-		m_apScene[m_bgtype]->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f));
-		m_apScene[m_bgtype]->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+		BgCreate(m_BgType);
 		break;
 
 	default:
 		break;
 	}
-	
 	
 	return S_OK;
 }
@@ -196,41 +146,41 @@ HRESULT CBg::Init()
 //=============================================================================
 void CBg::Uninit(void)
 {
-	switch (m_bgtype)
+	switch (m_BgType)
 	{
 		// ƒ`ƒ…[ƒgƒŠƒAƒ‹‚Ì”wŒi
 	case BGTYPE_TUTORIAL:
-		if (m_apScene[m_bgtype] != NULL)
+		if (m_apScene[m_BgType] != NULL)
 		{
 			// CScene2D‚ÌI—¹ˆ—
-			m_apScene[m_bgtype]->Uninit();
+			m_apScene[m_BgType]->Uninit();
 		}
 		break;
 
 		// ƒQ[ƒ€‚Ì”wŒi
 	case BGTYPE_GAME:
-		if (m_apScene[m_bgtype] != NULL)
+		if (m_apScene[m_BgType] != NULL)
 		{
 			// CScene2D‚ÌI—¹ˆ—
-			m_apScene[m_bgtype]->Uninit();
+			m_apScene[m_BgType]->Uninit();
 		}
 		break;
 
 		// ƒQ[ƒ€‚Ì˜g
 	case BGTYPE_FRAME:
-		if (m_apScene[m_bgtype] != NULL)
+		if (m_apScene[m_BgType] != NULL)
 		{
 			// CScene2D‚ÌI—¹ˆ—
-			m_apScene[m_bgtype]->Uninit();
+			m_apScene[m_BgType]->Uninit();
 		}
 		break;
 
 		// ƒŠƒUƒ‹ƒg‚Ì”wŒi
 	case BGTYPE_RESULT:
-		if (m_apScene[m_bgtype] != NULL)
+		if (m_apScene[m_BgType] != NULL)
 		{
 			// CScene2D‚ÌI—¹ˆ—
-			m_apScene[m_bgtype]->Uninit();
+			m_apScene[m_BgType]->Uninit();
 		}
 		break;
 
@@ -269,4 +219,24 @@ void CBg::Draw(void)
 			m_apScene[nCount]->Draw();
 		}
 	}
+}
+
+//=============================================================================
+// ”wŒiƒNƒ‰ƒX‚Ìƒ|ƒŠƒSƒ“‚ðì‚éˆ—
+//=============================================================================
+void CBg::BgCreate(BGTYPE BgType)
+{
+	m_apScene[BgType] = CScene2D::Create();
+
+	// CScene2D‚Ì‰Šú‰»ˆ—
+	m_apScene[BgType]->Init();
+
+	m_apScene[BgType]->SetObjType(OBJTYPE_SCENE);
+
+	// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
+	m_apScene[BgType]->BindTexture(m_apTexture[m_BgType]);
+
+	// À•W‚Æc‚Æ‰¡‚Ì’·‚³‚ð“n‚·
+	m_apScene[BgType]->SetPosition(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f));
+	m_apScene[BgType]->SetSize(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f));
 }

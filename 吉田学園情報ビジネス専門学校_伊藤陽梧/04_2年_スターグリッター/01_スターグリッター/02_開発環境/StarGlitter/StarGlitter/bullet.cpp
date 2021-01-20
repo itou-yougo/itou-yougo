@@ -12,12 +12,12 @@
 #include "renderer.h"
 #include "manager.h"
 #include "player.h"
-#include "player2.h"
 #include "explosion.h"
 #include "enemy.h"
 #include "life.h"
 #include "effect.h"
 #include "bossattack.h"
+#include "collision.h"
 
 //=============================================================================
 // マクロ定義
@@ -37,11 +37,7 @@ CBullet::CBullet() :CScene2D(OBJTYPE_BULLET)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Getpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
-	m_fGetSizeX = 0.0f;
-	m_fGetSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nLife = 0;
 	m_nGetLife = 0;
 	m_nDamage = 0;
@@ -96,7 +92,7 @@ void CBullet::Unload(void)
 //=============================================================================
 // バレットクラスのインスタンス生成
 //=============================================================================
-CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType)
+CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size, int nLife, int nDamage, BULLETTYPE BulletType, CHARGEBULLETTYPE ChargeBulletType, OBJTYPE objType)
 {
 	// pBulletのポインタ
 	CBullet *pBullet = NULL;
@@ -108,7 +104,7 @@ CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float 
 	if (pBullet != NULL)
 	{
 		// 弾のセット
-		pBullet->SetBullet(pos, move, fSizeX, fSizeY, nLife, nDamage, BulletType, ChargeBulletType, objType);
+		pBullet->SetBullet(pos, move, size, nLife, nDamage, BulletType, ChargeBulletType, objType);
 
 		// 初期化処理
 		pBullet->Init();
@@ -132,7 +128,7 @@ HRESULT CBullet::Init()
 	switch (m_BulletType)
 	{
 		// PLAYER1の弾
-	case BULLET_TYPE_PLAYER:
+	case BULLET_TYPE_1P:
 		// 普通の弾
 		if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
 		{
@@ -148,7 +144,7 @@ HRESULT CBullet::Init()
 		break;
 
 		// PLAYER2の弾
-	case BULLET_TYPE_PLAYER2:
+	case BULLET_TYPE_2P:
 		// 普通の弾
 		if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
 		{
@@ -183,7 +179,6 @@ HRESULT CBullet::Init()
 		break;
 	}
 
-	
 	return S_OK;   
 }
 
@@ -204,247 +199,57 @@ void CBullet::Update(void)
 	// CScene2Dの更新処理
 	CScene2D::Update();
 
+	// 弾を動かす処理
+	Move();
+
 	switch (m_BulletType)
 	{
 		// PLAYER1の弾
-	case BULLET_TYPE_PLAYER:
+	case BULLET_TYPE_1P:
 		if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
 		{
-			CEffect::Create(m_pos, m_fSizeX + 5.0f, m_fSizeY + 5.0f, 10, 255, 100, 100, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
+			CEffect::Create(m_pos, m_size + D3DXVECTOR3(5.0f, 5.0f, 0.0f) ,
+				10, 255, 100, 100, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
 		}
 
-		// 座標と体力の受け取り
-		m_pos = GetPosition();
+		// 弾の処理
+		BulletNomal(BULLET_TYPE_1P);
+		// チャージ弾の処理
+		BulletCharge(BULLET_TYPE_1P);
+		// レーザー弾の処理
+		BulletLaser(CPlayer::PLAYER_1P, BULLET_TYPE_1P);
 
-		// 移動量の加算
-		m_pos += m_move;
-		m_nLife--;
-
-		// 体力がなくなったとき
-		if (m_nLife <= 0)
-		{
-			Uninit();
-			return;
-		}
-
-		// 画面外に出た時
-		if (m_pos.y + m_fSizeY <= 0.0f)
-		{
-			Uninit();
-			return;
-		}
-
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-		{
-			// 敵のシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
-			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
-				{
-					// 座標やサイズの受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-					m_fGetSizeX = ((CScene2D*)pScene)->GetSizeX();
-					m_fGetSizeY = ((CScene2D*)pScene)->GetSizeY();
-					if (m_Getpos.y + m_fGetSizeY >= 0)
-					{
-						// チャージ弾のタイプが普通の弾の時
-						if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
-						{
-							// 当たり判定
-							if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (ENEMY_SIZE_X / 2) &&
-								m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (ENEMY_SIZE_X / 2) &&
-								m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (ENEMY_SIZE_Y / 2) &&
-								m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (ENEMY_SIZE_Y / 2))
-							{
-								// 敵のダメージ
-								((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BULLET_TYPE_PLAYER);
-
-								// 爆発の生成
-								CExplosion::Create(m_pos, EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
-
-								// 終了処理
-								Uninit();
-								break;
-							}
-						}
-						// チャージ弾のタイプがチャージした弾の時
-						if (m_ChargeBulletType == CHARGEBULLET_TYPE_CHARGE)
-						{
-							// 当たり判定
-							if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (ENEMY_SIZE_X / 2) &&
-								m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (ENEMY_SIZE_X / 2) &&
-								m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (ENEMY_SIZE_Y / 2) &&
-								m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (ENEMY_SIZE_Y / 2))
-							{
-								// 敵のダメージ
-								((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BULLET_TYPE_PLAYER);
-
-								// 爆発の生成
-								CExplosion::Create(m_pos, EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// 座標とサイズ、体力を渡す
-		SetPosition(m_pos);
-		SetSize(m_fSizeX, m_fSizeY);
 		break;
 
 		// PLAYER2の弾
-	case BULLET_TYPE_PLAYER2:
+	case BULLET_TYPE_2P:
 		if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
 		{
-			CEffect::Create(m_pos, m_fSizeX + 5.0f, m_fSizeY + 5.0f, 10, 100, 255, 255, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
+			CEffect::Create(m_pos, m_size + D3DXVECTOR3(5.0f, 5.0f, 0.0f),
+				10, 100, 255, 255, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
 		}
 
-		// 座標と体力の受け取り
-		m_pos = GetPosition();
-
-		// 移動量の加算
-		m_pos += m_move;
-		m_nLife--;
-
-		// 体力がなくなったとき
-		if (m_nLife <= 0)
-		{
-			Uninit();
-			return;
-		}
-
-		// 画面外に出た時
-		if (m_pos.y + m_fSizeY <= 0.0f)
-		{
-			Uninit();
-			return;
-		}
-
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-		{
-			// 敵のシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
-			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
-				{
-					// 座標やサイズの受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-					m_fGetSizeX = ((CScene2D*)pScene)->GetSizeX();
-					m_fGetSizeY = ((CScene2D*)pScene)->GetSizeY();
-					if (m_Getpos.y + m_fGetSizeY >= 0)
-					{
-						// チャージ弾のタイプが普通の弾の時
-						if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
-						{
-							if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (m_fGetSizeX / 2) &&
-								m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (m_fGetSizeX / 2) &&
-								m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (m_fGetSizeY / 2) &&
-								m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (m_fGetSizeY / 2))
-							{
-								// 敵のダメージ
-								((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BULLET_TYPE_PLAYER2);
-
-								// 爆発の生成
-								CExplosion::Create(m_pos, EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
-
-								// 終了処理
-								Uninit();
-								break;
-							}
-						}
-						// チャージ弾のタイプがレーザー弾の時
-						if (m_ChargeBulletType == CHARGEBULLET_TYPE_LASER)
-						{
-							if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (m_fGetSizeX / 2) &&
-								m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (m_fGetSizeX / 2) &&
-								m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (m_fGetSizeY / 2) &&
-								m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (m_fGetSizeY / 2))
-							{
-								// 敵のダメージ
-								((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BULLET_TYPE_PLAYER2);
-
-								// 爆発の生成
-								CExplosion::Create(m_pos, EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
-								break;
-							}
-						}
-					}
-				}
-			}
-
-			// チャージ弾のタイプがレーザー弾の時
-			if (m_ChargeBulletType == CHARGEBULLET_TYPE_LASER)
-			{
-				// PLAYER2のシーンの受け取り
-				pScene = GetScene(OBJTYPE_PLAYER2, nCntScene);
-				if (pScene != NULL)
-				{
-					// オブジェタイプの受け取り
-					OBJTYPE objType = pScene->GetObjType();
-					if (objType == OBJTYPE_PLAYER2)
-					{
-						// 座標の受け取りと代入
-						m_pos = ((CScene2D*)pScene)->GetPosition();
-
-						// LASERBULLET_SIZE_Y分縦の座標を下げる
-						m_pos.y = m_pos.y - (LASERBULLET_SIZE_Y / 2);
-					}
-				}
-			}
-		}
-
-		// 座標とサイズ、体力を渡す
-		SetPosition(m_pos);
-		SetSize(m_fSizeX, m_fSizeY);
+		// 弾の処理
+		BulletNomal(BULLET_TYPE_2P);
+		// チャージ弾の処理
+		BulletCharge(BULLET_TYPE_2P);
+		// レーザー弾の処理
+		BulletLaser(CPlayer::PLAYER_2P, BULLET_TYPE_2P);
 		break;
 
 		// ボスの弾
 	case BULLET_TYPE_BOSS:
-		if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
-		{
-			// エフェクトの生成
-			CEffect::Create(m_pos, m_fSizeX + 5.0f, m_fSizeY + 5.0f, 10, 100, 255, 255, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
-
-			// 画面外に出た時
-			if (m_pos.y + m_fSizeY <= 0.0f || m_pos.x - m_fSizeX <= SCREEN_CENTER_X)
-			{
-				// 終了処理
-				Uninit();
-				return;
-			}
-		}
-
-		// 座標と体力の受け取り
-		m_pos = GetPosition();
-
-		// 移動量の加算
-		m_pos += m_move;
-		m_nLife--;
-
-		// 体力がなくなったとき
-		if (m_nLife <= 0)
-		{
-			Uninit();
-			return;
-		}
-
-		// 座標とサイズ、体力を渡す
-		SetPosition(m_pos);
-		SetSize(m_fSizeX, m_fSizeY);
+		// ボスのレーザー弾の処理
+		BulletBossLaser();
 		break;
 
 	default:
 		break;
 	}
-	
+
+	// 座標とサイズ、体力を渡す
+	SetPosition(m_pos);
+	SetSize(m_size);
 }
 
 //=============================================================================
@@ -454,6 +259,207 @@ void CBullet::Draw(void)
 {
 	// CScene2Dの描画処理
 	CScene2D::Draw();
+}
+
+//=============================================================================
+// バレットクラスの弾を動かす処理
+//=============================================================================
+void CBullet::Move(void)
+{
+	// 座標と体力の受け取り
+	m_pos = GetPosition();
+
+	// 移動量の加算
+	m_pos += m_move;
+	m_nLife--;
+
+	// 体力がなくなったとき
+	if (m_nLife <= 0)
+	{
+		Uninit();
+		return;
+	}
+
+	// 画面外に出た時
+	if (m_pos.y + m_size.y <= 0.0f)
+	{
+		Uninit();
+		return;
+	}
+}
+
+//=============================================================================
+// バレットクラスの弾の処理
+// BulletType：誰が撃った弾なのか
+//=============================================================================
+void CBullet::BulletNomal(BULLETTYPE BulletType)
+{
+	// 敵のシーンの受け取り
+	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_ENEMY);
+	do
+	{
+		if (pScene != NULL)
+		{
+			// オブジェタイプの受け取り
+			OBJTYPE objType = pScene->GetObjType();
+			if (objType == OBJTYPE_ENEMY)
+			{
+				// チャージ弾のタイプが普通の弾の時
+				if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
+				{
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, m_size, pScene) == true)
+					{
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BulletType);
+
+						// 爆発の生成
+						CExplosion::Create(m_pos, D3DXVECTOR3(EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, 0.0f),
+							CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
+
+						// 終了処理
+						Uninit();
+						return;
+					}
+				}
+			}
+			pScene = pScene->GetSceneNext();
+		}
+	} while (pScene != NULL);
+}
+
+//=============================================================================
+// バレットクラスのチャージ弾の処理
+// BulletType：誰が撃った弾なのか
+//=============================================================================
+void CBullet::BulletCharge(BULLETTYPE BulletType)
+{
+	// 敵のシーンの受け取り
+	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_ENEMY);
+	do
+	{
+		if (pScene != NULL)
+		{
+			// オブジェタイプの受け取り
+			OBJTYPE objType = pScene->GetObjType();
+			if (objType == OBJTYPE_ENEMY)
+			{
+				// チャージ弾のタイプがチャージした弾の時
+				if (m_ChargeBulletType == CHARGEBULLET_TYPE_CHARGE)
+				{
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, m_size, pScene) == true)
+					{
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BulletType);
+
+						// 爆発の生成
+						CExplosion::Create(m_pos, D3DXVECTOR3(EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, 0.0f),
+							CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
+					}
+				}
+			}
+			pScene = pScene->GetSceneNext();
+		}
+	} while (pScene != NULL);
+}
+
+//=============================================================================
+// バレットクラスのレーザー弾の処理
+// PlayerNum：誰が撃った弾なのか
+//=============================================================================
+void CBullet::BulletLaser(CPlayer::PLAYERNUM PlayerNum, BULLETTYPE BulletType)
+{
+	// チャージ弾のタイプがレーザー弾の時
+	if (m_ChargeBulletType == CHARGEBULLET_TYPE_LASER)
+	{
+		// PLAYERのシーンの受け取り
+		CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
+		do
+		{
+			if (pScene != NULL)
+			{
+				// オブジェタイプの受け取り
+				OBJTYPE objType = pScene->GetObjType();
+				if (objType == OBJTYPE_PLAYER)
+				{
+					if (((CPlayer*)pScene)->GetPlayerNum() == PlayerNum)
+					{
+						// 座標の受け取りと代入
+						m_pos = ((CScene2D*)pScene)->GetPosition();
+
+						// LASERBULLET_SIZE_Y分縦の座標を下げる
+						m_pos.y = m_pos.y - (LASERBULLET_SIZE_Y / 2);
+					}
+				}
+				pScene = pScene->GetSceneNext();
+			}
+		} while (pScene != NULL);
+
+		// 敵のシーンの受け取り
+		pScene = CScene::GetSceneTop(CScene::OBJTYPE_ENEMY);
+		do
+		{
+			if (pScene != NULL)
+			{
+				// オブジェタイプの受け取り
+				OBJTYPE objType = pScene->GetObjType();
+				if (objType == OBJTYPE_ENEMY)
+				{
+					// チャージ弾のタイプがチャージした弾の時
+					if (m_ChargeBulletType == CHARGEBULLET_TYPE_LASER)
+					{
+						// 当たり判定
+						if (CCollision::PRectangleCollision(m_pos, m_size, pScene) == true)
+						{
+							// 敵のダメージ
+							((CEnemy*)pScene)->EnemyDamage(m_nDamage, CEnemy::DAMAGE_TYPE_BULLET, BulletType);
+
+							// 爆発の生成
+							CExplosion::Create(m_pos, D3DXVECTOR3(EXPLOSION_SIZE_X, EXPLOSION_SIZE_Y, 0.0f),
+								CExplosion::EXPLOSIONTYPE_NOMAL, CScene::OBJTYPE_EXPLOSION);
+						}
+					}
+				}
+				pScene = pScene->GetSceneNext();
+			}
+		} while (pScene != NULL);
+	}
+}
+
+//=============================================================================
+// バレットクラスのボスのレーザー弾の処理
+//=============================================================================
+void CBullet::BulletBossLaser(void)
+{
+	if (m_ChargeBulletType == CHARGEBULLET_TYPE_NOMAL)
+	{
+		// エフェクトの生成
+		CEffect::Create(m_pos, m_size + D3DXVECTOR3(5.0f, 5.0f, 0.0f),
+			10, 100, 255, 255, 255, CEffect::EFFECTTYPE_BULLET, OBJTYPE_EFFECT);
+
+		// 画面外に出た時
+		if (m_pos.y + m_size.y <= 0.0f || m_pos.x - m_size.x <= SCREEN_CENTER_X)
+		{
+			// 終了処理
+			Uninit();
+			return;
+		}
+	}
+
+	// 座標と体力の受け取り
+	m_pos = GetPosition();
+
+	// 移動量の加算
+	m_pos += m_move;
+	m_nLife--;
+
+	// 体力がなくなったとき
+	if (m_nLife <= 0)
+	{
+		Uninit();
+		return;
+	}
 }
 
 //=============================================================================

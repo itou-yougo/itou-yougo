@@ -90,9 +90,6 @@
     <ClCompile Include="title.cpp">
       <Filter>ソース ファイル\main\manager\mode\title</Filter>
     </ClCompile>
-    <ClCompile Include="titlelogo.cpp">
-      <Filter>ソース ファイル\main\manager\mode\title</Filter>
-    </ClCompile>
     <ClCompile Include="tutroial.cpp">
       <Filter>ソース ファイル\main\manager\mode\tutorial</Filter>
     </ClCompile>
@@ -159,16 +156,7 @@
     <ClCompile Include="manager.cpp">
       <Filter>ソース ファイル\main\manager</Filter>
     </ClCompile>
-    <ClCompile Include="ojamaplayer.cpp">
-      <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
-    </ClCompile>
-    <ClCompile Include="ojamaplayer2.cpp">
-      <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
-    </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
-    </ClCompile>
-    <ClCompile Include="player2.cpp">
       <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
     </ClCompile>
     <ClCompile Include="select.cpp">
@@ -180,14 +168,20 @@
     <ClCompile Include="scene2d.cpp">
       <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
     </ClCompile>
+    <ClCompile Include="titlelogo.cpp">
+      <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\main</Filter>
+    </ClCompile>
+    <ClCompile Include="ojama.cpp">
+      <Filter>ソース ファイル\main\manager\scene\scene2d</Filter>
+    </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>ソース ファイル\main\manager\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="titlelogo.h">
-      <Filter>ヘッダー ファイル\main\manager\mode\title</Filter>
-    </ClInclude>
     <ClInclude Include="title.h">
       <Filter>ヘッダー ファイル\main\manager\mode\title</Filter>
     </ClInclude>
@@ -254,19 +248,10 @@
     <ClInclude Include="main.h">
       <Filter>ヘッダー ファイル\main</Filter>
     </ClInclude>
-    <ClInclude Include="ojamaplayer.h">
-      <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
-    </ClInclude>
-    <ClInclude Include="ojamaplayer2.h">
-      <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
-    </ClInclude>
     <ClInclude Include="manager.h">
       <Filter>ヘッダー ファイル\main\manager</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
-    </ClInclude>
-    <ClInclude Include="player2.h">
       <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
@@ -285,6 +270,15 @@
       <Filter>ヘッダー ファイル\main\manager\sound</Filter>
     </ClInclude>
     <ClInclude Include="text.h">
+      <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ヘッダー ファイル\main</Filter>
+    </ClInclude>
+    <ClInclude Include="titlelogo.h">
+      <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
+    </ClInclude>
+    <ClInclude Include="ojama.h">
       <Filter>ヘッダー ファイル\main\manager\scene\scene2d</Filter>
     </ClInclude>
   </ItemGroup>

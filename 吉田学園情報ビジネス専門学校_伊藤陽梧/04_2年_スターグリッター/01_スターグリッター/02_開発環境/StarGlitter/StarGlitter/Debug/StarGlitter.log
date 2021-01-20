@@ -1,6 +1,3 @@
-﻿  title.cpp
-  scene2d.cpp
-  コードを生成中...
-  LINK : 前回のインクリメンタル リンクで C:\Users\student\Desktop\StarGlitter\Debug\StarGlitter.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  StarGlitter.vcxproj -> C:\Users\student\Desktop\StarGlitter\Debug\StarGlitter.exe
-  StarGlitter.vcxproj -> C:\Users\student\Desktop\StarGlitter\Debug\StarGlitter.pdb (Full PDB)
+﻿  game.cpp
+  StarGlitter.vcxproj -> C:\Users\student\Desktop\g3y209438_伊藤陽梧\02_開発環境\StarGlitter\Debug\StarGlitter.exe
+  StarGlitter.vcxproj -> C:\Users\student\Desktop\g3y209438_伊藤陽梧\02_開発環境\StarGlitter\Debug\StarGlitter.pdb (Full PDB)

@@ -17,12 +17,10 @@
 #include "bullet.h"
 #include "sound.h"
 #include "enemyexplosion.h"
-#include "ojamaplayer.h"
-#include "ojamaplayer2.h"
+#include "ojama.h"
 #include "chargeshot.h"
 #include "gauge.h"
 #include "player.h"
-#include "player2.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -37,8 +35,7 @@ CEnemy::CEnemy() :CScene2D(OBJTYPE_ENEMY)
 	m_pGauge = NULL;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0;
-	m_fSizeY = 0;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nLife = 0;
 	m_nOjamaCount = 0;
 	m_DamageType = DAMAGE_TYPE_NONE;
@@ -85,7 +82,7 @@ void CEnemy::Unload(void)
 //=============================================================================
 // エネミークラスのインスタンス生成
 //=============================================================================
-CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, OBJTYPE objType)
+CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size, int nLife, OBJTYPE objType)
 {
 	// CEnemyのポインタ
 	CEnemy *pEnemy = NULL;
@@ -97,7 +94,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fS
 	if (pEnemy != NULL)
 	{
 		// 敵の設定
-		pEnemy->SetEnemy(pos, move, fSizeX, fSizeY, nLife, objType);
+		pEnemy->SetEnemy(pos, move, size, nLife, objType);
 
 		// 初期化処理
 		pEnemy->Init();
@@ -153,130 +150,18 @@ void CEnemy::Update(void)
 
 	m_pos += m_move;
 
+	// 倒されたときの処理
+	Death();
+
 	// 座標とサイズ、体力を渡す
 	SetPosition(m_pos);
-	SetSize(m_fSizeX, m_fSizeY);
+	SetSize(m_size);
 
 	// 移動できる範囲の制限
 	if (m_pos.y > SCREEN_HEIGHT + (ENEMY_SIZE_X / 2))
 	{
 		Uninit();
-	}
-
-	// 体力が0以下になったとき
-	else if (m_nLife <= 0)
-	{
-		// 爆発のダメージで死んだとき
-		if (m_DamageType == DAMAGE_TYPE_EXPLOSION)
-		{
-			// どっちのプレイヤーの攻撃か判別してランダムでおじゃまを出す
-			switch (m_BulletType)
-			{
-				// PLAYER1の弾
-			case CBullet::BULLET_TYPE_PLAYER:
-				switch (rand() % 3)
-				{
-				case 0:
-					COjamaplayer::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3(2.0f, 2.0f, 0.0f), COjamaplayer::OJAMA_TYPE_THROUGH, OBJTYPE_OJAMA);
-					break;
-
-				case 1:
-					COjamaplayer::Create(m_pos, D3DXVECTOR3(10.0f, -10.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3((float)(rand() % 3) + 2.0f, -2.0f, 0.0f), COjamaplayer::OJAMA_TYPE_CURVE, OBJTYPE_OJAMA);
-					break;
-					
-				case 2:
-					COjamaplayer::Create(m_pos, D3DXVECTOR3((float)(rand() % 10) - 15.0f, (float)(rand() % 10) - 15.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3((float)(rand() % 5) + 5.0f, 5.0f, 0.0f), COjamaplayer::OJAMA_TYPE_FALL, OBJTYPE_OJAMA);
-					break;
-
-				default:
-					break;
-				}
-
-				// 敵の爆発の生成
-				CEnemyexplosion::Create(m_pos, 100.0f, 100.0f, CEnemyexplosion::EXPLOSIONTYPE_PLAYER, CEnemyexplosion::EXPLOSIONTEXTURE_2, OBJTYPE_ENEMYEXPLOSION);
-				break;
-
-				// PLAYER2の弾
-			case CBullet::BULLET_TYPE_PLAYER2:	
-				switch (rand() % 3)
-				{
-				case 0:
-					COjamaplayer2::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3(2.0f, 2.0f, 0.0f), COjamaplayer2::OJAMA_TYPE_THROUGH, OBJTYPE_OJAMA2);
-					break;
-
-				case 1:
-					COjamaplayer2::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3(-(float)(rand() % 3) - 2.0f, -2.0f, 0.0f), COjamaplayer2::OJAMA_TYPE_CURVE, OBJTYPE_OJAMA2);
-					break;
-					
-				case 2:
-					COjamaplayer2::Create(m_pos, D3DXVECTOR3(-(float)(rand() % 10) + 15.0f, -(float)(rand() % 10) + 15.0f, 0.0f), 50.0f, 50.0f, 0, D3DXVECTOR3(-(float)(rand() % 5) - 5.0f, 5.0f, 0.0f), COjamaplayer2::OJAMA_TYPE_FALL, OBJTYPE_OJAMA2);
-					break;
-				default:
-					break;
-				}
-
-				// 敵の爆発の生成
-				CEnemyexplosion::Create(m_pos, 100.0f, 100.0f, CEnemyexplosion::EXPLOSIONTYPE_PLAYER2, CEnemyexplosion::EXPLOSIONTEXTURE_2, OBJTYPE_ENEMYEXPLOSION);
-				break;
-
-			default:
-				break;
-			}
-		}
-		else
-		{
-			// どっちのプレイヤーの攻撃か判別して爆発を起こす
-			switch (m_BulletType)
-			{
-				// PLAYER1の弾
-			case CBullet::BULLET_TYPE_PLAYER:
-				// 敵の爆発の生成
-				CEnemyexplosion::Create(m_pos, 100.0f, 100.0f, CEnemyexplosion::EXPLOSIONTYPE_PLAYER, CEnemyexplosion::EXPLOSIONTEXTURE_1, OBJTYPE_ENEMYEXPLOSION);
-				break;
-
-				// PLAYER2の弾
-			case CBullet::BULLET_TYPE_PLAYER2:
-				// 敵の爆発の生成
-				CEnemyexplosion::Create(m_pos, 100.0f, 100.0f, CEnemyexplosion::EXPLOSIONTYPE_PLAYER2, CEnemyexplosion::EXPLOSIONTEXTURE_1, OBJTYPE_ENEMYEXPLOSION);
-				break;
-			}
-		}
-
-		// プレイヤー1のこうげきで倒されたら
-		if (m_BulletType == CBullet::BULLET_TYPE_PLAYER)
-		{
-			// PLAYERのシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_PLAYER, 0);
-			if (pScene != NULL)
-			{
-				// オブジェクトの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_PLAYER)
-				{
-					// PLAYERのチャージショットのゲージの最大値を伸ばす
-					((((CPlayer*)pScene)->GetChargeShot())->GetGauge())->SetExtend(5.0f, 0.0f);
-				}
-			}
-		}
-		// プレイヤー2のこうげきで倒されたら
-		if (m_BulletType == CBullet::BULLET_TYPE_PLAYER2)
-		{
-			// PLAYER2のシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_PLAYER2, 0);
-			if (pScene != NULL)
-			{
-				// オブジェクトの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_PLAYER2)
-				{
-					// PLAYER2のチャージショットのゲージの最大値を伸ばす
-					((((CPlayer2*)pScene)->GetChargeShot())->GetGauge())->SetExtend(5.0f, 0.0f);
-				}
-			}
-		}
-
-		// 終了処理
-		Uninit();
+		return;
 	}
 }
 
@@ -287,6 +172,172 @@ void CEnemy::Draw(void)
 {
 	// CScene2Dの描画処理
 	CScene2D::Draw();
+}
+
+//=============================================================================
+// エネミークラスの倒されたときの処理
+//=============================================================================
+void CEnemy::Death(void)
+{
+	// 体力が0以下になったとき
+	if (m_nLife <= 0)
+	{
+		// おじゃまを作る処理
+		OjamanCreate();
+
+		// ゲージの最大値を伸ばす処理
+		GaugeUp();
+
+		// 終了処理
+		Uninit();
+		return;
+	}
+}
+
+//=============================================================================
+// エネミークラスのおじゃまを作る処理
+//=============================================================================
+void CEnemy::OjamanCreate(void)
+{
+	// 爆発のダメージで死んだとき
+	if (m_DamageType == DAMAGE_TYPE_EXPLOSION)
+	{
+		// どっちのプレイヤーの攻撃か判別してランダムでおじゃまを出す
+		switch (m_BulletType)
+		{
+			// PLAYER1の弾
+		case CBullet::BULLET_TYPE_1P:
+			switch (rand() % 3)
+			{
+			case 0:
+				COjama::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), D3DXVECTOR3(50.0f, 50.0f, 0.0f),
+					0, D3DXVECTOR3(2.0f, 2.0f, 0.0f), COjama::OJAMA_TYPE_THROUGH, COjama::OJAMAPLAYER_1P, OBJTYPE_OJAMA);
+				break;
+
+			case 1:
+				COjama::Create(m_pos, D3DXVECTOR3(10.0f, -10.0f, 0.0f), D3DXVECTOR3(50.0f, 50.0f, 0.0f), 0,
+					D3DXVECTOR3((float)(rand() % 3) + 2.0f, -2.0f, 0.0f), COjama::OJAMA_TYPE_CURVE, COjama::OJAMAPLAYER_1P, OBJTYPE_OJAMA);
+				break;
+
+			case 2:
+				COjama::Create(m_pos, D3DXVECTOR3((float)(rand() % 10) - 15.0f, (float)(rand() % 10) - 15.0f, 0.0f),
+					D3DXVECTOR3(50.0f, 50.0f, 0.0f), 0, D3DXVECTOR3((float)(rand() % 5) + 5.0f, 5.0f, 0.0f),
+					COjama::OJAMA_TYPE_FALL, COjama::OJAMAPLAYER_1P, OBJTYPE_OJAMA);
+				break;
+
+			default:
+				break;
+			}
+
+			// 敵の爆発を出す処理
+			EnemyExplosionCreate(CEnemyexplosion::EXPLOSIONTEXTURE_2);
+			break;
+
+			// PLAYER2の弾
+		case CBullet::BULLET_TYPE_2P:
+			switch (rand() % 3)
+			{
+			case 0:
+				COjama::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), D3DXVECTOR3(50.0f, 50.0f, 0.0f), 0,
+					D3DXVECTOR3(2.0f, 2.0f, 0.0f), COjama::OJAMA_TYPE_THROUGH, COjama::OJAMAPLAYER_2P, OBJTYPE_OJAMA);
+				break;
+
+			case 1:
+				COjama::Create(m_pos, D3DXVECTOR3(-10.0f, -10.0f, 0.0f), D3DXVECTOR3(50.0f, 50.0f, 0.0f), 0,
+					D3DXVECTOR3(-(float)(rand() % 3) - 2.0f, -2.0f, 0.0f), COjama::OJAMA_TYPE_CURVE, COjama::OJAMAPLAYER_2P, OBJTYPE_OJAMA);
+				break;
+
+			case 2:
+				COjama::Create(m_pos, D3DXVECTOR3(-(float)(rand() % 10) + 15.0f, -(float)(rand() % 10) + 15.0f, 0.0f),
+					D3DXVECTOR3(50.0f, 50.0f, 0.0f), 0, D3DXVECTOR3(-(float)(rand() % 5) - 5.0f, 5.0f, 0.0f),
+					COjama::OJAMA_TYPE_FALL, COjama::OJAMAPLAYER_2P, OBJTYPE_OJAMA);
+				break;
+			default:
+				break;
+			}
+
+			// 敵の爆発を出す処理
+			EnemyExplosionCreate(CEnemyexplosion::EXPLOSIONTEXTURE_2);
+			break;
+
+		default:
+			break;
+		}
+	}
+	else
+	{
+		// 敵の爆発を出す処理
+		EnemyExplosionCreate(CEnemyexplosion::EXPLOSIONTEXTURE_1);
+	}
+}
+
+//=============================================================================
+// エネミークラスの敵の爆発を出す処理
+// ExplosionTexture：テクスチャの番号
+//=============================================================================
+void CEnemy::EnemyExplosionCreate(CEnemyexplosion::EXPLOSIONTEXTURE ExplosionTexture)
+{
+	// どっちのプレイヤーの攻撃か判別して爆発を起こす
+	switch (m_BulletType)
+	{
+		// PLAYER1の弾
+	case CBullet::BULLET_TYPE_1P:
+		// 敵の爆発の生成
+		CEnemyexplosion::Create(m_pos, D3DXVECTOR3(100.0f, 100.0f, 0.0f), CEnemyexplosion::EXPLOSIONTYPE_PLAYER,
+			ExplosionTexture, OBJTYPE_ENEMYEXPLOSION);
+		break;
+
+		// PLAYER2の弾
+	case CBullet::BULLET_TYPE_2P:
+		// 敵の爆発の生成
+		CEnemyexplosion::Create(m_pos, D3DXVECTOR3(100.0f, 100.0f, 0.0f), CEnemyexplosion::EXPLOSIONTYPE_PLAYER2,
+			ExplosionTexture, OBJTYPE_ENEMYEXPLOSION);
+		break;
+	}
+}
+
+//=============================================================================
+// エネミークラスのゲージの最大値を伸ばす処理
+//=============================================================================
+void CEnemy::GaugeUp(void)
+{
+	// プレイヤーのシーンを受け取る
+	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
+	do
+	{
+		if (pScene != NULL)
+		{
+			// オブジェクトの受け取り
+			OBJTYPE objType = pScene->GetObjType();
+			if (objType == OBJTYPE_PLAYER)
+			{
+				switch (m_BulletType)
+				{
+					// プレイヤー1のこうげきで倒されたら
+				case CBullet::BULLET_TYPE_1P:
+					if (((CPlayer*)pScene)->GetPlayerNum() == CPlayer::PLAYER_1P)
+					{
+						// PLAYERのチャージショットのゲージの最大値を伸ばす
+						((((CPlayer*)pScene)->GetChargeShot())->GetGauge())->SetExtend(5.0f, 0.0f);
+					}
+					break;
+
+					// プレイヤー2のこうげきで倒されたら
+				case CBullet::BULLET_TYPE_2P:
+					if (((CPlayer*)pScene)->GetPlayerNum() == CPlayer::PLAYER_2P)
+					{
+						// PLAYER2のチャージショットのゲージの最大値を伸ばす
+						((((CPlayer*)pScene)->GetChargeShot())->GetGauge())->SetExtend(5.0f, 0.0f);
+					}
+					break;
+
+				default:
+					break;
+				}
+			}
+			pScene = pScene->GetSceneNext();
+		}
+	} while (pScene != NULL);
 }
 
 //=============================================================================

@@ -25,32 +25,31 @@
 class CGauge
 {
 public:
-	CGauge();
-	~CGauge();
+	CGauge();  // コンストラク
+	~CGauge(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
 
-	static CGauge *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY);
-	void SetGauge(D3DXVECTOR3 pos, float fSizeX, float fSizeY) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	static CGauge *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size); // クリエイト
+	void SetGauge(D3DXVECTOR3 pos, D3DXVECTOR3 size) {		  // 座標とサイズの設定
+		m_pos = pos; m_size = size;
 	}
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetExtend(float fExtendX, float fExtendY) {
+	void SetExtend(float fExtendX, float fExtendY) { // 長さをセットする処理
 		m_fMaxExtendX += fExtendX; m_fMaxExtendY += fExtendY;
 	}
-	float GetMaxExtend(void);
+	float GetMaxExtend(void); // 長さの最大値を返す
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;  // テクスチャのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	   // 頂点バッファへのポインタ
 	D3DXVECTOR3				m_pos;		   // 座標
-	float					m_fSizeX;	   // 横の大きさ
-	float					m_fSizeY;	   // 縦の大きさ
+	D3DXVECTOR3				m_size;		   // 座標
 	float					m_fExtendX;	   // テクスチャを横に伸ばす
 	float					m_fExtendY;	   // テクスチャを縦に伸ばす
 	float					m_fMaxExtendX; // テクスチャを横に伸ばす最大値

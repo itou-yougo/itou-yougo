@@ -32,24 +32,25 @@ public:
 		BGTYPE_RESULT,	 // リザルトの背景
 	}BGTYPE;
 
-	CBg();
-	~CBg();
+	CBg();  // コンストラク
+	~CBg();	// デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CBg *Create(BGTYPE bgtype, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CBg *Create(BGTYPE bgtype, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetBG(BGTYPE bgtype, OBJTYPE objType) {
-		m_bgtype = bgtype; SetObjType(objType);
+	void SetBG(BGTYPE bgtype, OBJTYPE objType) { // 背景の設定
+		m_BgType = bgtype; SetObjType(objType);
 	}
+	void BgCreate(BGTYPE BgType); // 背景のポリゴンを作る処理
 private:
 	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_BG_TEXTURE]; // テクスチャのポインタ
 	CScene2D *m_apScene[MAX_BG_TEXTURE];				   // CScene2Dのポインタ
-	BGTYPE m_bgtype;									   // 背景の種類
+	BGTYPE m_BgType;									   // 背景の種類
 };
 #endif

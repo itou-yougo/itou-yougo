@@ -19,30 +19,30 @@ class CLifepolygon
 {
 public:
 
-	CLifepolygon();
-	~CLifepolygon();
+	CLifepolygon();  // コンストラク
+	~CLifepolygon(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CLifepolygon *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nDivide, int nCount);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	static CLifepolygon *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, int nDivide, int nCount); // クリエイト
 
-	void SetLifePolygon(int nDivide, int nCount);
+	HRESULT Init(void); // 初期化処理
+	void Uninit(void);	// 終了処理
+	void Update(void);	// 更新処理
+	void Draw(void);	// 描画処理
 
-	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }
-	void SetSize(float fSizeX, float fSizeY) {
-		m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	void SetLifePolygon(int nDivide, int nCount); // ライフのテクスチャの設定
+
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; } // 座標の設定
+	void SetSize(D3DXVECTOR3 size) { // サイズの設定
+		m_size = size;
 	}
 
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture; // テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	  // 頂点バッファへのポインタ
 	D3DXVECTOR3				m_pos;		  // 座標
-	float					m_fSizeX;	  // 横の大きさ
-	float					m_fSizeY;	  // 縦の大きさ
+	D3DXVECTOR3				m_size;		  // 大きさ
 };
 #endif

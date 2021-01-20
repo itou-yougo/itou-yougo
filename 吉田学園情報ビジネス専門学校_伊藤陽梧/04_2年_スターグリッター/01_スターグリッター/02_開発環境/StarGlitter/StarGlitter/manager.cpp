@@ -13,7 +13,6 @@
 #include "scene2d.h"
 #include "input.h"
 #include "player.h"
-#include "player2.h"
 #include "explosion.h"
 #include "sound.h"
 #include "bg.h"
@@ -22,8 +21,7 @@
 #include "lifepolygon.h"
 #include "effect.h"
 #include "gauge.h"
-#include "ojamaplayer.h"
-#include "ojamaplayer2.h"
+#include "ojama.h"
 #include "title.h"
 #include "game.h"
 #include "enemyexplosion.h"
@@ -124,14 +122,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	// テクスチャのロード
 	CBg::Load();
 	CPlayer::Load();
-	CPlayer2::Load();
 	CEnemy::Load();
 	CBullet::Load();
 	CExplosion::Load();
 	CLifepolygon::Load();
 	CEffect::Load();
-	COjamaplayer::Load();
-	COjamaplayer2::Load();
+	COjama::Load();
 	CEnemyexplosion::Load();
 	CCharge::Load();
 	CGauge::Load();
@@ -193,14 +189,12 @@ void CManager::Uninit(void)
 	// テクスチャのアンロード
 	CBg::Unload();
 	CPlayer::Unload();
-	CPlayer2::Unload();
 	CEnemy::Unload();
 	CBullet::Unload();
 	CExplosion::Unload();
 	CLifepolygon::Unload();
 	CEffect::Unload();
-	COjamaplayer::Unload();
-	COjamaplayer2::Unload();
+	COjama::Unload();
 	CEnemyexplosion::Unload();
 	CCharge::Unload();
 	CGauge::Unload();

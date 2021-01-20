@@ -69,7 +69,9 @@ HRESULT CLife::Init()
 		for (int nCount = 0; nCount < m_nLife; nCount++)
 		{
 			// ライフポリゴンのクリエイト
-			m_pLifepolygon[nCount] = m_pLifepolygon[nCount]->Create(D3DXVECTOR3((LIFEPOLYGON_SIZE_X * 2) + (50.0f * nCount), 50.0f, 0.0f), LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 1, 0);
+			m_pLifepolygon[nCount] = m_pLifepolygon[nCount]->Create(
+				D3DXVECTOR3((LIFEPOLYGON_SIZE_X * 2) + (50.0f * nCount), 50.0f, 0.0f), 
+				D3DXVECTOR3(LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 0.0f), 1, 0);
 		}
 		break;
 
@@ -78,7 +80,9 @@ HRESULT CLife::Init()
 		for (int nCount = 0; nCount < m_nLife; nCount++)
 		{
 			// ライフポリゴンのクリエイト
-			m_pLifepolygon[nCount] = m_pLifepolygon[nCount]->Create(D3DXVECTOR3(SCREEN_WIDTH - (LIFEPOLYGON_SIZE_X * 2) - (50.0f * nCount), 50.0f, 0.0f), LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 1, 0);
+			m_pLifepolygon[nCount] = m_pLifepolygon[nCount]->Create(
+				D3DXVECTOR3(SCREEN_WIDTH - (LIFEPOLYGON_SIZE_X * 2) - (50.0f * nCount), 50.0f, 0.0f), 
+				D3DXVECTOR3(LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 0.0f), 1, 0);
 		}
 		break;
 	default:
@@ -235,7 +239,9 @@ void CLife::Cure()
 		if (m_nLife - 1 < PLAYER_LIFE)
 		{
 			// ライフポリゴンの生成
-			m_pLifepolygon[m_nLife - 1] = m_pLifepolygon[m_nLife - 1]->Create(D3DXVECTOR3((LIFEPOLYGON_SIZE_X * 2) + (50.0f * (m_nLife - 1)), 50.0f, 0.0f), LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 1, 0);
+			m_pLifepolygon[m_nLife - 1] = m_pLifepolygon[m_nLife - 1]->Create(
+				D3DXVECTOR3((LIFEPOLYGON_SIZE_X * 2) + (50.0f * (m_nLife - 1)), 50.0f, 0.0f), 
+				D3DXVECTOR3(LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 0.0f), 1, 0);
 		}
 		break;
 
@@ -243,7 +249,9 @@ void CLife::Cure()
 		if (m_nLife < PLAYER_LIFE + 1)
 		{
 			// ライフポリゴンの生成
-			m_pLifepolygon[m_nLife - 1] = m_pLifepolygon[m_nLife - 1]->Create(D3DXVECTOR3(SCREEN_WIDTH - (LIFEPOLYGON_SIZE_X * 2) - (50.0f * (m_nLife - 1)), 50.0f, 0.0f), LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 1, 0);
+			m_pLifepolygon[m_nLife - 1] = m_pLifepolygon[m_nLife - 1]->Create(
+				D3DXVECTOR3(SCREEN_WIDTH - (LIFEPOLYGON_SIZE_X * 2) - (50.0f * (m_nLife - 1)), 50.0f, 0.0f), 
+				D3DXVECTOR3(LIFEPOLYGON_SIZE_X, LIFEPOLYGON_SIZE_Y, 0.0f), 1, 0);
 		}
 		break;
 	}

@@ -14,6 +14,7 @@
 #include "main.h"
 #include "scene2d.h"
 #include "bullet.h"
+#include "enemyexplosion.h"
 
 //=============================================================================
 // 前方宣言
@@ -36,32 +37,37 @@ public:
 		DAMAGE_TYPE_MAX,
 	}DAMAGETYPE;
 
-	CEnemy();
-	~CEnemy();
+	CEnemy();  // コンストラク
+	~CEnemy(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move,
+		D3DXVECTOR3 size, int nLife, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, int nLife, OBJTYPE objType) {
-		SetPosition(pos); SetSize(fSizeX, fSizeY); m_pos = pos;
-		m_move = move; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	void SetEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 move, 
+		D3DXVECTOR3 size, int nLife, OBJTYPE objType) { // 敵のセット
+		SetPosition(pos); SetSize(size); m_pos = pos;
+		m_move = move; m_size = size;
 		m_nLife = nLife; SetObjType(objType);
 	}
 
-	void EnemyDamage(int nDamage, DAMAGETYPE DamageType, CBullet::BULLETTYPE BulletType);
+	void Death(void); // 倒されたときの処理
+	void OjamanCreate(void); // おじゃまを作る処理
+	void EnemyExplosionCreate(CEnemyexplosion::EXPLOSIONTEXTURE ExplosionTexture); // 敵の爆発を出す処理
+	void GaugeUp(void); // ゲージの最大値を伸ばす処理
+	void EnemyDamage(int nDamage, DAMAGETYPE DamageType, CBullet::BULLETTYPE BulletType); // ダメージの処理
 private:
 	CGauge* m_pGauge; // ゲージのポインタ
 	static LPDIRECT3DTEXTURE9 m_pTexture; // テクスチャへのポインタ
 	D3DXVECTOR3			m_pos;		   // 位置
 	D3DXVECTOR3			m_move;		   // 速度
-	float				m_fSizeX;	   // 横の大きさ
-	float				m_fSizeY;	   // 縦の大きさ
+	D3DXVECTOR3			m_size;		   // 大きさ
 	int					m_nLife;	   // 敵の体力
 	int					m_nOjamaCount; // おじゃまのカウント
 	DAMAGETYPE			m_DamageType;  // ダメージのタイプ

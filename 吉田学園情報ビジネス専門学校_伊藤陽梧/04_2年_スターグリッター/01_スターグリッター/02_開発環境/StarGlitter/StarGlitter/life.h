@@ -32,29 +32,29 @@ public:
 		LIFE_TYPE_MAX,
 	}LIFETYPE;
 
-	CLife();
-	~CLife();
+	CLife();  // コンストラク
+	~CLife(); // デストラクタ
 
-	static CLife *Create(int nLife, LIFETYPE LifeType, OBJTYPE objType);
+	static CLife *Create(int nLife, LIFETYPE LifeType, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	int GetLife(void);
+	int GetLife(void); // 体力を返す
 
-	void Damage();
-	void Cure();
+	void Damage(); // ダメージの処理
+	void Cure(); // 回復の処理
 	//void Damage(int nDamage) {
 	//	m_nLife -= nDamage;
 	//}
 
-	void SetLife(int nLife) {
+	void SetLife(int nLife) { // 体力の設定
 		m_nLife = nLife;
 	}
 
-	void SetType(LIFETYPE LifeType, OBJTYPE objType) {
+	void SetType(LIFETYPE LifeType, OBJTYPE objType) { // 体力の処理
 		m_LifeType = LifeType;
 		SetObjType(objType);
 	}

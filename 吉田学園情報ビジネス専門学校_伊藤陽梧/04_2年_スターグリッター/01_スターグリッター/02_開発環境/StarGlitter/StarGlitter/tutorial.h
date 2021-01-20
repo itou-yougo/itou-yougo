@@ -25,15 +25,15 @@ class CSound;
 class CTutorial
 {
 public:
-	CTutorial();
-	~CTutorial();
+	CTutorial();  // コンストラク
+	~CTutorial(); // デストラクタ
 
-	static CTutorial *Create();
+	static CTutorial *Create(); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture; // textureのポインタ
 	bool	 m_bTrriger; //	押したときの判定

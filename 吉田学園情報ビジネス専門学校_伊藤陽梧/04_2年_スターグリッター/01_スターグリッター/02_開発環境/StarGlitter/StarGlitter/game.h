@@ -39,18 +39,20 @@ public:
 		GAMESTATE_MAX,
 	}GAMESTATE;
 
-	CGame();
-	~CGame();
+	CGame();  // コンストラク
+	~CGame(); // デストラクタ
 
-	static CGame *Create();
+	static CGame *Create(); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	static void SetGameState(GAMESTATE gamestate);
-	static GAMESTATE GetGameState(void);
+	void EnemyCreate(void); // 敵を作る処理
+	void Pause(void); // 敵を作る処理
+	static void SetGameState(GAMESTATE gamestate); // ポーズ中の処理
+	static GAMESTATE GetGameState(void); // ゲームの状態を渡す処理
 private:
 	static GAMESTATE	  m_gamestate;			  // ゲームの状態
 	static CSelect		  *m_pSelect[MAX_SELECT]; // セレクトクラスのポインタ

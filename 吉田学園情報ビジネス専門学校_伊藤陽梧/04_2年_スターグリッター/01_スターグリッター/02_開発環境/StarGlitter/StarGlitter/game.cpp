@@ -17,7 +17,6 @@
 #include "renderer.h"
 #include "manager.h"
 #include "player.h"
-#include "player2.h"
 #include "explosion.h"
 #include "bg.h"
 #include "enemy.h"
@@ -25,8 +24,7 @@
 #include "lifepolygon.h"
 #include "effect.h"
 #include "gauge.h"
-#include "ojamaplayer.h"
-#include "ojamaplayer2.h"
+#include "ojama.h"
 #include "input.h"
 #include "select.h"
 #include "text.h"
@@ -92,11 +90,13 @@ HRESULT CGame::Init()
 	CBg::Create(CBg::BGTYPE_GAME, CScene::OBJTYPE_BG);
 	CBg::Create(CBg::BGTYPE_FRAME, CScene::OBJTYPE_BG);
 
-	// m_pPlayerのクリエイト
-	CPlayer::Create(D3DXVECTOR3(432.0f, SCREEN_HEIGHT - 200.0f, 0.0f), D3DXVECTOR3(PLAYER_SPEED, PLAYER_SPEED, 0.0f), PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_LIFE, CScene::OBJTYPE_PLAYER);
+	// CPlayerのクリエイト
+	CPlayer::Create(D3DXVECTOR3(432.0f, SCREEN_HEIGHT - 200.0f, 0.0f), D3DXVECTOR3(PLAYER_SPEED, PLAYER_SPEED, 0.0f),
+		D3DXVECTOR3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 0.0f), PLAYER_LIFE, CPlayer::PLAYER_1P, CScene::OBJTYPE_PLAYER);
 
-	// m_pPlayerのクリエイト
-	CPlayer2::Create(D3DXVECTOR3(1296.0f, SCREEN_HEIGHT - 200.0f, 0.0f), D3DXVECTOR3(PLAYER_SPEED, PLAYER_SPEED, 0.0f), PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_LIFE, CScene::OBJTYPE_PLAYER2);
+	// CPlayerのクリエイト
+	CPlayer::Create(D3DXVECTOR3(1296.0f, SCREEN_HEIGHT - 200.0f, 0.0f), D3DXVECTOR3(PLAYER_SPEED, PLAYER_SPEED, 0.0f),
+		D3DXVECTOR3(PLAYER_SIZE_X, PLAYER_SIZE_Y, 0.0f), PLAYER_LIFE, CPlayer::PLAYER_2P, CScene::OBJTYPE_PLAYER);
 
 	// サウンドの再生
 	CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
@@ -120,9 +120,6 @@ void CGame::Uninit(void)
 //=============================================================================
 void CGame::Update(void)
 {
-	// CInputJoypadのポインタのインスタンス生成の受け取り
-	CInputJoypad *pInputJoypad = CManager::GetInputJoypad();
-
 	switch (m_gamestate)
 	{
 		// ノーマルの状態
@@ -139,8 +136,8 @@ void CGame::Update(void)
 				m_nCountText = 0;
 
 				// READYの文字の生成
-				CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), 832.0f, 0.0f, CText::TEXTTYPE_READY);
-				CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), 832.0f, 0.0f, CText::TEXTTYPE_READY);
+				CText::Create(D3DXVECTOR3(PLAYER_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(832.0f, 0.0f, 0.0f), CText::TEXTTYPE_READY);
+				CText::Create(D3DXVECTOR3(PLAYER2_START_POS, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(832.0f, 0.0f, 0.0f), CText::TEXTTYPE_READY);
 
 				// ゲームが始まった状態にする
 				m_bGameStart = true;
@@ -155,247 +152,12 @@ void CGame::Update(void)
 		{
 			if (CScene::GetPause() != true)
 			{
-				// 生成するカウント
-				m_nCountCreate++;
-
-				// 生成するカウントが200以上になったら
-				if (m_nCountCreate >= 200)
-				{
-					// ランダムで出す敵を変える
-					switch (rand() % 6)
-					{
-					case 0:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 5, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(432.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 3, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1296.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 5, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-
-					case 1:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-
-					case 2:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-
-					case 3:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(432.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(432.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 1, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(432.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 5, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1296.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1296.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1296.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X, ENEMY_SIZE_Y, 2, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-
-					case 4:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(144.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1008.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-
-					case 5:
-						// m_pEnemyのクリエイト
-						CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(720.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 5, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 4, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 3, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 2, CScene::OBJTYPE_ENEMY);
-						CEnemy::Create(D3DXVECTOR3(1584.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 1, CScene::OBJTYPE_ENEMY);
-						m_nCountCreate = 0;
-						break;
-					default:
-						break;
-					}
-				}
+				// 敵を作る処理
+				EnemyCreate();
 			}
 
-			// ポーズ画面の処理
-			// 選んだ時のカウントを減算する
-			m_nSelectCount--;
-
-			// 選んだ時のカウントが0以下になったら
-			if (m_nSelectCount <= 0)
-			{
-				// ポーズ状態じゃなく、モードがゲームの時
-				if (m_bPause == true && CManager::GetMode() == CManager::MODE_GAME)
-				{
-					// スタートボタンを押したら
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_START))
-					{
-						//ポーズ状態にする
-						CScene::SetPause(true);
-
-						// セレクトクラスの生成
-						m_pSelect[0] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT, CSelect::SELECTTYPE_KUROHAIKEI);
-						m_pSelect[1] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), 850.0f, 625.0f, CSelect::SELECTTYPE_MENU);
-
-						// ポーズ状態にする
-						m_bPause = false;
-						m_nSelectCount = 20;
-
-						// サウンドの停止と再生
-						CManager::GetSound()->StopSound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
-						CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_MENUCREATE);
-						return;
-					}
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_START))
-					{
-						//ポーズ状態にする
-						CScene::SetPause(true);
-
-						// セレクトクラスの生成
-						m_pSelect[0] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT, CSelect::SELECTTYPE_KUROHAIKEI);
-						m_pSelect[1] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), 850.0f, 625.0f, CSelect::SELECTTYPE_MENU);
-
-						// ポーズ状態にする
-						m_bPause = false;
-						m_nSelectCount = 20;
-
-						// サウンドの停止と再生
-						CManager::GetSound()->StopSound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
-						CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_MENUCREATE);
-						return;
-					}
-
-				}
-				// ポーズ状態の時
-				else if (m_bPause == false)
-				{
-					// スタートボタンを押したら
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_START))
-					{
-						//ポーズ状態を解除する
-						CScene::SetPause(false);
-
-						// サウンドの再生
-						CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
-
-						for (int nCount = 0; nCount < MAX_SELECT; nCount++)
-						{
-							// m_pSelectがNULLじゃないとき
-							if (m_pSelect[nCount] != NULL)
-							{
-								// m_pSelectの終了処理
-								m_pSelect[nCount]->Uninit();
-								m_pSelect[nCount] = NULL;
-							}
-						}
-
-						// ポーズ状態を解除する
-						m_bPause = true;
-						m_nSelectCount = 20;
-						return;
-					}
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_START))
-					{
-						//ポーズ状態を解除する
-						CScene::SetPause(false);
-
-						// サウンドの再生
-						CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
-
-						for (int nCount = 0; nCount < MAX_SELECT; nCount++)
-						{
-							// m_pSelectがNULLじゃないとき
-							if (m_pSelect[nCount] != NULL)
-							{
-								// m_pSelectの終了処理
-								m_pSelect[nCount]->Uninit();
-								m_pSelect[nCount] = NULL;
-							}
-						}
-
-						// ポーズ状態を解除する
-						m_bPause = true;
-						m_nSelectCount = 20;
-						return;
-					}
-
-					// Aボタンを押したら
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_A))
-					{
-						for (int nCount = 0; nCount < MAX_SELECT; nCount++)
-						{
-							if (m_pSelect[nCount] != NULL)
-							{
-								// m_pSelectがNULLじゃないとき
-								m_pSelect[nCount]->Uninit();
-								m_pSelect[nCount] = NULL;
-							}
-						}
-
-						// ポーズ状態を解除する
-						m_bPause = true;
-						m_nSelectCount = 180;
-						return;
-					}
-					if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_A))
-					{
-						for (int nCount = 0; nCount < MAX_SELECT; nCount++)
-						{
-							if (m_pSelect[nCount] != NULL)
-							{
-								// m_pSelectがNULLじゃないとき
-								m_pSelect[nCount]->Uninit();
-								m_pSelect[nCount] = NULL;
-							}
-						}
-
-						// ポーズ状態を解除する
-						m_bPause = true;
-						m_nSelectCount = 180;
-						return;
-					}
-				}
-			}
+			// ポーズ中の処理
+			Pause();
 		}
 		break;
 
@@ -407,7 +169,7 @@ void CGame::Update(void)
 			CScene::SetPause(true);
 
 			// テキストクラスのKOの生成
-			CText::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), 530.0f, 232.0f, CText::TEXTTYPE_KO);
+			CText::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(530.0f, 232.0f, 0.0f), CText::TEXTTYPE_KO);
 
 			// ゲームが終わる状態にする
 			m_bGameStart = false;
@@ -430,6 +192,254 @@ void CGame::Update(void)
 void CGame::Draw(void)
 {
 
+}
+
+//=============================================================================
+// ゲームクラスの敵を作る処理
+//=============================================================================
+void CGame::EnemyCreate(void)
+{
+	// 生成するカウント
+	m_nCountCreate++;
+	// 生成するカウントが200以上になったら
+	if (m_nCountCreate >= 200)
+	{
+		// ランダムで出す敵を変える
+		switch (rand() % 6)
+		{
+		case 0:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(432.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1296.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		case 1:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		case 2:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		case 3:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(432.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(432.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(432.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1296.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1296.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1296.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X, ENEMY_SIZE_Y, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		case 4:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(144.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(144.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1008.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		case 5:
+			// m_pEnemyのクリエイト
+			CEnemy::Create(D3DXVECTOR3(720.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(720.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 5.0f, ENEMY_SIZE_Y - 5.0f, 0.0f), 5, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -200.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 10.0f, ENEMY_SIZE_Y - 10.0f, 0.0f), 4, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 15.0f, ENEMY_SIZE_Y - 15.0f, 0.0f), 3, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -400.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 20.0f, ENEMY_SIZE_Y - 20.0f, 0.0f), 2, CScene::OBJTYPE_ENEMY);
+			CEnemy::Create(D3DXVECTOR3(1584.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 3.0f, 0.0f), D3DXVECTOR3(ENEMY_SIZE_X - 25.0f, ENEMY_SIZE_Y - 25.0f, 0.0f), 1, CScene::OBJTYPE_ENEMY);
+			m_nCountCreate = 0;
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+//=============================================================================
+// ゲームクラスのポーズ中の処理
+//=============================================================================
+void CGame::Pause(void)
+{
+	// CInputJoypadのポインタのインスタンス生成の受け取り
+	CInputJoypad *pInputJoypad = CManager::GetInputJoypad();
+
+	// ポーズ画面の処理
+	// 選んだ時のカウントを減算する
+	m_nSelectCount--;
+	// 選んだ時のカウントが0以下になったら
+	if (m_nSelectCount <= 0)
+	{
+		// ポーズ状態じゃなく、モードがゲームの時
+		if (m_bPause == true && CManager::GetMode() == CManager::MODE_GAME)
+		{
+			// スタートボタンを押したら
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_START))
+			{
+				//ポーズ状態にする
+				CScene::SetPause(true);
+
+				// セレクトクラスの生成
+				m_pSelect[0] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CSelect::SELECTTYPE_KUROHAIKEI);
+				m_pSelect[1] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(850.0f, 625.0f, 0.0f), CSelect::SELECTTYPE_MENU);
+				// ポーズ状態にする
+				m_bPause = false;
+				m_nSelectCount = 20;
+
+				// サウンドの停止と再生
+				CManager::GetSound()->StopSound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
+				CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_MENUCREATE);
+				return;
+			}
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_START))
+			{
+				//ポーズ状態にする
+				CScene::SetPause(true);
+
+				// セレクトクラスの生成
+				m_pSelect[0] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CSelect::SELECTTYPE_KUROHAIKEI);
+				m_pSelect[1] = CSelect::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(850.0f, 625.0f, 0.0f), CSelect::SELECTTYPE_MENU);
+				// ポーズ状態にする
+				m_bPause = false;
+				m_nSelectCount = 20;
+
+				// サウンドの停止と再生
+				CManager::GetSound()->StopSound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
+				CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_MENUCREATE);
+				return;
+			}
+
+		}
+		// ポーズ状態の時
+		else if (m_bPause == false)
+		{
+			// スタートボタンを押したら
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_START))
+			{
+				//ポーズ状態を解除する
+				CScene::SetPause(false);
+
+				// サウンドの再生
+				CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
+
+				for (int nCount = 0; nCount < MAX_SELECT; nCount++)
+				{
+					// m_pSelectがNULLじゃないとき
+					if (m_pSelect[nCount] != NULL)
+					{
+						// m_pSelectの終了処理
+						m_pSelect[nCount]->Uninit();
+						m_pSelect[nCount] = NULL;
+					}
+				}
+				// ポーズ状態を解除する
+				m_bPause = true;
+				m_nSelectCount = 20;
+				return;
+			}
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_START))
+			{
+				//ポーズ状態を解除する
+				CScene::SetPause(false);
+
+				// サウンドの再生
+				CManager::GetSound()->PlaySound(CManager::GetSound()->SOUND_LABEL_GAMEBGM);
+
+				for (int nCount = 0; nCount < MAX_SELECT; nCount++)
+				{
+					// m_pSelectがNULLじゃないとき
+					if (m_pSelect[nCount] != NULL)
+					{
+						// m_pSelectの終了処理
+						m_pSelect[nCount]->Uninit();
+						m_pSelect[nCount] = NULL;
+					}
+				}
+				// ポーズ状態を解除する
+				m_bPause = true;
+				m_nSelectCount = 20;
+				return;
+			}
+			// Aボタンを押したら
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_1, CInputJoypad::BUTTON_A))
+			{
+				for (int nCount = 0; nCount < MAX_SELECT; nCount++)
+				{
+					if (m_pSelect[nCount] != NULL)
+					{
+						// m_pSelectがNULLじゃないとき
+						m_pSelect[nCount]->Uninit();
+						m_pSelect[nCount] = NULL;
+					}
+				}
+				// ポーズ状態を解除する
+				m_bPause = true;
+				m_nSelectCount = 180;
+				return;
+			}
+			if (pInputJoypad->GetJoypadTrigger(PLAYER_2, CInputJoypad::BUTTON_A))
+			{
+				for (int nCount = 0; nCount < MAX_SELECT; nCount++)
+				{
+					if (m_pSelect[nCount] != NULL)
+					{
+						// m_pSelectがNULLじゃないとき
+						m_pSelect[nCount]->Uninit();
+						m_pSelect[nCount] = NULL;
+					}
+				}
+				// ポーズ状態を解除する
+				m_bPause = true;
+				m_nSelectCount = 180;
+				return;
+			}
+		}
+	}
 }
 
 

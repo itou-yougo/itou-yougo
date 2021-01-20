@@ -71,7 +71,7 @@ void CBomb::Unload(void)
 //=============================================================================
 // ボムクラスのインスタンス生成
 //=============================================================================
-CBomb* CBomb::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, BOMBTTYPE BombType, OBJTYPE objType)
+CBomb* CBomb::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, BOMBTTYPE BombType, OBJTYPE objType)
 {
 	// CBombのポインタ
 	CBomb *pBullet = NULL;
@@ -83,7 +83,7 @@ CBomb* CBomb::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, BOMBTTYPE Bomb
 	if (pBullet != NULL)
 	{
 		// ボムのセット
-		pBullet->SetBomb(pos, fSizeX, fSizeY, BombType, objType);
+		pBullet->SetBomb(pos, size, BombType, objType);
 
 		// 初期化処理
 		pBullet->Init();

@@ -24,8 +24,7 @@ CLifepolygon::CLifepolygon()
 {
 	m_pVtxBuff = NULL;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //=============================================================================
@@ -69,7 +68,7 @@ void CLifepolygon::Unload(void)
 //=============================================================================
 // ライフポリゴンクラスのインスタンス生成
 //=============================================================================
-CLifepolygon * CLifepolygon::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nDivide, int nCount)
+CLifepolygon * CLifepolygon::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, int nDivide, int nCount)
 {
 	// CLifepolygonのポインタ
 	CLifepolygon *pLifepolygon = NULL;
@@ -86,7 +85,7 @@ CLifepolygon * CLifepolygon::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY,
 		// ライフポリゴンのセット
 		pLifepolygon->SetLifePolygon(nDivide, nCount);
 		pLifepolygon->SetPosition(pos);
-		pLifepolygon->SetSize(fSizeX, fSizeY);
+		pLifepolygon->SetSize(size);
 	}
 
 	// pLifepolygonを返す
@@ -169,10 +168,10 @@ void CLifepolygon::Update(void)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点情報を設定
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x - (m_fSizeX / 2), m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_fSizeX / 2), m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x - (m_fSizeX / 2), m_pos.y + (m_fSizeY / 2), 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_fSizeX / 2), m_pos.y + (m_fSizeY / 2), 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
 
 	//頂点データをアンロックする
 	m_pVtxBuff->Unlock();

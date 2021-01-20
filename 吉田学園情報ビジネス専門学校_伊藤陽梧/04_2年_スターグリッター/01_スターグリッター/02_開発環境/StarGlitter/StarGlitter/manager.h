@@ -21,7 +21,7 @@ class CGame;
 class CResult;
 class CRenderer;
 class CScene2D;
-class CPlayer;
+
 class CInput;
 class CInputKeyboard;
 class CInputJoypad;

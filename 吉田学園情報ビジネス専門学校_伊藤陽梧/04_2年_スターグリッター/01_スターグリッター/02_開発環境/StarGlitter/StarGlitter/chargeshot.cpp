@@ -32,8 +32,7 @@ CChargeshot::CChargeshot() :CScene(OBJTYPE_GAUGE)
 	pCharge = NULL;
 	m_pVtxBuff = NULL;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //=============================================================================
@@ -77,7 +76,7 @@ void CChargeshot::Unload(void)
 //=============================================================================
 // チャージショットクラスのインスタンス生成
 //=============================================================================
-CChargeshot * CChargeshot::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, CHARGESHOTTYPE chargeshottype, OBJTYPE objType)
+CChargeshot * CChargeshot::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, CHARGESHOTTYPE chargeshottype, OBJTYPE objType)
 {
 	// CChargeshotのポインタ
 	CChargeshot *pChargeshot = NULL;
@@ -89,7 +88,7 @@ CChargeshot * CChargeshot::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, C
 	if (pChargeshot != NULL)
 	{
 		// チャージショットのセット
-		pChargeshot->SetChargeShot(pos, fSizeX, fSizeY, chargeshottype, objType);
+		pChargeshot->SetChargeShot(pos, size, chargeshottype, objType);
 
 		// 初期化処理
 		pChargeshot->Init();
@@ -149,8 +148,8 @@ HRESULT CChargeshot::Init()
 	m_pVtxBuff->Unlock();
 
 	// ゲージとチャージの生成
-	pGauge = CGauge::Create(D3DXVECTOR3(m_pos.x - 136.0f, m_pos.y, 0.0f), 0.0f, m_fSizeY);
-	pCharge = CCharge::Create(D3DXVECTOR3(m_pos.x - 136.0f, m_pos.y, 0.0f), 100.0f, m_fSizeY);
+	pGauge = CGauge::Create(D3DXVECTOR3(m_pos.x - 136.0f, m_pos.y, 0.0f), D3DXVECTOR3(0.0f, m_size.y, 0.0f));
+	pCharge = CCharge::Create(D3DXVECTOR3(m_pos.x - 136.0f, m_pos.y, 0.0f), D3DXVECTOR3(100.0f, m_size.y, 0.0f));
 
 	return S_OK;
 }
@@ -200,10 +199,10 @@ void CChargeshot::Update(void)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点情報を設定
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x - (m_fSizeX / 2), m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_fSizeX / 2), m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x - (m_fSizeX / 2), m_pos.y + (m_fSizeY / 2), 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_fSizeX / 2), m_pos.y + (m_fSizeY / 2), 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
 
 	//頂点データをアンロックする
 	m_pVtxBuff->Unlock();
@@ -242,7 +241,6 @@ void CChargeshot::Draw(void)
 		pCharge->Draw();
 	}
 
-
 	// インスタンス生成したものを受け取る
 	CRenderer *pRenderer = CManager::GetRenderer();
 
@@ -260,8 +258,6 @@ void CChargeshot::Draw(void)
 
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, NUM_POLYGON);
-
-
 }
 
 //=============================================================================

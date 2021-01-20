@@ -40,31 +40,26 @@ public:
 		BOMBEXPLOSION_MAX,
 	}BOMBEXPLOSIONTYPE;
 
-	CBombexplosion();
-	~CBombexplosion();
+	CBombexplosion();  // コンストラク
+	~CBombexplosion(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CBombexplosion *Create(D3DXVECTOR3 pos, int nLife, BOMBEXPLOSIONTYPE bombexplosiontype, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CBombexplosion *Create(D3DXVECTOR3 pos, int nLife, BOMBEXPLOSIONTYPE bombexplosiontype, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetExplosion(D3DXVECTOR3 pos, int nLife, BOMBEXPLOSIONTYPE bombexplosiontype, OBJTYPE objType) {
+	void SetBombexplosion(D3DXVECTOR3 pos, int nLife, BOMBEXPLOSIONTYPE bombexplosiontype, OBJTYPE objType) { // ボムの爆発の設定
 		m_pos = pos; m_nLife = nLife; 
-		SetPosition(pos); SetSize(BOMBEXPLOSION_SIZE_X, BOMBEXPLOSION_SIZE_Y);
+		SetPosition(pos); SetSize(D3DXVECTOR3(BOMBEXPLOSION_SIZE_X, BOMBEXPLOSION_SIZE_Y, 0.0f));
 		m_BombExplosionType = bombexplosiontype; SetObjType(objType);
 	}
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;  // テクスチャのポインタ
 	D3DXVECTOR3		  m_pos;			   // 爆発の座標
-	D3DXVECTOR3		  m_Getpos;			   // 受け取った座標
-	float			  m_fSizeX;			   // 横の大きさ
-	float			  m_fSizeY;			   // 縦の大きさ
-	float			  m_fGetSizeX;		   // 受け取った横のサイズ
-	float			  m_fGetSizeY;		   // 受け取った縦のサイズ
 	int				  m_nLife;			   // 体力
 	BOMBEXPLOSIONTYPE m_BombExplosionType; // ボムの爆発のタイプ
 };

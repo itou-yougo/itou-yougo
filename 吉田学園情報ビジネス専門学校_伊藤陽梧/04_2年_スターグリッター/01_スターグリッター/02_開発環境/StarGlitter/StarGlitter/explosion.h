@@ -35,28 +35,29 @@ public:
 		EXPLOSIONTYPE_BOSS,		 // ボスアタックの爆発
 	}EXPLOSIONTYPE;
 
-	CExplosion();
-	~CExplosion();
+	CExplosion();  // コンストラク
+	~CExplosion(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CExplosion *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CExplosion *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, 
+		EXPLOSIONTYPE ExplosionType, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetExplosion(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, OBJTYPE objType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+	void SetExplosion(D3DXVECTOR3 pos, D3DXVECTOR3 size, 
+		EXPLOSIONTYPE ExplosionType, OBJTYPE objType) { // 爆発の設定
+		m_pos = pos; m_size = size;
+		SetPosition(pos); SetSize(size);
 		m_ExplosionType = ExplosionType; SetObjType(objType);
 	}
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture[MAX_EXPLOSION_TEXTUTE]; // テクスチャへのポインタ
 	D3DXVECTOR3		  m_pos;		   // 座標
-	float			  m_fSizeX;		   // 横の大きさ
-	float			  m_fSizeY;		   // 縦の大きさ
+	D3DXVECTOR3		  m_size;		   // 大きさ
 	int				  m_nCounterAnim;  // アニメーションのカウント
 	EXPLOSIONTYPE	  m_ExplosionType; // 爆発のタイプ
 };

@@ -153,6 +153,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="charge.cpp" />
     <ClCompile Include="chargeshot.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyexplosion.cpp" />
@@ -167,10 +168,8 @@
     <ClCompile Include="lifepolygon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
-    <ClCompile Include="ojamaplayer.cpp" />
-    <ClCompile Include="ojamaplayer2.cpp" />
+    <ClCompile Include="ojama.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="player2.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene2d.cpp" />
@@ -189,6 +188,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="charge.h" />
     <ClInclude Include="chargeshot.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyexplosion.h" />
@@ -203,10 +203,8 @@
     <ClInclude Include="lifepolygon.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
-    <ClInclude Include="ojamaplayer.h" />
-    <ClInclude Include="ojamaplayer2.h" />
+    <ClInclude Include="ojama.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="player2.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene2d.h" />

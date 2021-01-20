@@ -28,38 +28,40 @@ public:
 	{
 		EFFECTTYPE_BULLET = 0,  // 弾のエフェクト
 		EFFECTTYPE_CHARGESTATE, // チャージのエフェクト
-	}EFFECTTYPE;     
-	CEffect();
-	~CEffect();
+	}EFFECTTYPE;
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CEffect *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType);
+	CEffect();  // コンストラク
+	~CEffect();	// デストラクタ
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CEffect *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,
+		int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType); // クリエイト
 
-	void SetEffect(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY;
+	HRESULT Init(void); // 初期化処理
+	void Uninit(void);  // 終了処理
+	void Update(void);  // 更新処理
+	void Draw(void);    // 描画処理
+
+	void SetEffect(D3DXVECTOR3 pos, D3DXVECTOR3 size,
+		int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType) { // エフェクトの設定
+		m_pos = pos; m_size = size;
 		m_nLife = nLife; m_nRed = nRed; m_nGreen = nGreen;
 		m_nBrue = nBrue; m_nAlpha = nAlpha;
 		m_EffectType = EffectType;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+		SetPosition(pos); SetSize(size);
 		SetObjType(objType);
 	}
 
 private:
 	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_EFFECT_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3				  m_pos;	  // 座標
+	D3DXVECTOR3				  m_size;	  // 大きさ
 	int						  m_nLife;	  // 体力
 	int						  m_nRed;	  // 赤
 	int						  m_nGreen;	  // 緑
 	int						  m_nBrue;	  // 青
 	int						  m_nAlpha;	  // 透明度
-	float					  m_fSizeX;	  // 横の大きさ
-	float					  m_fSizeY;	  // 縦の大きさ
 	EFFECTTYPE m_EffectType;
 };
 #endif

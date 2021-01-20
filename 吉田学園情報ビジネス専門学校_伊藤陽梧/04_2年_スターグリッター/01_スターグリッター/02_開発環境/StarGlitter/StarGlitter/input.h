@@ -46,11 +46,11 @@
 class CInput
 {
 public:
-	CInput();
-	virtual ~CInput();  // 親クラスのデストラクタにvirtualをつけることで、メモリリークを抑える
-	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd);
-	virtual void Uninit(void);
-	virtual void Update(void) = 0;
+	CInput();          // コンストラク
+	virtual ~CInput(); // デストラクタ  // 親クラスのデストラクタにvirtualをつけることで、メモリリークを抑える
+	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd); // 初期化処理
+	virtual void Uninit(void); 							  // 終了処理
+	virtual void Update(void) = 0;						  // 更新処理
 
 protected:
 	LPDIRECTINPUTDEVICE8 m_pDevice;	// 入力デバイスへのポインタ
@@ -61,14 +61,14 @@ protected:
 class CInputKeyboard : public CInput
 {
 public:
-	CInputKeyboard();
-	~CInputKeyboard();
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd);
-	void Uninit(void);
-	void Update(void);
-	bool GetKeyboardPress(int nKey);
-	bool GetKeyboardTrigger(int nKey);
-	bool GetKeyboardRelease(int nKey);
+	CInputKeyboard();  // コンストラク
+	~CInputKeyboard(); // デストラクタ 
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd);// 初期化処理
+	void Uninit(void);							 // 終了処理
+	void Update(void);							 // 更新処理
+	bool GetKeyboardPress(int nKey); // Press処理
+	bool GetKeyboardTrigger(int nKey); // Trigger処理
+	bool GetKeyboardRelease(int nKey); // Release処理
 
 private:
 	BYTE m_aKeyStateOld[NUM_KEY_MAX];       // 1F前のキーボードの入力情報ワーク
@@ -109,18 +109,18 @@ public:
 		DIJOYSTATE2 Release;     // コントローラーのプレス情報
 	}CONTROLLER;
 
-	CInputJoypad();
-	~CInputJoypad();
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd);
-	void Update(void);
-	void Release(void);
-	bool GetJoypadPress(int nController, int nButton);
-	bool GetJoypadTrigger(int nController, int nButton);
+	CInputJoypad();  // コンストラク
+	~CInputJoypad(); // デストラクタ 
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd);  // 初期化処理
+	void Update(void);							   // 更新処理
+	void Release(void);							   // 入力デバイスの開放
+	bool GetJoypadPress(int nController, int nButton); // Press処理
+	bool GetJoypadTrigger(int nController, int nButton); // Trigger処理
 	bool GetJoypadCrossKeyTrigger(int nController, int nButton);
-	bool GetJoypadRelease(int nController, int nButton);
-	DIJOYSTATE2 GetController(int nContllre);
-	static LPDIRECTINPUT8 GetInput(void) { return m_pInput; }
-	HRESULT CreateDevice(LPDIDEVICEINSTANCE lpddi);
+	bool GetJoypadRelease(int nController, int nButton); // Release処理
+	DIJOYSTATE2 GetController(int nContllre); // コントローラの状態を取得
+	static LPDIRECTINPUT8 GetInput(void) { return m_pInput; } // 
+	HRESULT CreateDevice(LPDIDEVICEINSTANCE lpddi); // デバイスをCreate
 
 private:
 	CONTROLLER m_Controller[MAX_CONTROLLER];    // コントローラーの情報

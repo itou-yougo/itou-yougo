@@ -36,30 +36,33 @@ public:
 		TEXTTYPE_MAX,
 	}TEXTTYPE;
 
-	CText();
-	~CText();
+	CText();  // コンストラク
+	~CText(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CText *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, TEXTTYPE TextType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CText *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, TEXTTYPE TextType); // クリエイト
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init(void); // 初期化処理
+	void Uninit(void);	// 終了処理
+	void Update(void);	// 更新処理
+	void Draw(void);	// 描画処理
 
-	void SetText(D3DXVECTOR3 pos, float fSizeX, float fSizeY, TEXTTYPE TextType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY; m_TextType = TextType;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+	void SetText(D3DXVECTOR3 pos, D3DXVECTOR3 size, TEXTTYPE TextType) { // テキストの設定
+		m_pos = pos; m_size = size; m_TextType = TextType;
+		SetPosition(pos); SetSize(size);
 	}
 
+	void Ready(void); // Readyの文字の処理
+	void Go(void);	  // Goの文字の処理
+	void Ko(void);	  // Koの文字の処理
+	void Won(void);   // Wonの文字の処理
 private:
 	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_TEXT_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3				  m_pos;	  // 座標
+	D3DXVECTOR3				  m_size;	  // 大きさ
 	int						  m_nAlpha;   // 透明度
 	int						  m_nCount;   // カウント
-	float					  m_fSizeX;   // 横の大きさ
-	float					  m_fSizeY;   // 縦の大きさ
 	bool					  m_bUse;	  // 使っているかの判定
 	TEXTTYPE				  m_TextType; // テキストのタイプ
 };

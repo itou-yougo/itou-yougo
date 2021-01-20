@@ -25,11 +25,10 @@ CGauge::CGauge()
 	m_pTexture = NULL;
 	m_pVtxBuff = NULL;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fExtendX = 0.0f;
 	m_fExtendY = 0.0f;
-	m_fMaxExtendX = MAX_GAUGE_EXTEND / 3;
+	m_fMaxExtendX = MAX_GAUGE_EXTEND;
 	m_fMaxExtendY = 0.0f;
 }
 
@@ -74,7 +73,7 @@ void CGauge::Unload(void)
 //=============================================================================
 // ゲージクラスのインスタンス生成
 //=============================================================================
-CGauge* CGauge::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY)
+CGauge* CGauge::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	// CGaugeのポインタ
 	CGauge *pGauge = NULL;
@@ -85,7 +84,7 @@ CGauge* CGauge::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY)
 	// pGaugeがNULLじゃないとき
 	if (pGauge != NULL)
 	{
-		pGauge->SetGauge(pos, fSizeX, fSizeY);
+		pGauge->SetGauge(pos, size);
 
 		// 初期化処理
 		pGauge->Init();
@@ -182,10 +181,10 @@ void CGauge::Update(void)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点情報を設定
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_fMaxExtendX, m_pos.y - (m_fSizeY / 2), 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x, m_pos.y + (m_fSizeY / 2), 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_fMaxExtendX, m_pos.y + (m_fSizeY / 2), 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_fMaxExtendX, m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x, m_pos.y + (m_size.y / 2), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_fMaxExtendX, m_pos.y + (m_size.y / 2), 0.0f);
 
 	// 頂点カラーの設定(0～255の範囲で設定)
 	pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);

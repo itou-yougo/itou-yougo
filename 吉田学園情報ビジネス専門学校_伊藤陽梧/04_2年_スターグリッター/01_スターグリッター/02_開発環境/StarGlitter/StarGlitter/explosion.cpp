@@ -35,8 +35,7 @@ LPDIRECT3DTEXTURE9 CExplosion::m_pTexture[MAX_EXPLOSION_TEXTUTE] = {};
 CExplosion::CExplosion() :CScene2D(OBJTYPE_EXPLOSION)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounterAnim = 0;
 	m_ExplosionType = EXPLOSIONTYPE_NOMAL;
 }
@@ -86,7 +85,7 @@ void CExplosion::Unload(void)
 //=============================================================================
 // バレットクラスのインスタンス生成
 //=============================================================================
-CExplosion* CExplosion::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, OBJTYPE objType)
+CExplosion* CExplosion::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, EXPLOSIONTYPE ExplosionType, OBJTYPE objType)
 {
 	// CExplosionのポインタ
 	CExplosion *pExplosion = NULL;
@@ -101,7 +100,7 @@ CExplosion* CExplosion::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPL
 	if (pExplosion != NULL)
 	{
 		// 爆発のセット
-		pExplosion->SetExplosion(pos, fSizeX, fSizeY, ExplosionType, objType);
+		pExplosion->SetExplosion(pos, size, ExplosionType, objType);
 
 		// 初期化処理
 		pExplosion->Init();
@@ -164,8 +163,7 @@ void CExplosion::Uninit(void)
 void CExplosion::Update(void)
 {
 	// サイズの受け取り
-	m_fSizeX = GetSizeX();
-	m_fSizeY = GetSizeY();
+	m_size = GetSize();
 
 	// アニメーションのカウント
 	m_nCounterAnim++;
@@ -175,7 +173,7 @@ void CExplosion::Update(void)
 
 	// m_posを渡す
 	SetPosition(m_pos);
-	SetSize(m_fSizeX, m_fSizeY);
+	SetSize(m_size);
 
 	switch (m_ExplosionType)
 	{

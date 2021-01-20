@@ -24,13 +24,12 @@ LPDIRECT3DTEXTURE9 CEffect::m_apTexture[MAX_EFFECT_TEXTURE] = {};
 CEffect::CEffect() :CScene2D(OBJTYPE_EFFECT)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nLife = 0;
 	m_nRed = 0;
 	m_nGreen = 0;
 	m_nBrue = 0;
 	m_nAlpha = 0;
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
 	m_EffectType = EFFECTTYPE_BULLET;
 }
 
@@ -79,7 +78,7 @@ void CEffect::Unload(void)
 //=============================================================================
 // エフェクトクラスのインスタンス生成
 //=============================================================================
-CEffect * CEffect::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType)
+CEffect * CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, int nLife, int nRed, int nGreen, int nBrue, int nAlpha, EFFECTTYPE EffectType, OBJTYPE objType)
 {
 	// CDiceのポインタ
 	CEffect *Effect = NULL;
@@ -90,7 +89,7 @@ CEffect * CEffect::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, int nLife
 	// EffectがNULLじゃないとき
 	if (Effect != NULL)
 	{
-		Effect->SetEffect(pos, fSizeX, fSizeY, nLife, nRed, nGreen, nBrue, nAlpha, EffectType, objType);
+		Effect->SetEffect(pos, size, nLife, nRed, nGreen, nBrue, nAlpha, EffectType, objType);
 		
 		// 初期化処理
 		Effect->Init();
@@ -150,25 +149,19 @@ void CEffect::Update(void)
 
 	// 座標とサイズを受け取る
 	m_pos = GetPosition();
-	m_fSizeX = GetSizeX();
-	m_fSizeY = GetSizeY();
+	m_size = GetSize();
 
 	switch (m_EffectType)
 	{
 		// 弾のエフェクト
 	case EFFECTTYPE_BULLET:
 		// サイズを小さくしていく
-		m_fSizeX -= 1.0f;
-		m_fSizeY -= 1.0f;
+		m_size -= D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 
 		// サイズが0.0fより小さくなったら
-		if (m_fSizeX < 0.0f)
+		if (m_size < D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 		{
-			m_fSizeX = 0.0f;
-		}
-		if (m_fSizeY < 0.0f)
-		{
-			m_fSizeY = 0.0f;
+			m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 
 		// 体力と透明度の減算
@@ -188,7 +181,7 @@ void CEffect::Update(void)
 	
 	// 座標とサイズを渡す
 	SetPosition(m_pos);
-	SetSize(m_fSizeX, m_fSizeY);
+	SetSize(m_size);
 }
 
 //=============================================================================

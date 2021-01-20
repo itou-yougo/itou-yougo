@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "sound.h"
 #include "bullet.h"
+#include "collision.h"
 
 //=============================================================================
 // マクロ定義
@@ -35,9 +36,7 @@ LPDIRECT3DTEXTURE9 CEnemyexplosion::m_apTexture[MAX_ENEMYEXPLOSION_TEXTURE] = {}
 CEnemyexplosion::CEnemyexplosion() :CScene2D(OBJTYPE_ENEMYEXPLOSION)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Getpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSizeX = 0.0f;
-	m_fSizeY = 0.0f;
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounterAnim = 0;
 	m_nPatternAnim = 0;
 	m_nTimeAnim = EXPLOSION_ANIMATION_TIME;
@@ -90,7 +89,7 @@ void CEnemyexplosion::Unload(void)
 //=============================================================================
 // 敵の爆発クラスのインスタンス生成
 //=============================================================================
-CEnemyexplosion* CEnemyexplosion::Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType)
+CEnemyexplosion* CEnemyexplosion::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, EXPLOSIONTYPE ExplosionType, EXPLOSIONTEXTURE ExplosionTexture, OBJTYPE objType)
 {
 	// CEnemyexplosionのポインタ
 	CEnemyexplosion *pEnemyexplosion = NULL;
@@ -104,7 +103,7 @@ CEnemyexplosion* CEnemyexplosion::Create(D3DXVECTOR3 pos, float fSizeX, float fS
 	if (pEnemyexplosion != NULL)
 	{
 		// 敵の爆発のセット
-		pEnemyexplosion->SetExplosion(pos, fSizeX, fSizeY, ExplosionType, ExplosionTexture, objType);
+		pEnemyexplosion->SetExplosion(pos, size, ExplosionType, ExplosionTexture, objType);
 
 		// 初期化処理
 		pEnemyexplosion->Init();
@@ -146,84 +145,21 @@ void CEnemyexplosion::Uninit(void)
 void CEnemyexplosion::Update(void)
 {
 	// サイズの受け取り
-	m_fSizeX = GetSizeX();
-	m_fSizeY = GetSizeY();
+	m_size = GetSize();
 
 	// CScene2Dの更新処理
 	CScene2D::Update();
 
 	// サイズの加算
-	m_fSizeX++;
-	m_fSizeY++;
+	m_size.x++;
+	m_size.y++;
 
-	switch (m_ExplosionType)
-	{
-	case EXPLOSIONTYPE_PLAYER:
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-		{
-			// 敵のシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
-			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
-				{
-					// 座標の受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-
-					// 当たり判定
-					if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (ENEMY_SIZE_X / 2) &&
-						m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (ENEMY_SIZE_X / 2) &&
-						m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (ENEMY_SIZE_Y / 2) &&
-						m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (ENEMY_SIZE_Y / 2))
-					{
-						// 敵のダメージ
-						((CEnemy*)pScene)->EnemyDamage(5, CEnemy::DAMAGE_TYPE_EXPLOSION, CBullet::BULLET_TYPE_PLAYER);
-						break;
-					}
-				}
-			}
-		}
-		break;
-
-	case EXPLOSIONTYPE_PLAYER2:
-		for (int nCntScene = 0; nCntScene < MAX_POLYGON; nCntScene++)
-		{
-			// 敵のシーンの受け取り
-			CScene *pScene = GetScene(OBJTYPE_ENEMY, nCntScene);
-			if (pScene != NULL)
-			{
-				// オブジェタイプの受け取り
-				OBJTYPE objType = pScene->GetObjType();
-				if (objType == OBJTYPE_ENEMY)
-				{
-					// 座標の受け取り
-					m_Getpos = ((CScene2D*)pScene)->GetPosition();
-
-					// 当たり判定
-					if (m_pos.x - (m_fSizeX / 2) <= m_Getpos.x + (PLAYER_SIZE_X / 2) &&
-						m_pos.x + (m_fSizeX / 2) >= m_Getpos.x - (PLAYER_SIZE_X / 2) &&
-						m_pos.y - (m_fSizeY / 2) <= m_Getpos.y + (PLAYER_SIZE_Y / 2) &&
-						m_pos.y + (m_fSizeY / 2) >= m_Getpos.y - (PLAYER_SIZE_Y / 2))
-					{
-						// 敵のダメージ
-						((CEnemy*)pScene)->EnemyDamage(5, CEnemy::DAMAGE_TYPE_EXPLOSION, CBullet::BULLET_TYPE_PLAYER2);
-						break;
-					}
-				}
-			}
-		}
-		break;
-
-	default:
-		break;
-	}
-
+	// 敵に当たったとき
+	Hit();
 
 	// 座標とサイズを渡す
 	SetPosition(m_pos);
-	SetSize(m_fSizeX, m_fSizeY);
+	SetSize(m_size);
 	
 	// アニメーションが終わったら終了処理
 	if (m_nTimeAnim == EXPLOSION_ANIMATION_TIME)
@@ -246,6 +182,50 @@ void CEnemyexplosion::Draw(void)
 {
 	// CScene2Dの描画処理
 	CScene2D::Draw();
+}
+
+//=============================================================================
+// 敵の爆発クラスの当たったときの処理
+//=============================================================================
+void CEnemyexplosion::Hit(void)
+{
+	// 敵のシーンを受け取る
+	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_ENEMY);
+	do
+	{
+		if (pScene != NULL)
+		{
+			// オブジェタイプの受け取り
+			OBJTYPE objType = pScene->GetObjType();
+			if (objType == OBJTYPE_ENEMY)
+			{
+				switch (m_ExplosionType)
+				{
+				case EXPLOSIONTYPE_PLAYER:
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, m_size, pScene) == true)
+					{
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(5, CEnemy::DAMAGE_TYPE_EXPLOSION, CBullet::BULLET_TYPE_1P);
+					}
+					break;
+
+				case EXPLOSIONTYPE_PLAYER2:
+					// 当たり判定
+					if (CCollision::PRectangleCollision(m_pos, m_size, pScene) == true)
+					{
+						// 敵のダメージ
+						((CEnemy*)pScene)->EnemyDamage(5, CEnemy::DAMAGE_TYPE_EXPLOSION, CBullet::BULLET_TYPE_2P);
+					}
+					break;
+
+				default:
+					break;
+				}
+			}
+			pScene = pScene->GetSceneNext();
+		}
+	} while (pScene != NULL);
 }
 
 //=============================================================================

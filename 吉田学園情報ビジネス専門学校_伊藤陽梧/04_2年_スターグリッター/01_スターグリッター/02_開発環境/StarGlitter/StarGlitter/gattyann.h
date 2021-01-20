@@ -11,8 +11,8 @@
 // マクロ定義
 //=============================================================================
 #define MAX_GATTYANN_TEXTURE (8)
-#define GATTYANN_SPEED (10.0f)
-#define GATTYANN_OPEN_SPEED (15)
+#define GATTYANN_SPEED (15.0f)
+#define GATTYANN_OPEN_SPEED (15.0f) // 開く速さ
 
 //=============================================================================
 // インクルードファイル
@@ -38,28 +38,29 @@ public:
 		GATTYANN_8,		// 8枚目
 	}GATTYANNTYPE;
 
-	CGattyann();
-	~CGattyann();
+	CGattyann();  // コンストラク
+	~CGattyann(); // デストラクタ
 
 	static HRESULT Load(void);
 	static void Unload(void);
-	static CGattyann *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, GATTYANNTYPE GattyannType);
+	static CGattyann *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, GATTYANNTYPE GattyannType); // クリエイト
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init(void); // 初期化処理
+	void Uninit(void);	// 終了処理
+	void Update(void);	// 更新処理
+	void Draw(void);	// 描画処理
 
-	void SetGattyann(D3DXVECTOR3 pos, float fSizeX, float fSizeY, GATTYANNTYPE GattyannType) {
-		m_pos = pos; m_fSizeX = fSizeX; m_fSizeY = fSizeY; m_GattyannType = GattyannType;
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+	void SetGattyann(D3DXVECTOR3 pos, D3DXVECTOR3 size, GATTYANNTYPE GattyannType) { // ガッチャンの設定
+		m_pos = pos; m_size = size; m_GattyannType = GattyannType;
+		SetPosition(pos); SetSize(size);
 	}
-
+	
+	void CloseMove(void); // 閉じる処理
+	void OpenMove(void);  // 開く処理
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture[MAX_GATTYANN_TEXTURE]; // テクスチャへのポインタ
 	D3DXVECTOR3				  m_pos;		  // 座標
-	float					  m_fSizeX;		  // 横の大きさ
-	float					  m_fSizeY;		  // 縦の大きさ
+	D3DXVECTOR3				  m_size;		  // 大きさ
 	int						  m_nCount;		  // カウント
 	GATTYANNTYPE			  m_GattyannType; // 何枚目か
 };

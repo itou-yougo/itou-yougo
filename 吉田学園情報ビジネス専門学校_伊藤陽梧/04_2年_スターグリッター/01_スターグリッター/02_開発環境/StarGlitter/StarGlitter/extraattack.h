@@ -12,7 +12,6 @@
 //=============================================================================
 #include "main.h"
 #include "scene2d.h"
-#include "bullet.h"
 
 //=============================================================================
 // マクロ定義
@@ -31,50 +30,54 @@ public:
 		EXTRAATTCK_PLAYER1,		    // プレイヤー1のエクストラアタック
 		EXTRAATTCK_PLAYER2,		    // プレイヤー2のエクストラアタック
 		EXTRAATTCK_PLAYER_MAX,
-	}PLAYER;
+	}EXTRAATTCKPLAYERNUM;
 
 	typedef enum
 	{
 		EXTRAATTACK_NONE = 0,
-		EXTRAATTACK_TIKATIKA,  // チカチカしながら相手の方に行くエクストラアタック
-		EXTRAATTACK_NERAU,	   // 相手を狙うエクストラアタック
+		EXTRAATTACK_BLINKING,  // チカチカしながら相手の方に行くエクストラアタック
+		EXTRAATTACK_AIM,	   // 相手を狙うエクストラアタック
 		EXTRAATTACK_EXPLOSION, // 爆発するエクストラアタック
 		EXTRAATTACK_LOCKET,	   // 上にあがるエクストラアタック
 		EXTRAATTACK_MAX,
 	}EXTRAATTACK;
 
-	CExtraattck();
-	~CExtraattck();
+	CExtraattck();  // コンストラク
+	~CExtraattck();	// デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CExtraattck *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, PLAYER Player, EXTRAATTACK Extraattack, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CExtraattck *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,
+		EXTRAATTCKPLAYERNUM Player, EXTRAATTACK Extraattack, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();     // 初期化処理
+	void Uninit(void);  // 終了処理
+	void Update(void);  // 更新処理
+	void Draw(void);    // 描画処理
 
-	void SetExtraAttack(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fSizeX, float fSizeY, PLAYER Player, EXTRAATTACK Extraattack, OBJTYPE objType) {
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
-		m_pos = pos; m_move = move;
-		m_fSizeX = fSizeX; m_fSizeY = fSizeY;
-		m_Player = Player; m_ExtraAttack = Extraattack;
+	void SetExtraAttack(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 size,
+		EXTRAATTCKPLAYERNUM Player, EXTRAATTACK Extraattack, OBJTYPE objType) { //エクストラアタックの設定
+		SetPosition(pos); SetSize(size);
+		m_pos = pos; m_move = move; m_size = size;
+		m_ExtraPlayerNum = Player; m_ExtraAttack = Extraattack;
 		SetObjType(objType);
 	}
 
-	EXTRAATTACK GetExtraAttack(void);
+	void Blinking(void);  // チカチカする処理
+	void Aim(void);		  // 相手を狙う処理
+	void Explosion(void); // 爆発する処理
+	void Locket(void);	  // 上にあがる処理
+	EXTRAATTACK GetExtraAttack(void); // エクストラアタックを返す処理
+	EXTRAATTCKPLAYERNUM GetExtraPlayerNum(void); // エクストラアタックのプレイヤーの番号を返す処理
 private:
-	CBullet::BULLETTYPE m_BulletType;	   // 弾のタイプ
 	static LPDIRECT3DTEXTURE9 m_pTexture[MAX_EXTRAATTACK_TEXTURE];  // テクスチャへのポインタ
 	D3DXVECTOR3	m_pos;					   // 座標
 	D3DXVECTOR3	m_move;					   // 速さ
 	D3DXVECTOR3 m_Getpos;				   // 受け取った座標
-	float	m_fSizeX;					   // 横の大きさ
-	float	m_fSizeY;					   // 縦の大きさ
+	D3DXVECTOR3	m_size;					   // 大きさ
 	float	m_fAngle;					   // 角度
 	int		m_nCountColor;				   // 色のカウント
-	PLAYER m_Player;					   // どのプレイヤーか
+	EXTRAATTCKPLAYERNUM m_ExtraPlayerNum;  // どのプレイヤーか
 	EXTRAATTACK m_ExtraAttack;			   // エクストラアタックのタイプ
 };
 #endif

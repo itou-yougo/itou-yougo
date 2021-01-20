@@ -27,25 +27,25 @@ public:
 		BOMB_TYPE_MAX,
 	}BOMBTTYPE;
 
-	CBomb();
-	~CBomb();
+	CBomb();  // コンストラク
+	~CBomb(); // デストラクタ
 
-	static HRESULT Load(void);
-	static void Unload(void);
-	static CBomb *Create(D3DXVECTOR3 pos, float fSizeX, float fSizeY, BOMBTTYPE BombType, OBJTYPE objType);
+	static HRESULT Load(void); // ロード
+	static void Unload(void);  // アンロード
+	static CBomb *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, BOMBTTYPE BombType, OBJTYPE objType); // クリエイト
 
-	HRESULT Init();
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT Init();    // 初期化処理
+	void Uninit(void); // 終了処理
+	void Update(void); // 更新処理
+	void Draw(void);   // 描画処理
 
-	void SetBomb(D3DXVECTOR3 pos, float fSizeX, float fSizeY, BOMBTTYPE BombType, OBJTYPE objType) {
-		SetPosition(pos); SetSize(fSizeX, fSizeY);
+	void SetBomb(D3DXVECTOR3 pos, D3DXVECTOR3 size, BOMBTTYPE BombType, OBJTYPE objType) { // ボムの設定
+		SetPosition(pos); SetSize(size);
 		m_pos = pos; m_BombType = BombType;
 		SetObjType(objType);
 	}
 
-	void UseBomb(void);
+	void UseBomb(void); // ボムを使うときの処理
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;  // テクスチャへのポインタ
 	D3DXVECTOR3	m_pos;					   // ボムの座標
