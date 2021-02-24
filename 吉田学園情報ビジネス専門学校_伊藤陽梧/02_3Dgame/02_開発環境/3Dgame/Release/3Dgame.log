@@ -1,0 +1,49 @@
+﻿  billboard.cpp
+  camera.cpp
+  character.cpp
+  collision.cpp
+  debugcollision.cpp
+  enemy.cpp
+  enemydeatheffect.cpp
+  enemyremainder.cpp
+  fade.cpp
+  fire.cpp
+  game.cpp
+  gameover.cpp
+  input.cpp
+  joystick.cpp
+  keyboard.cpp
+  light.cpp
+  loadmodeldata.cpp
+  magiccircle.cpp
+  main.cpp
+  manager.cpp
+  コンパイル中...
+  map.cpp
+  mode.cpp
+  model.cpp
+  motion.cpp
+  number.cpp
+  particle.cpp
+  player.cpp
+player.cpp(188): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  renderer.cpp
+  result.cpp
+  scene.cpp
+  scene2d.cpp
+  scene3d.cpp
+  skybox.cpp
+  slash.cpp
+  sound.cpp
+  spark.cpp
+  spesialattackeffect.cpp
+  swordeffect.cpp
+  title.cpp
+  tutorial.cpp
+  コンパイル中...
+  ui.cpp
+  コード生成しています。
+  All 441 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  3Dgame.vcxproj -> C:\Users\student\Desktop\就職活動に使うもの\itou-yougo\吉田学園情報ビジネス専門学校_伊藤陽梧\02_3Dgame\02_開発環境\Release\3Dgame.exe
+  3Dgame.vcxproj -> C:\Users\student\Desktop\就職活動に使うもの\itou-yougo\吉田学園情報ビジネス専門学校_伊藤陽梧\02_3Dgame\02_開発環境\Release\3Dgame.pdb (Full PDB)
