@@ -21,6 +21,7 @@
 #include "sound.h"
 #include "collision.h"
 #include "debugcollision.h"
+#include "enemydeatheffect.h"
 
 //=============================================================================
 // コンストラクタ
@@ -208,6 +209,16 @@ void CEnemy::Update(void)
 			m_fMotionTime--;
 			if (m_fMotionTime <= 50.0f)
 			{
+				float fAngle = D3DXToRadian(360.0f / ENEMYDEATHEFFEC_CREATE_NUM);
+				for (int nCount = 0; nCount < ENEMYDEATHEFFEC_CREATE_NUM; nCount++)
+				{
+					CEnemydeatheffect::Create(pos, ENEMYDEATHEFFEC_DEFAULT_SIZE,
+						D3DXVECTOR3(sinf(fAngle * nCount), 0.0f, cosf(fAngle * nCount)) * ENEMYDEATHEFFEC_DEFAULT_SPEED,
+						ENEMYDEATHEFFEC_DEFAULT_COLOR,
+						ENEMYDEATHEFFEC_COUNTANIM * ENEMYDEATHEFFEC_PATTERNANIM * ENEMYDEATHEFFEC_TIMEANIM);
+				}
+
+				// 終了処理
 				Uninit();
 				return;
 			}

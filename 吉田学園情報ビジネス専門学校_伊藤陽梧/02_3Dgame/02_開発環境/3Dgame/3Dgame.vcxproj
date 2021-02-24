@@ -152,6 +152,7 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="debugcollision.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemydeatheffect.cpp" />
     <ClCompile Include="enemyremainder.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fire.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="debugcollision.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemydeatheffect.h" />
     <ClInclude Include="enemyremainder.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="fire.h" />

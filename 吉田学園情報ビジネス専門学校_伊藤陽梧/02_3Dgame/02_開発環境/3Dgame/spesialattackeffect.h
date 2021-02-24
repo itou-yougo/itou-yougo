@@ -15,11 +15,11 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define SPESIALATTACKEFFECT_COUNTANIM (1)	// テクスチャの横の分割
-#define SPESIALATTACKEFFECT_PATTERNANIM (6) // テクスチャの縦の分割
+#define SPESIALATTACKEFFECT_COUNTANIM (10)	// テクスチャの横の分割
+#define SPESIALATTACKEFFECT_PATTERNANIM (1) // テクスチャの縦の分割
 #define SPESIALATTACKEFFECT_TIMEANIM (4)	// アニメーションの時間
 
-#define SPESIALATTACKEFFECT_SIZE (D3DXVECTOR3(300.0f, 150.0f, 0.0f))	// サイズ
+#define SPESIALATTACKEFFECT_SIZE (D3DXVECTOR3(300.0f, 300.0f, 0.0f))	// サイズ
 #define SPESIALATTACKEFFECT_COLOR (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	// 色
 
 //=============================================================================

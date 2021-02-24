@@ -32,7 +32,7 @@ CMagiccercle::~CMagiccercle()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CMagiccercle * CMagiccercle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, int Life)
+CMagiccercle * CMagiccercle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, int Life, MAGICCIRCLETYPE type)
 {
 	// CMagiccercleポインタ
 	CMagiccercle *pMagiccerclet = NULL;
@@ -56,7 +56,7 @@ CMagiccercle * CMagiccercle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR
 	pMagiccerclet->SetLife(Life);
 
 	// 初期化
-	pMagiccerclet->Init();
+	pMagiccerclet->Init(type);
 
 	// ポインタを返す
 	return pMagiccerclet;
@@ -65,9 +65,23 @@ CMagiccercle * CMagiccercle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CMagiccercle::Init()
+HRESULT CMagiccercle::Init(MAGICCIRCLETYPE type)
 {
-	CParticle::Init(TEX_TYPE_MAGICCIRCLE);
+	switch (type)
+	{
+	case MAGICCIRCLETYPE_PLAYER:
+		CParticle::Init(TEX_TYPE_MAGICCIRCLE);
+		break;
+
+	case MAGICCIRCLETYPE_ENEMY:
+		SetAnimation(MAGICCERCLE_ENEMY_COUNTANIM, MAGICCERCLE_ENEMY_PATTERNANIM, MAGICCERCLE_ENEMY_TIMEANIM);
+		CParticle::Init(TEX_TYPE_ENEMYCREATE_MAGICCIRCLE);
+		break;
+
+	default:
+		break;
+	}
+
 	return S_OK;
 }
 

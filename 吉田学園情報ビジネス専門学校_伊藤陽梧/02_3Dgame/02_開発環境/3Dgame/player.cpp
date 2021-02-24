@@ -367,7 +367,7 @@ void CPlayer::Swordeffect(D3DXVECTOR3 Distance)
 			GetModelParts(11)->GetMtxWorld()._42,
 			GetModelParts(11)->GetMtxWorld()._43) + GetDistance,
 			SWORD_EFFECT_SIZE, D3DXVECTOR3(0.0f, 0.1f, 0.0f),
-			SWORD_EFFECT_COLOR + D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f / (PLAYER_SP_MAX - m_fSpGauge)), SWORD_EFFECT_LIFE);
+			SWORD_EFFECT_COLOR, SWORD_EFFECT_LIFE);
 		m_nSwordEffectTime = 0;
 	}
 }
@@ -380,7 +380,8 @@ void CPlayer::Magic(void)
 	if (m_fMotionTime == MOTION_MAGICCIRCLE_FLAME - MOTION_MAGICCIRCLE_CREATE_START)
 	{
 		// ñÇñ@êwÇÃê∂ê¨
-		CMagiccercle::Create(D3DXVECTOR3(GetPos().x, 0.0f, GetPos().z), MAGICCERCLE_DEFAULT_ROT, MAGICCERCLE_DEFAULT_SIZE, MAGICCERCLE_DEFAULT_COLOR, (int)m_fMotionTime);
+		CMagiccercle::Create(D3DXVECTOR3(GetPos().x, 0.0f, GetPos().z),
+			MAGICCERCLE_DEFAULT_ROT, MAGICCERCLE_DEFAULT_SIZE, MAGICCERCLE_DEFAULT_COLOR, (int)m_fMotionTime, CMagiccercle::MAGICCIRCLETYPE_PLAYER);
 	}
 }
 

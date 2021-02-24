@@ -180,6 +180,9 @@
     <ClCompile Include="enemyremainder.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="enemydeatheffect.cpp">
+      <Filter>ソース ファイル\scene\scene3d\particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="enemyremainder.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="enemydeatheffect.h">
+      <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

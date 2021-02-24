@@ -1,26 +1,23 @@
 //=============================================================================
 //
-// 炎のエフェクトの処理 [fire.h]
+// 敵が死んだエフェクトの処理 [enemydeatheffect.h]
 // Author : 伊藤陽梧
 //
 //=============================================================================
-#ifndef _FIRE_H_
-#define _FIRE_H_
+#ifndef _ENEMYDEATHEFFECT_H_
+#define _ENEMYDEATHEFFECT_H_
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define FIRE_SPEED_ADD_SUBTRACT_Z (0.06f)		// Zの移動量の加算と減算用
-#define FIRE_SPEED_ADD_Y (0.05f)				// Yの加算用
-#define FIRE_SUBTRACT_COLOR_RED_GREEN (0.03f)	// 赤と緑の下げる量
-#define FIRE_SUBTRACT_COLOR_ALPHA (0.003f)		// 透明度の下げる量
-
-#define FIR_SIZE (D3DXVECTOR3(50.0f, 50.0f, 0.0f))			// サイズ
-#define FIRE_COLOR (D3DXCOLOR(0.6f, 0.9f, 1.0f, 1.0f))		// 色
-#define FIRE_LIFE (60)										// ライフ
-#define FIRE_MOVE_Y (1.5f)									// ライフ
-#define FIRE_MOVE_Z (2.2f)									// ライフ
-#define FIRE_CREATE_ANGLE_MAX (360)							// 生成する角度の最大値
+#define ENEMYDEATHEFFEC_DEFAULT_SIZE (D3DXVECTOR3(80.0f, 80.0f, 0.0f))		// 敵が死んだエフェクトのの初期サイズ
+#define ENEMYDEATHEFFEC_DEFAULT_COLOR (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	// 敵が死んだエフェクトのの初期カラー
+#define ENEMYDEATHEFFEC_DEFAULT_SPEED (1.5f)								// 敵が死んだエフェクトのの初期スピード
+#define ENEMYDEATHEFFEC_SUBTRACT_COLOR_ALPHA (0.01f)						// 透明度の下げる量
+#define ENEMYDEATHEFFEC_COUNTANIM (13)	// テクスチャの横の分割
+#define ENEMYDEATHEFFEC_PATTERNANIM (1) // テクスチャの縦の分割
+#define ENEMYDEATHEFFEC_TIMEANIM (4)	// アニメーションの時間
+#define ENEMYDEATHEFFEC_CREATE_NUM (6)	// 作る数
 
 //=============================================================================
 // インクルードファイル
@@ -31,13 +28,13 @@
 //=============================================================================
 // ファイアクラス
 //=============================================================================
-class CFire : public CParticle
+class CEnemydeatheffect : public CParticle
 {
 public:
-	CFire(int nPriority = OBJTYPE_PARTICLE);
-	~CFire();
+	CEnemydeatheffect(int nPriority = OBJTYPE_PARTICLE);
+	~CEnemydeatheffect();
 
-	static CFire *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,
+	static CEnemydeatheffect *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,
 		D3DXVECTOR3 move, D3DXCOLOR col, int Life);
 
 	HRESULT Init();

@@ -26,6 +26,7 @@
 #include "fire.h"
 #include "number.h"
 #include "enemyremainder.h"
+#include "magiccircle.h"
 
 //=============================================================================
 // ê√ìIÉÅÉìÉoïœêî
@@ -121,9 +122,10 @@ void CGame::Update(void)
 			float fCreateAngle = D3DXToRadian((rand() % ENEMY_CREATE_ANGLE));
 			float fDivide = (float)(rand() % 3 + 1);
 
-			// ìGÇÃê∂ê¨
-			CEnemy::Create(D3DXVECTOR3((ENEMY_CREATE_DISTANCE.x / fDivide) * sinf(fCreateAngle), 35.0f, (ENEMY_CREATE_DISTANCE.z / fDivide) * cosf(fCreateAngle)),
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), ENEMY_SIZE, CEnemy::ENEMYSTATE_NOMAL);
+			// ìGÇê∂ê¨Ç∑ÇÈÇ∆Ç´ÇÃñÇñ@êwÇÃê∂ê¨
+			CMagiccercle::Create(D3DXVECTOR3((ENEMY_CREATE_DISTANCE.x / fDivide) * sinf(fCreateAngle), 0.0f, (ENEMY_CREATE_DISTANCE.z / fDivide) * cosf(fCreateAngle)),
+				MAGICCERCLE_DEFAULT_ROT, MAGICCERCLE_ENEMY_DEFAULT_SIZE, MAGICCERCLE_DEFAULT_COLOR,
+				MAGICCERCLE_ENEMY_COUNTANIM * MAGICCERCLE_ENEMY_PATTERNANIM * MAGICCERCLE_ENEMY_TIMEANIM, CMagiccercle::MAGICCIRCLETYPE_ENEMY);
 
 			// ìGÇÃêîÇÃâ¡éZ
 			m_nEnemyNum++;

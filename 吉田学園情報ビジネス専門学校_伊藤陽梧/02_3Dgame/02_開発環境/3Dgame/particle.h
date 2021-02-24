@@ -18,8 +18,8 @@
 class CParticle : public CBillboard
 {
 public:
+	// テクスチャタイプ
 	typedef enum
-		// テクスチャタイプ
 	{
 		TEX_TYPE_NONE = 0,
 		TEX_TYPE_1,
@@ -29,6 +29,8 @@ public:
 		TEX_TYPE_SPESIALATTACK,
 		TEX_TYPE_FIRE,
 		TEX_TYPE_MAGICCIRCLE,
+		TEX_TYPE_ENEMYCREATE_MAGICCIRCLE,
+		TEX_TYPE_ENEMYDEATH,
 		TEX_TYPE_MAX,
 	}TEX_TYPE;
 

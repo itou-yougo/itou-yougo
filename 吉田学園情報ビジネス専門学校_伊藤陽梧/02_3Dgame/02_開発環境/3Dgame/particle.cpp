@@ -15,6 +15,7 @@
 #include "enemy.h"
 #include "collision.h"
 #include "debugcollision.h"
+#include "enemydeatheffect.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -50,9 +51,12 @@ HRESULT CParticle::Load(void)
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/slash_effect_2.png", &m_pTexture[TEX_TYPE_2]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/effect.png", &m_pTexture[TEX_TYPE_SWORD]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spark_effect.png", &m_pTexture[TEX_TYPE_SPARK]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spesialattack_effect.png", &m_pTexture[TEX_TYPE_SPESIALATTACK]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spesialattackeffect02.png", &m_pTexture[TEX_TYPE_SPESIALATTACK]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/fire.png", &m_pTexture[TEX_TYPE_FIRE]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/magiccircle.png", &m_pTexture[TEX_TYPE_MAGICCIRCLE]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/enemycreateeffect.png", &m_pTexture[TEX_TYPE_ENEMYCREATE_MAGICCIRCLE]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/enemydeatheffect.png", &m_pTexture[TEX_TYPE_ENEMYDEATH]);
+	
 	return S_OK;
 }
 
@@ -228,6 +232,30 @@ void CParticle::Update(void)
 
 		SetRot(rot);
 		SetSize(size);
+		break;
+
+
+	case TEX_TYPE_ENEMYCREATE_MAGICCIRCLE:
+		// 更新
+		CBillboard::Update();
+
+		if (GetLife() == MAGICCERCLE_ENEMY_CREATE_TIME)
+		{
+			// 敵の生成
+			CEnemy::Create(D3DXVECTOR3(pos.x, 35.0f, pos.z),
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f), ENEMY_SIZE, CEnemy::ENEMYSTATE_NOMAL);
+		}
+		break;
+
+	case TEX_TYPE_ENEMYDEATH:
+		// 更新
+		CBillboard::Update();
+		col.a -= ENEMYDEATHEFFEC_SUBTRACT_COLOR_ALPHA;
+		pos += m_Move;
+
+		// 座標と色のセット
+		SetPos(pos);
+		SetColor(col);
 		break;
 
 	default:

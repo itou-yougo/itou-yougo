@@ -1,77 +1,80 @@
 //=============================================================================
 //
-// 必殺技のエフェクトの処理 [spesialattackeffect.cpp]
+// 炎のエフェクトの処理 [fire.cpp]
 // Author : 伊藤陽梧
 //
 //=============================================================================
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
+#include "camera.h"
+#include "scene.h"
+#include "joystick.h"
 #include "billboard.h"
 #include "particle.h"
-#include "spesialattackeffect.h"
+#include "enemydeatheffect.h"
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CSpesialattackeffect::CSpesialattackeffect()
+CEnemydeatheffect::CEnemydeatheffect(int nPriority) : CParticle(nPriority)
 {
 }
 
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CSpesialattackeffect::~CSpesialattackeffect()
+CEnemydeatheffect::~CEnemydeatheffect()
 {
 }
 
 //=============================================================================
 // 生成処理
 //=============================================================================
-CSpesialattackeffect * CSpesialattackeffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXCOLOR col, int Life)
+CEnemydeatheffect * CEnemydeatheffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 move, D3DXCOLOR col, int Life)
 {
-	// CSpesialattackeffectクラスのポインタ
-	CSpesialattackeffect *pSpesialattackeffect;
+	// CEnemydeatheffectポインタ
+	CEnemydeatheffect *pSwordeffect = NULL;
 
 	// メモリ確保
-	pSpesialattackeffect = new CSpesialattackeffect;
+	pSwordeffect = new CEnemydeatheffect;
 
 	// 位置座標設定
-	pSpesialattackeffect->SetPos(pos);
+	pSwordeffect->SetPos(pos);
 
 	// サイズ設定
-	pSpesialattackeffect->SetSize(size);
+	pSwordeffect->SetSize(size);
 
 	// カラー設定
-	pSpesialattackeffect->SetColor(col);
+	pSwordeffect->SetColor(col);
 
-	// カラー設定
-	pSpesialattackeffect->SetLife(Life);
+	// ライフ設定
+	pSwordeffect->SetLife(Life);
 
-	// アニメーションの設定
-	pSpesialattackeffect->SetAnimation(SPESIALATTACKEFFECT_COUNTANIM, SPESIALATTACKEFFECT_PATTERNANIM, SPESIALATTACKEFFECT_TIMEANIM);
+	// 動く向きの代入
+	pSwordeffect->SetMove(move);
 
 	// 初期化
-	pSpesialattackeffect->Init();
+	pSwordeffect->Init();
 
-	// CSparkクラスのポインタを返す
-	return pSpesialattackeffect;
+	// ポインタを返す
+	return pSwordeffect;
 }
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CSpesialattackeffect::Init()
+HRESULT CEnemydeatheffect::Init()
 {
-	// CParticleクラスのInit
-	CParticle::Init(TEX_TYPE_SPESIALATTACK);
+	SetAnimation(ENEMYDEATHEFFEC_COUNTANIM, ENEMYDEATHEFFEC_PATTERNANIM, ENEMYDEATHEFFEC_TIMEANIM);
+	CParticle::Init(TEX_TYPE_ENEMYDEATH);
 	return S_OK;
 }
 
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CSpesialattackeffect::Uninit(void)
+void CEnemydeatheffect::Uninit(void)
 {
 	// 終了
 	CParticle::Uninit();
@@ -80,7 +83,7 @@ void CSpesialattackeffect::Uninit(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void CSpesialattackeffect::Update(void)
+void CEnemydeatheffect::Update(void)
 {
 	// 更新
 	CParticle::Update();
@@ -89,10 +92,13 @@ void CSpesialattackeffect::Update(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void CSpesialattackeffect::Draw(void)
+void CEnemydeatheffect::Draw(void)
 {
-	// 加算合成のフラグ
-	SetAdditiveSynthesis();
+	//// 加算合成のフラグ
+	//SetAdditiveSynthesis();
+
+	//// Zバッファのフラグ
+	//SetZbuffer();
 
 	// 描画
 	CParticle::Draw();
