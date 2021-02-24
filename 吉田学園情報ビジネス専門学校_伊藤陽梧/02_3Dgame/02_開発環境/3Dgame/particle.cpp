@@ -16,6 +16,7 @@
 #include "collision.h"
 #include "debugcollision.h"
 #include "enemydeatheffect.h"
+#include "sound.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -50,12 +51,13 @@ HRESULT CParticle::Load(void)
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/slash_effect_1.png", &m_pTexture[TEX_TYPE_1]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/slash_effect_2.png", &m_pTexture[TEX_TYPE_2]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/effect.png", &m_pTexture[TEX_TYPE_SWORD]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spark_effect.png", &m_pTexture[TEX_TYPE_SPARK]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spark_effect.png", &m_pTexture[TEX_TYPE_PLAYERATTACK]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/spesialattackeffect02.png", &m_pTexture[TEX_TYPE_SPESIALATTACK]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/fire.png", &m_pTexture[TEX_TYPE_FIRE]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/magiccircle.png", &m_pTexture[TEX_TYPE_MAGICCIRCLE]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/enemycreateeffect.png", &m_pTexture[TEX_TYPE_ENEMYCREATE_MAGICCIRCLE]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/enemydeatheffect.png", &m_pTexture[TEX_TYPE_ENEMYDEATH]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/enemyattackeffect.png", &m_pTexture[TEX_TYPE_ENEMYATTACK]);
 	
 	return S_OK;
 }
@@ -141,7 +143,7 @@ void CParticle::Update(void)
 		SetPos(pos);
 		break;
 
-	case TEX_TYPE_SPARK:
+	case TEX_TYPE_PLAYERATTACK:
 		// 更新
 		CBillboard::Update();
 		break;
@@ -224,6 +226,8 @@ void CParticle::Update(void)
 			// 魔法陣の内側にいる敵の判定
 			MagiccircleCollision();
 
+			CScene::SetbUpdate(false, CScene::OBJTYPE_ENEMY);
+
 #ifdef _DEBUG
 			// 当たり判定の可視化
 			CDebugCollision::Create(pos, D3DXVECTOR3(GetSize().x, GetSize().z, GetSize().y), CDebugCollision::TYPE_SPHERE);
@@ -256,6 +260,11 @@ void CParticle::Update(void)
 		// 座標と色のセット
 		SetPos(pos);
 		SetColor(col);
+		break;
+
+	case TEX_TYPE_ENEMYATTACK:
+		// 更新
+		CBillboard::Update();
 		break;
 
 	default:

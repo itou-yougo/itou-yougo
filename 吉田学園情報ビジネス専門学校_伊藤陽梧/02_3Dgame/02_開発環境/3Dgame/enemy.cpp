@@ -22,6 +22,7 @@
 #include "collision.h"
 #include "debugcollision.h"
 #include "enemydeatheffect.h"
+#include "hiteffect.h"
 
 //=============================================================================
 // コンストラクタ
@@ -104,7 +105,7 @@ void CEnemy::Update(void)
 		{
 			//方向の計算
 			float angle = (float)atan2(PlayerPos.x - pos.x, PlayerPos.z - pos.z);
-			rot.y = angle - D3DXToRadian(180);
+			rot.y = angle - D3DXToRadian(180.0f);
 		}
 
 		// 敵の状態
@@ -114,68 +115,7 @@ void CEnemy::Update(void)
 			// プレイヤーと敵の距離が近かったら
 			if (fDistance <= ENEMY_DISTANCE_PLAYER)
 			{
-				// 攻撃していないとき
-				if (m_bAttack == false)
-				{
-					// 攻撃する時間の加算
-					m_fAttackTime++;
-
-					// 攻撃する時間が超えたら
-					if (m_fAttackTime >= ENEMY_ATTACK_UNTIL_TIME)
-					{
-						// 攻撃のフラグ立て
-						m_bAttack = true;
-
-						// 攻撃モーション
-						GetMotion()->SetMotion(ENEMYMOTION_ATTACK);
-						m_fMotionTime = ENEMY_ATTACK_MOTION_TIME;
-					}
-				}
-				else
-				{
-#ifdef _DEBUG
-					// 当たり判定の可視化
-					CDebugCollision::Create(D3DXVECTOR3(GetModelParts(9)->GetMtxWorld()._41,
-						GetModelParts(9)->GetMtxWorld()._42,
-						GetModelParts(9)->GetMtxWorld()._43),
-						D3DXVECTOR3(10.0f, 10.0f, 10.0f), CDebugCollision::TYPE_SQUARE);
-#endif
-					// プレイヤーへの当たり判定
-					CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
-					do
-					{
-						if (pScene != NULL)
-						{
-							OBJTYPE objType = pScene->GetObjType();
-							if (objType == OBJTYPE_PLAYER)
-							{
-								// 当たったかどうかと当たった場所
-								bool bHit = false;
-								D3DXVECTOR3 Hitpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-								// 当たり判定
-								if (CCollision::RectangleCollision3D(D3DXVECTOR3(GetModelParts(9)->GetMtxWorld()._41,
-									GetModelParts(9)->GetMtxWorld()._42,
-									GetModelParts(9)->GetMtxWorld()._43),
-									SWORD_COLISION_SIZE, ((CPlayer*)pScene)->GetPos(), ((CPlayer*)pScene)->GetSize()) == true)
-								{
-									// 敵へのダメージ(敵側で当たったか返す)
-									bHit = ((CPlayer*)pScene)->HitDamage(5);
-									break;
-								}
-							}
-							pScene = pScene->GetSceneNext();
-						}
-					} while (pScene != NULL);
-
-					// モーションの時間の減算
-					m_fMotionTime--;
-					if (m_fMotionTime <= 0.0f)
-					{
-						m_bAttack = false;
-						m_fAttackTime = 0.0f;
-						m_fMotionTime = 0.0f;
-					}
-				}
+				Attack();
 			}
 			else
 			{
@@ -305,6 +245,9 @@ bool CEnemy::HitDamage(int nDamage, DAMAGESTATE DamageState)
 			m_EnemyState = ENEMYSTATE_DAMAGE;
 			m_fMotionTime = ENEMY_DAMAGE_MOTION_TIME;
 
+			//サウンドの再生
+			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_ENEMY_DAMAGE);
+
 			if (nLife <= 0)
 			{
 				//サウンドの再生
@@ -335,8 +278,8 @@ bool CEnemy::HitDamage(int nDamage, DAMAGESTATE DamageState)
 //=============================================================================
 void CEnemy::EnemyCollision(void)
 {
-	// 死んでいないとき
-	if (m_EnemyState != ENEMYSTATE_DEATH)
+	// 死んでいないときとダメージを受けてないとき
+	if (m_EnemyState != ENEMYSTATE_DEATH || m_EnemyState != ENEMYSTATE_DAMAGE)
 	{
 		CScene *pScene = GetSceneTop(OBJTYPE_ENEMY);
 		do
@@ -351,11 +294,11 @@ void CEnemy::EnemyCollision(void)
 						if (((CEnemy*)pScene)->GetEnemyState() != ENEMYSTATE_DEATH)
 						{
 							// 当たり判定
-							if (CCollision::SphereCollision(GetPos(), GetSize().x, ((CEnemy*)pScene)->GetPos(), ((CEnemy*)pScene)->GetSize().x) == true)
+							if (CCollision::SphereCollision(GetPos(), GetSize().x / 2.0f, ((CEnemy*)pScene)->GetPos(), ((CEnemy*)pScene)->GetSize().x / 2.0f) == true)
 							{
-								float frot = D3DXToRadian((float)(rand() % 360));
-								m_move.x = sinf(GetRot().y + frot);
-								m_move.z = cosf(GetRot().y + frot);
+								float frot = atan2f(GetPos().x - ((CEnemy*)pScene)->GetPos().x, GetPos().z - ((CEnemy*)pScene)->GetPos().z);
+								m_move.x -= sinf(frot + D3DX_PI);
+								m_move.z -= cosf(frot + D3DX_PI);
 							}
 						}
 					}
@@ -386,7 +329,7 @@ D3DXVECTOR3 CEnemy::PlayerCollision(D3DXVECTOR3 pos)
 				if (objType == OBJTYPE_PLAYER)
 				{
 					// 当たり判定
-					if (CCollision::SphereCollision(GetPos(), GetSize().x, ((CPlayer*)pScene)->GetPos(), ((CPlayer*)pScene)->GetSize().x) == true)
+					if (CCollision::SphereCollision(GetPos(), GetSize().x / 2.0f, ((CPlayer*)pScene)->GetPos(), ((CPlayer*)pScene)->GetSize().x / 2.0f) == true)
 					{
 						if (m_EnemyState == ENEMYSTATE_NOMAL)
 						{
@@ -407,38 +350,79 @@ D3DXVECTOR3 CEnemy::PlayerCollision(D3DXVECTOR3 pos)
 //=============================================================================
 void CEnemy::Attack(void)
 {
-	// 敵への当たり判定
-	CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
-	do
+	// 攻撃していないとき
+	if (m_bAttack == false)
 	{
-		if (pScene != NULL)
-		{
-			OBJTYPE objType = pScene->GetObjType();
-			if (objType == OBJTYPE_PLAYER)
-			{
-				// 当たったかどうかと当たった場所
-				bool bHit = false;
-#ifdef _DEBUG
-				// 当たり判定の可視化
-				CDebugCollision::Create(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
-					GetModelParts(11)->GetMtxWorld()._42,
-					GetModelParts(11)->GetMtxWorld()._43),
-					D3DXVECTOR3(5.0f, 5.0f, 5.0f), CDebugCollision::TYPE_SQUARE);
-#endif
+		// 攻撃する時間の加算
+		m_fAttackTime++;
 
-				// 当たり判定
-				if (CCollision::RectangleCollision3D(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
-					GetModelParts(11)->GetMtxWorld()._42,
-					GetModelParts(11)->GetMtxWorld()._43),
-					ENEMY_ATTACK_COLISION_SIZE, ((CPlayer*)pScene)->GetPos(), ((CPlayer*)pScene)->GetSize()) == true)
-				{
-					// 敵へのダメージ(敵側で当たったか返す)
-					bHit = ((CPlayer*)pScene)->HitDamage(5);
-				}
-			}
-			pScene = pScene->GetSceneNext();
+		// 攻撃する時間が超えたら
+		if (m_fAttackTime >= ENEMY_ATTACK_UNTIL_TIME)
+		{
+			// 攻撃のフラグ立て
+			m_bAttack = true;
+
+			// 攻撃モーション
+			GetMotion()->SetMotion(ENEMYMOTION_ATTACK);
+			m_fMotionTime = ENEMY_ATTACK_MOTION_TIME;
 		}
-	} while (pScene != NULL);
+	}
+	else
+	{
+#ifdef _DEBUG
+		// 当たり判定の可視化
+		CDebugCollision::Create(D3DXVECTOR3(GetModelParts(9)->GetMtxWorld()._41,
+			GetModelParts(9)->GetMtxWorld()._42,
+			GetModelParts(9)->GetMtxWorld()._43),
+			D3DXVECTOR3(10.0f, 10.0f, 10.0f), CDebugCollision::TYPE_SQUARE);
+#endif
+		// プレイヤーへの当たり判定
+		CScene *pScene = CScene::GetSceneTop(CScene::OBJTYPE_PLAYER);
+		do
+		{
+			if (pScene != NULL)
+			{
+				OBJTYPE objType = pScene->GetObjType();
+				if (objType == OBJTYPE_PLAYER)
+				{
+					// 当たったかどうかと当たった場所
+					bool bHit = false;
+					D3DXVECTOR3 Hitpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+					// 当たり判定
+					if (CCollision::RectangleCollision3D(D3DXVECTOR3(GetModelParts(9)->GetMtxWorld()._41,
+						GetModelParts(9)->GetMtxWorld()._42,
+						GetModelParts(9)->GetMtxWorld()._43),
+						SWORD_COLISION_SIZE, ((CPlayer*)pScene)->GetPos(), ((CPlayer*)pScene)->GetSize()) == true)
+					{
+						// 敵へのダメージ(敵側で当たったか返す)
+						bHit = ((CPlayer*)pScene)->HitDamage(5);
+					}
+
+					// 敵に当たったなら
+					if (bHit == true)
+					{
+						// 火花を出す
+						CHiteffect::Create(D3DXVECTOR3(GetModelParts(9)->GetMtxWorld()._41,
+							GetModelParts(9)->GetMtxWorld()._42,
+							GetModelParts(9)->GetMtxWorld()._43) + Hitpos, HITEFFECT_ENEMY_SIZE, HITEFFECT_ENEMY_COLOR,
+							HITEFFECT_ENEMY_COUNTANIM * HITEFFECT_ENEMY_PATTERNANIM * HITEFFECT_ENEMY_TIMEANIM, CHiteffect::HITEFFECTTYPE_ENEMY);
+					}
+
+				}
+				pScene = pScene->GetSceneNext();
+			}
+		} while (pScene != NULL);
+
+		// モーションの時間の減算
+		m_fMotionTime--;
+		if (m_fMotionTime <= 0.0f)
+		{
+			m_bAttack = false;
+			m_fAttackTime = 0.0f;
+			m_fMotionTime = 0.0f;
+		}
+	}
 }
 
 //=============================================================================

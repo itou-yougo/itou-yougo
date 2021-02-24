@@ -181,7 +181,7 @@
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="slash.cpp" />
     <ClCompile Include="sound.cpp" />
-    <ClCompile Include="spark.cpp" />
+    <ClCompile Include="hiteffect.cpp" />
     <ClCompile Include="spesialattackeffect.cpp" />
     <ClCompile Include="swordeffect.cpp" />
     <ClCompile Include="title.cpp" />
@@ -224,7 +224,7 @@
     <ClInclude Include="skybox.h" />
     <ClInclude Include="slash.h" />
     <ClInclude Include="sound.h" />
-    <ClInclude Include="spark.h" />
+    <ClInclude Include="hiteffect.h" />
     <ClInclude Include="spesialattackeffect.h" />
     <ClInclude Include="swordeffect.h" />
     <ClInclude Include="title.h" />

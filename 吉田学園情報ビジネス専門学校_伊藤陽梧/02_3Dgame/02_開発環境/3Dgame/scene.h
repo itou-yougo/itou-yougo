@@ -38,21 +38,21 @@ public:
 	OBJTYPE GetObjType(void) { return m_objType; }
 
 	//純粋仮想関数
-	virtual HRESULT Init(void)=0;	//初期化処理
-	virtual void Uninit(void)=0;	//終了処理
-	virtual void Update(void)=0;	//更新処理
-	virtual void Draw(void)=0;		//描画処理
+	virtual HRESULT Init(void) = 0;	//初期化処理
+	virtual void Uninit(void) = 0;	//終了処理
+	virtual void Update(void) = 0;	//更新処理
+	virtual void Draw(void) = 0;		//描画処理
 
 	static void UpdateAll(void);	//更新まとめ
 	static void DrawAll(void);		//描画まとめ
 	static void ReleaseAll(void);	//終了まとめ
 
 	static void DesignationReleaseAll(OBJTYPE type);
-	static void SetUpdateStop(bool bUpdateStop);
+	static void SetbUpdate(bool bUpdate, OBJTYPE type);
 
 	void ConnectionList(void); // データのつなぎなおし
 
-	static bool GetUpdateStop(void) { return m_bUpdateStop; }
+	static bool GetbUpdate(OBJTYPE type) { return m_bUpdate[type]; }
 	static CScene *GetSceneTop(int nPriority) { return m_pTop[nPriority]; } // シーンのデータを返す
 	CScene * GetSceneNext(void) { return m_pNext; } // シーンのネクストのデータを返す
 
@@ -60,19 +60,15 @@ protected:
 	void Release(void);
 
 private:
-	OBJTYPE m_objType;					//オブジェクトの種類
-	static CScene *m_pTop[OBJTYPE_MAX];	//先頭のオブジェクトへのポインタ
-	static CScene *m_pCur[OBJTYPE_MAX];	//現在のオブジェクトへのポインタ
-	CScene *m_pPrev;					//前のオブジェクトへのポインタ
-	CScene *m_pNext;					//次のオブジェクトへのポインタ
-	static int m_nNumAll;
-	int m_nPriority;
-	int m_nID;
-	static int	m_nCount;
-	static int m_nNext;
-	static bool m_bRelease;
-	bool m_bDeath;
-	static bool m_bUpdateStop;
+	OBJTYPE m_objType;					// オブジェクトの種類
+	static CScene *m_pTop[OBJTYPE_MAX];	// 先頭のオブジェクトへのポインタ
+	static CScene *m_pCur[OBJTYPE_MAX];	// 現在のオブジェクトへのポインタ
+	CScene *m_pPrev;					// 前のオブジェクトへのポインタ
+	CScene *m_pNext;					// 次のオブジェクトへのポインタ
+	int m_nObj;							// オブジェクトのナンバー
+	bool m_bDeath;						// 死亡フラグ
+	static bool m_bUpdate[OBJTYPE_MAX]; // 更新するかどうか
+	static bool m_bDraw[OBJTYPE_MAX];	// 描画するかどうか
 };
 
 #endif // !_RENDERER_H_

@@ -16,13 +16,13 @@
 #include "sound.h"
 #include "ui.h"
 #include "mode.h"
+#include "fade.h"
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
 CTitle::CTitle()
 {
-	m_bSoundDecision = false;
 }
 
 //=============================================================================
@@ -51,9 +51,6 @@ HRESULT CTitle::Init(void)
 //=============================================================================
 void CTitle::Uninit(void)
 {
-	//サウンドの停止
-	CManager::GetSound()->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
-
 	//指定したオブジェクト以外のメモリの開放処理
 	CScene::DesignationReleaseAll(CScene::OBJTYPE_FADE);
 }
@@ -63,21 +60,16 @@ void CTitle::Uninit(void)
 //=============================================================================
 void CTitle::Update(void)
 {
-	if (CScene::GetUpdateStop() == false)
+	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		if (m_bSoundDecision == false)
+		//Enterキー または Bボタンを押したとき
+		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
 		{
-			//Enterキー または Bボタンを押したとき
-			if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
-			{
-				//サウンドの再生
-				CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);
+			//サウンドの再生
+			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);
 
-				//フェードの生成
-				CManager::CreateFade(CManager::MODE_TUTORIAL);
-
-				m_bSoundDecision = true;
-			}
+			//フェードの生成
+			CManager::GetFade()->SetFade(CManager::MODE_TUTORIAL);
 		}
 	}
 }

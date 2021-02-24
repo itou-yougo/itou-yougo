@@ -12,17 +12,9 @@
 #include "manager.h"
 #include "keyboard.h"
 #include "joystick.h"
-#include "time.h"
 #include "sound.h"
 #include "ui.h"
-#include "mode.h"
-#include "player.h"
-#include "enemy.h"
-#include "camera.h"
-#include "light.h"
-#include "scene.h"
-#include "map.h"
-#include "skybox.h"
+#include "fade.h"
 
 //=============================================================================
 // コンストラクタ
@@ -45,9 +37,6 @@ CTutorial::~CTutorial()
 //=============================================================================
 HRESULT CTutorial::Init(void)
 {
-	//サウンドの再生
-	CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_TUTORIAL);
-
 	//チュートリアルのUIの生成
 	m_pUi = CUi::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CUi::TYPE_TUTORIAL);
 	m_pUi->SetTextureSelect(m_nCountTexture, 2);
@@ -60,7 +49,7 @@ HRESULT CTutorial::Init(void)
 void CTutorial::Uninit(void)
 {
 	//サウンドの停止
-	CManager::GetSound()->StopSound(CSound::SOUND_LABEL_BGM_TUTORIAL);
+	CManager::GetSound()->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
 
 	//指定したオブジェクト以外のメモリの開放処理
 	CScene::DesignationReleaseAll(CScene::OBJTYPE_FADE);
@@ -71,25 +60,26 @@ void CTutorial::Uninit(void)
 //=============================================================================
 void CTutorial::Update(void)
 {
-	if (CScene::GetUpdateStop() == false)
+	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
 		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
 		{ //Enterキー または Bボタンを押したとき
-			if (m_nCountTexture == 2)
+			if (m_nCountTexture == TEXTURE_END_NUM)
 			{
-				//サウンドの再生
-				CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_GAME_START);
-
 				//フェードの生成
-				CManager::CreateFade(CManager::MODE_GAME);
+				CManager::GetFade()->SetFade(CManager::MODE_GAME);
 			}
-			if (m_nCountTexture <= 1)
+
+			// テクスチャをずらす数が小さかったら
+			if (m_nCountTexture < TEXTURE_END_NUM)
 			{
 				m_nCountTexture++;
 			}
 		}
 	}
-	m_pUi->SetTextureSelect(m_nCountTexture, 2);
+
+	// テクスチャをずらす
+	m_pUi->SetTextureSelect(m_nCountTexture, TEXTURE_END_NUM);
 }
 
 //=============================================================================

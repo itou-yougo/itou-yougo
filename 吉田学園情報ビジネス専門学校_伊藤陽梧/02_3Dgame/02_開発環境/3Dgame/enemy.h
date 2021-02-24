@@ -27,7 +27,7 @@
 #define ENEMY_CREATE_DISTANCE (D3DXVECTOR3(1000.0f, 0.0f, 1000.0f))	// 敵を生成する距離
 #define ENEMY_CREATE_TIME (20)										// 敵を生成する時間
 #define ENEMY_DAMAGE_SRASH_TIME (10.0f)								// 斬撃でのダメージを受ける時間
-#define ENEMY_DAMAGE_MAGICCIRCLE_TIME (60)							// 魔法陣でのダメージを受ける時間
+#define ENEMY_DAMAGE_MAGICCIRCLE_TIME (60.0f)						// 魔法陣でのダメージを受ける時間
 #define ENEMY_DAMAGE_MOTION_TIME (88.0f)							// ダメージモーションの時間
 #define ENEMY_ATTACK_MOTION_TIME (103.0f)							// 攻撃するモーションの時間
 #define ENEMY_ATTACK_UNTIL_TIME (120.0f)							// 攻撃するまでの時間

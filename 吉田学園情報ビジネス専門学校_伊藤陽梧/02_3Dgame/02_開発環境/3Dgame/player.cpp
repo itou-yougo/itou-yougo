@@ -22,9 +22,10 @@
 #include "slash.h"
 #include "debugcollision.h"
 #include "swordeffect.h"
-#include "spark.h"
+#include "hiteffect.h"
 #include "spesialattackeffect.h"
 #include "magiccircle.h"
+#include "fade.h"
 
 //=============================================================================
 // コンストラクタ
@@ -220,6 +221,9 @@ void CPlayer::GamePad(void)
 			GetMotion()->SetMotion(PLAYERMOTION_SLASH);
 			m_Playerstate = PLAYERSTATE_ATTACK;
 			m_fMotionTime = MOTION_SLASH_FLAME;
+
+			//サウンドの再生
+			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_SLASH);
 		}
 
 		// ゲージが最大になったら
@@ -238,6 +242,12 @@ void CPlayer::GamePad(void)
 					SPESIALATTACKEFFECT_COLOR, SPESIALATTACKEFFECT_COUNTANIM * SPESIALATTACKEFFECT_PATTERNANIM * SPESIALATTACKEFFECT_TIMEANIM);
 
 				m_fSpGauge = 0.0f;
+
+				CScene::SetbUpdate(true, CScene::OBJTYPE_ENEMY);
+
+				//サウンドの再生
+				CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_MAGICCIRCLE);
+				CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_MAGIC);
 			}
 		}
 	}
@@ -317,7 +327,7 @@ void CPlayer::Attack(D3DXVECTOR3 Distance)
 							CDebugCollision::Create(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
 								GetModelParts(11)->GetMtxWorld()._42,
 								GetModelParts(11)->GetMtxWorld()._43) + (GetDistance * (float)nCount),
-								D3DXVECTOR3(5.0f, 5.0f, 5.0f), CDebugCollision::TYPE_SQUARE);
+								SWORD_COLISION_SIZE, CDebugCollision::TYPE_SQUARE);
 #endif
 							// 当たり判定
 							if (CCollision::RectangleCollision3D(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
@@ -336,10 +346,10 @@ void CPlayer::Attack(D3DXVECTOR3 Distance)
 						if (bHit == true)
 						{
 							// 火花を出す
-							CSpark::Create(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
+							CHiteffect::Create(D3DXVECTOR3(GetModelParts(11)->GetMtxWorld()._41,
 								GetModelParts(11)->GetMtxWorld()._42,
-								GetModelParts(11)->GetMtxWorld()._43) + Hitpos, D3DXVECTOR3(200.0f, 200.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-								SPARK_COUNTANIM * SPARK_PATTERNANIM * SPARK_TIMEANIM);
+								GetModelParts(11)->GetMtxWorld()._43) + Hitpos, HITEFFECT_PLAYER_SIZE, HITEFFECT_PLAYER_COLOR,
+								HITEFFECT_PLAYER_COUNTANIM * HITEFFECT_PLAYER_PATTERNANIM * HITEFFECT_PLAYER_TIMEANIM, CHiteffect::HITEFFECTTYPE_PLAYER);
 
 							// spのゲージを加算する
 							m_fSpGauge++;
@@ -402,7 +412,7 @@ D3DXVECTOR3 CPlayer::EnemyCollision(D3DXVECTOR3 pos)
 				if (((CEnemy*)pScene)->GetEnemyState() != CEnemy::ENEMYSTATE_DEATH)
 				{
 					// 当たり判定
-					if (CCollision::SphereCollision(Hitpos, GetSize().x, ((CEnemy*)pScene)->GetPos(), ((CEnemy*)pScene)->GetSize().x) == true)
+					if (CCollision::SphereCollision(Hitpos, GetSize().x / 2.0f, ((CEnemy*)pScene)->GetPos(), ((CEnemy*)pScene)->GetSize().x / 2.0f) == true)
 					{
 						// 当たったら1フレーム前の座標を入れる
 						Hitpos = GetPos();
@@ -453,11 +463,8 @@ bool CPlayer::HitDamage(int nDamage)
 		// ライフが0以下の時
 		if (nLife <= 0)
 		{
-			//サウンドの停止
-			CManager::GetSound()->StopSound(CSound::SOUND_LABEL_SE_DASH);
-
 			// フェードの生成
-			CManager::CreateFade(CManager::MODE_GAMEOVER);
+			CManager::GetFade()->SetFade(CManager::MODE_GAMEOVER);
 		}
 
 		// 当たったフラグを返す

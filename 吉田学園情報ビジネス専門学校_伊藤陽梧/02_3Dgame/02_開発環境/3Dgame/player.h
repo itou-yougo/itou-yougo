@@ -20,12 +20,12 @@
 #define PLAYER_SP_MAX (20)											// プレイヤーのSP
 #define PLAYER_DEFAULT_POS (D3DXVECTOR3(0.0f, 43.0f, 0.0f))			// 座標
 #define PLAYER_DEFAULT_ROT (D3DXVECTOR3(0.0f, 1.5f, 0.0f))			// 回転
-#define PLAYER_DEFAULT_SIZE (D3DXVECTOR3(30.0f, 80.0f, 30.0f))		// 大きさ
+#define PLAYER_DEFAULT_SIZE (D3DXVECTOR3(50.0f, 80.0f, 50.0f))		// 大きさ
 #define PLAYER_MOVE_SPEED (2.0f)									// 歩く速度
 #define PLAYER_ATTACK_MOVE_SPEED (1.0f)								// 攻撃した時の速度
 #define PLAYER_DAMAGE_TIME (120.0f)									// プレイヤーがダメージを受ける時間
 #define PLAYER_MOVE_MAP_LIMIT (800.0f)								// プレイヤーの移動できる範囲
-#define SWORD_COLISION_SIZE (D3DXVECTOR3(5.0f, 5.0f, 5.0f))			// 剣の当たり判定の大きさ
+#define SWORD_COLISION_SIZE (D3DXVECTOR3(10.0f, 10.0f, 10.0f))			// 剣の当たり判定の大きさ
 #define MOTION_SLASH_FLAME (26.0f)									// 斬るモーションのフレーム
 #define MOTION_SLASH_FLAME_COLLISION_START (8.0f)					// 斬るモーションのエフェクトが出るまでのフレーム
 #define MOTION_MAGICCIRCLE_FLAME (380.0f)							// 魔法陣を出すモーションのフレーム

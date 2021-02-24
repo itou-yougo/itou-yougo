@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "ui.h"
 #include "mode.h"
+#include "fade.h"
 
 //=============================================================================
 // コンストラクタ
@@ -23,7 +24,6 @@
 CResult::CResult()
 {
 	m_Type = TYPE_NONE;
-	m_bSoundDecision = false;
 }
 
 //=============================================================================
@@ -64,20 +64,15 @@ void CResult::Uninit(void)
 //=============================================================================
 void CResult::Update(void)
 {
-	if (CScene::GetUpdateStop() == false)
+	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		if (m_bSoundDecision == false)
-		{
-			if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
-			{ //Enterキー または Bボタンを押したとき
-				//サウンドの再生
-				CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);
+		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
+		{ //Enterキー または Bボタンを押したとき
+			//サウンドの再生
+			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);
 
-				//フェードの生成
-				CManager::CreateFade(CManager::MODE_TITLE);
-
-				m_bSoundDecision = true;
-			}
+			//フェードの生成
+			CManager::GetFade()->SetFade(CManager::MODE_TITLE);
 		}
 	}
 }

@@ -97,6 +97,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindouw)
 	//モードの設定
 	SetMode(MODE_TITLE);
 
+	// フェードのクリエイト
+	CManager::CreateFade();
+
 	return S_OK;
 }
 
@@ -354,17 +357,11 @@ void CManager::CreateLight(void)
 //=============================================================================
 // フェードの生成
 //=============================================================================
-void CManager::CreateFade(MODE mode)
+void CManager::CreateFade(void)
 {
 	if (m_pFade == NULL)
 	{
-		m_pFade = new CFade(CScene::OBJTYPE_FADE);
-		m_pFade->Init();
-		m_pFade->SetFade(mode);
-	}
-	else if (m_pFade != NULL)
-	{
-		m_pFade->SetFade(mode);
+		m_pFade = CFade::Create();
 	}
 }
 

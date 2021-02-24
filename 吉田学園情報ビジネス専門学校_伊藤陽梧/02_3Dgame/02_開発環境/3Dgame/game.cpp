@@ -111,30 +111,33 @@ void CGame::Uninit(void)
 //=============================================================================
 void CGame::Update(void)
 {
-	// ¶¬‚·‚éƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é‚È‚ç
-	if (m_bEnemyCreate == true)
+	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		// “G‚ð¶¬‚·‚éŽžŠÔ‚Ì‰ÁŽZ
-		m_nEnemyCreateTime++;
-		if (m_nEnemyCreateTime >= ENEMY_CREATE_TIME)
+		// ¶¬‚·‚éƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é‚È‚ç
+		if (m_bEnemyCreate == true)
 		{
-			// ¶¬‚·‚éŠp“x
-			float fCreateAngle = D3DXToRadian((rand() % ENEMY_CREATE_ANGLE));
-			float fDivide = (float)(rand() % 3 + 1);
-
-			// “G‚ð¶¬‚·‚é‚Æ‚«‚Ì–‚–@w‚Ì¶¬
-			CMagiccercle::Create(D3DXVECTOR3((ENEMY_CREATE_DISTANCE.x / fDivide) * sinf(fCreateAngle), 0.0f, (ENEMY_CREATE_DISTANCE.z / fDivide) * cosf(fCreateAngle)),
-				MAGICCERCLE_DEFAULT_ROT, MAGICCERCLE_ENEMY_DEFAULT_SIZE, MAGICCERCLE_DEFAULT_COLOR,
-				MAGICCERCLE_ENEMY_COUNTANIM * MAGICCERCLE_ENEMY_PATTERNANIM * MAGICCERCLE_ENEMY_TIMEANIM, CMagiccercle::MAGICCIRCLETYPE_ENEMY);
-
-			// “G‚Ì”‚Ì‰ÁŽZ
-			m_nEnemyNum++;
-			m_nEnemyCreateTime = 0;
-
-			// “G‚Ì‘”‚ª’´‚¦‚½‚ç
-			if (m_nEnemyNum >= ENEMY_CREATE_NUM)
+			// “G‚ð¶¬‚·‚éŽžŠÔ‚Ì‰ÁŽZ
+			m_nEnemyCreateTime++;
+			if (m_nEnemyCreateTime >= ENEMY_CREATE_TIME)
 			{
-				m_bEnemyCreate = false;
+				// ¶¬‚·‚éŠp“x
+				float fCreateAngle = D3DXToRadian((rand() % ENEMY_CREATE_ANGLE));
+				float fDivide = (float)(rand() % 3 + 1);
+
+				// “G‚ð¶¬‚·‚é‚Æ‚«‚Ì–‚–@w‚Ì¶¬
+				CMagiccercle::Create(D3DXVECTOR3((ENEMY_CREATE_DISTANCE.x / fDivide) * sinf(fCreateAngle), 0.0f, (ENEMY_CREATE_DISTANCE.z / fDivide) * cosf(fCreateAngle)),
+					MAGICCERCLE_DEFAULT_ROT, MAGICCERCLE_ENEMY_DEFAULT_SIZE, MAGICCERCLE_DEFAULT_COLOR,
+					MAGICCERCLE_ENEMY_COUNTANIM * MAGICCERCLE_ENEMY_PATTERNANIM * MAGICCERCLE_ENEMY_TIMEANIM, CMagiccercle::MAGICCIRCLETYPE_ENEMY);
+
+				// “G‚Ì”‚Ì‰ÁŽZ
+				m_nEnemyNum++;
+				m_nEnemyCreateTime = 0;
+
+				// “G‚Ì‘”‚ª’´‚¦‚½‚ç
+				if (m_nEnemyNum >= ENEMY_CREATE_NUM)
+				{
+					m_bEnemyCreate = false;
+				}
 			}
 		}
 	}
@@ -147,14 +150,13 @@ void CGame::Update(void)
 
 	if (m_nEnemyDeathTotal >= MAX_ENEMY_NUM)
 	{
-		if (CScene::GetUpdateStop() == false)
+		if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 		{
 			//ƒTƒEƒ“ƒh‚Ì’âŽ~
 			CManager::GetSound()->StopSound(CSound::SOUND_LABEL_BGM_GAME);
-			CManager::GetSound()->StopSound(CSound::SOUND_LABEL_SE_DASH);
 
 			//ƒtƒF[ƒh‚Ì¶¬
-			CManager::CreateFade(CManager::MODE_RESULT);
+			CManager::GetFade()->SetFade(CManager::MODE_RESULT);
 		}
 	}
 }

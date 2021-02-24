@@ -16,10 +16,8 @@
 //=============================================================================
 CScene *CScene::m_pTop[OBJTYPE_MAX] = {};
 CScene *CScene::m_pCur[OBJTYPE_MAX] = {};
-int CScene::m_nNumAll = 0;
-int CScene::m_nCount = 0;
-int CScene::m_nNext = 0;
-bool CScene::m_bUpdateStop = false;
+bool CScene::m_bUpdate[OBJTYPE_MAX] = {};
+bool CScene::m_bDraw[OBJTYPE_MAX] = {};
 
 //=============================================================================
 //コンストラクタ
@@ -58,7 +56,7 @@ CScene::CScene(int nPriority)
 	this->m_pNext = NULL;
 
 	m_objType = OBJTYPE_NONE;
-	m_nPriority = nPriority;
+	m_nObj = nPriority;
 	m_bDeath = false;
 
 }
@@ -98,6 +96,9 @@ void CScene::ReleaseAll(void)
 	}
 }
 
+//=============================================================================
+// 指定したもの以外のリリース処理
+//=============================================================================
 void CScene::DesignationReleaseAll(OBJTYPE type)
 {
 	for (int nCount = 0; nCount < OBJTYPE_MAX; nCount++)
@@ -115,49 +116,14 @@ void CScene::DesignationReleaseAll(OBJTYPE type)
 			}
 		}
 	}
-
-	for (int nCount = 0; nCount < OBJTYPE_MAX; nCount++)
-	{
-		CScene *pScene = m_pTop[nCount];
-
-		while (pScene != NULL)
-		{
-			CScene *pSave = pScene->m_pNext;
-
-			if (pScene->m_bDeath == true)
-			{
-				if (pScene->m_pPrev != NULL)
-				{
-					pScene->m_pPrev->m_pNext = pScene->m_pNext;
-				}
-
-				if (pScene->m_pNext != NULL)
-				{
-					pScene->m_pNext->m_pPrev = pScene->m_pPrev;
-				}
-
-				if (m_pTop[nCount] == pScene)
-				{
-					m_pTop[nCount] = pScene->m_pNext;
-				}
-
-				if (m_pCur[nCount] == pScene)
-				{
-					m_pCur[nCount] = pScene->m_pPrev;
-				}
-
-				//オブジェクトを破棄
-				delete pScene;
-			}
-
-			pScene = pSave;
-		}
-	}
 }
 
-void CScene::SetUpdateStop(bool bUpdateStop)
+//=============================================================================
+// 指定したオブジェクトのアップデートを止めるか動かすか
+//=============================================================================
+void CScene::SetbUpdate(bool bUpdate, OBJTYPE type)
 {
-	m_bUpdateStop = bUpdateStop;
+	m_bUpdate[type] = bUpdate;
 }
 
 //=============================================================================
@@ -165,10 +131,11 @@ void CScene::SetUpdateStop(bool bUpdateStop)
 //=============================================================================
 void CScene::UpdateAll(void)
 {
-	if (m_bUpdateStop == false)
+	// OBJTYPEの数分回す
+	for (int nCount = 0; nCount < OBJTYPE_MAX; nCount++)
 	{
-		// OBJTYPEの数分回す
-		for (int nCount = 0; nCount < OBJTYPE_MAX; nCount++)
+		// 更新するなら
+		if (m_bUpdate[nCount] == false)
 		{
 			// Topの情報の保持
 			CScene *pScene = m_pTop[nCount];
@@ -188,21 +155,8 @@ void CScene::UpdateAll(void)
 			}
 		}
 	}
-	else
-	{
-		CScene *pScene = m_pTop[OBJTYPE_FADE];
-		while (pScene != NULL)
-		{
-			CScene *pSave = pScene->m_pNext;
-			if (pScene->m_bDeath == false)
-			{
-				//更新処理
-				pScene->Update();
-			}
-			pScene = pSave;
-		}
-	}
 
+	// OBJTYPEの数分回す
 	for (int nCount = 0; nCount < OBJTYPE_MAX; nCount++)
 	{
 		CScene *pScene = m_pTop[nCount];
@@ -239,22 +193,22 @@ void CScene::ConnectionList(void)
 	}
 
 	// 自分が先頭と現在のオブジェクトだったとき
-	if (this == m_pTop[m_nPriority] && this == m_pCur[m_nPriority])
+	if (this == m_pTop[m_nObj] && this == m_pCur[m_nObj])
 	{
-		m_pTop[m_nPriority] = NULL;
-		m_pCur[m_nPriority] = NULL;
+		m_pTop[m_nObj] = NULL;
+		m_pCur[m_nObj] = NULL;
 	}
 
 	// 自分が先頭のオブジェクトだったとき
-	if (this == m_pTop[m_nPriority])
+	if (this == m_pTop[m_nObj])
 	{
-		m_pTop[m_nPriority] = m_pNext;
+		m_pTop[m_nObj] = m_pNext;
 	}
 
 	// 自分が現在のオブジェクトだったとき
-	if (this == m_pCur[m_nPriority])
+	if (this == m_pCur[m_nObj])
 	{
-		m_pCur[m_nPriority] = m_pPrev;
+		m_pCur[m_nObj] = m_pPrev;
 	}
 }
 
@@ -265,18 +219,22 @@ void CScene::DrawAll(void)
 {
 	for (int nCountpriority = 0; nCountpriority < OBJTYPE_MAX; nCountpriority++)
 	{
-		// Topの情報の保持
-		CScene*pScene = m_pTop[nCountpriority];
-
-		while (pScene != NULL)
+		// 描画するなら
+		if (m_bDraw[nCountpriority] == false)
 		{
-			// Nextの情報の保持
-			CScene *pSceneNext = pScene->m_pNext;
+			// Topの情報の保持
+			CScene*pScene = m_pTop[nCountpriority];
 
-			if (pScene->m_bDeath != true)
+			while (pScene != NULL)
 			{
-				pScene->Draw();
-				pScene = pSceneNext;
+				// Nextの情報の保持
+				CScene *pSceneNext = pScene->m_pNext;
+
+				if (pScene->m_bDeath != true)
+				{
+					pScene->Draw();
+					pScene = pSceneNext;
+				}
 			}
 		}
 	}

@@ -5,15 +5,6 @@
 //
 //=============================================================================
 #include "fade.h"
-#include "scene2d.h"
-#include "manager.h"
-#include "renderer.h"
-
-//=============================================================================
-// 静的メンバ変数宣言
-//=============================================================================
-CFade::FADE CFade::m_fade = FADE_NONE;
-CManager::MODE CFade::m_mode = CManager::MODE_NONE;
 
 //=============================================================================
 // コンストラクタ
@@ -21,12 +12,9 @@ CManager::MODE CFade::m_mode = CManager::MODE_NONE;
 CFade::CFade(int nPriority) :CScene2D(nPriority)
 {
 	m_pVtxBuff = NULL;
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	m_TexPos = 0;
-	m_color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	m_PolygonWidth = 0;
-	m_PolygonHeight = 0;
+	m_modeNext = CManager::MODE_TITLE;
+	m_color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	m_fade = FADE_IN;
 }
 
 //=============================================================================
@@ -37,11 +25,36 @@ CFade::~CFade()
 }
 
 //=============================================================================
+// 生成処理
+//=============================================================================
+CFade * CFade::Create(void)
+{
+	// CFadeのポインタ
+	CFade *pFade = NULL;
+
+	// メモリの確保
+	pFade = new CFade;
+
+	// pFadeがNULLじゃないとき
+	if (pFade != NULL)
+	{
+		// 初期化処理
+		pFade->Init();
+	}
+
+	// pFadeを返す
+	return pFade;
+}
+
+//=============================================================================
 // 初期化処理
 //=============================================================================
 HRESULT CFade::Init(void)
 {
 	SetPosition(D3DXVECTOR3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
+	SetSize(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f));
+	SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	SetObjType(CScene::OBJTYPE_FADE);
 	CScene2D::Init();
 	return S_OK;
 }
@@ -70,6 +83,10 @@ void CFade::Update(void)
 			FadeOut();
 		}
 	}
+
+	SetColor(m_color);
+
+	CScene2D::Update();
 }
 
 //=============================================================================
@@ -81,33 +98,24 @@ void CFade::Draw(void)
 }
 
 //=============================================================================
-// セット
-//=============================================================================
-void CFade::SetFade(CManager::MODE mode)
-{
-	SetPosition(D3DXVECTOR3((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 0.0f));
-	SetSize(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f));
-	SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-	SetObjType(CScene::OBJTYPE_FADE);
-	m_fade = FADE_IN;
-	m_mode = mode;
-}
-
-//=============================================================================
 // フェードイン処理
 //=============================================================================
 void CFade::FadeIn(void)
 {
-	m_color.a += 0.02f;
-	if (m_color.a >= 1.0f)
-	{
-		m_color.a = 1.0f;
-		m_fade = FADE_OUT;
-		GetManager()->SetMode(m_mode);
-		return;
+	if (m_fade != FADE_NONE)
+	{//フェードイン処理
+		if (m_fade == FADE_IN)
+		{//フェードイン処理
+			m_color.a -= FADE_RATE;
+			//α値を減算して後ろの画面を浮き上がらせる
+			if (m_color.a <= 0.0f)
+			{
+				//フェード処理終了
+				m_color.a = 0.0f;
+				m_fade = FADE_NONE;
+			}
+		}
 	}
-	SetColor(m_color);
-	CScene2D::Update();
 }
 
 //=============================================================================
@@ -115,13 +123,29 @@ void CFade::FadeIn(void)
 //=============================================================================
 void CFade::FadeOut(void)
 {	
-	m_color.a -= 0.02f;
-	if (m_color.a <= 0.0f)
+	if (m_fade != FADE_NONE)
 	{
-		m_color.a = 0.0f;
-		m_fade = FADE_NONE;
-		return;
+		if (m_fade == FADE_OUT)
+		{//フェードアウト処理
+			m_color.a += FADE_RATE;
+			//α値を減算して後ろの画面を消していく
+			if (m_color.a >= 1.0f)
+			{
+				//フェードイン処理に切り替え
+				m_fade = FADE_IN;
+				m_color.a = 1.0f;
+				//モード設定
+				CManager::SetMode(m_modeNext);
+			}
+		}
 	}
-	SetColor(m_color);
-	CScene2D::Update();
+}
+
+//=============================================================================
+// セット
+//=============================================================================
+void CFade::SetFade(CManager::MODE mode)
+{
+	m_fade = FADE_OUT;
+	m_modeNext = mode;
 }

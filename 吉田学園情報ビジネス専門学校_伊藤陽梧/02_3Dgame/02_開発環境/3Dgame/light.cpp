@@ -48,7 +48,7 @@ void CLight::Init(void)
 	m_light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	//ライトの方向を設定
-	vecDir = D3DXVECTOR3(0.5f, -0.8f, 0.0f);
+	vecDir = D3DXVECTOR3(0.5f, -1.0f, 1.0f);
 
 	//正規化する（大きさ1のベクトルにする必要がある）
 	D3DXVec3Normalize(&vecDir, &vecDir);

@@ -141,9 +141,6 @@
     <ClCompile Include="title.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
-    <ClCompile Include="spark.cpp">
-      <Filter>ソース ファイル\scene\scene3d\particle</Filter>
-    </ClCompile>
     <ClCompile Include="slash.cpp">
       <Filter>ソース ファイル\scene\scene3d\particle</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="enemydeatheffect.cpp">
+      <Filter>ソース ファイル\scene\scene3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="hiteffect.cpp">
       <Filter>ソース ファイル\scene\scene3d\particle</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,9 +251,6 @@
     <ClInclude Include="slash.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
-    <ClInclude Include="spark.h">
-      <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
-    </ClInclude>
     <ClInclude Include="spesialattackeffect.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
@@ -306,6 +303,9 @@
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="enemydeatheffect.h">
+      <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="hiteffect.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
   </ItemGroup>

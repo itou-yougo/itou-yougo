@@ -28,7 +28,6 @@ public:
 	static void Unload(void);
 
 private:
-	bool m_bSoundDecision;	//決定ボタンサウンドが再生されているかの判定
 	static LPDIRECT3DTEXTURE9 m_pTexture;
 };
 
