@@ -94,11 +94,11 @@ void CEnemydeatheffect::Update(void)
 //=============================================================================
 void CEnemydeatheffect::Draw(void)
 {
-	//// 加算合成のフラグ
-	//SetAdditiveSynthesis();
+	// 加算合成のフラグ
+	SetAdditiveSynthesis();
 
-	//// Zバッファのフラグ
-	//SetZbuffer();
+	// Zバッファのフラグ
+	SetZbuffer();
 
 	// 描画
 	CParticle::Draw();

@@ -37,28 +37,18 @@ class CManager;
 // マクロ定義
 //=============================================================================
 #define CLASS_NAME		"AppClass"			// ウインドウのクラス名
-#define WINDOW_NAME		"OBJECT"	// ウインドウのキャプション名
+#define WINDOW_NAME		"3Dgame"			// ウインドウのキャプション名
 
 #define SCREEN_WIDTH	(1280)				// ウインドウの幅
 #define SCREEN_HEIGHT	(720)				// ウインドウの高さ
 #define SCREEN_CENTER_X	(SCREEN_WIDTH / 2)	// ウインドウの中心Ｘ座標
 #define SCREEN_CENTER_Y	(SCREEN_HEIGHT / 2)	// ウインドウの中心Ｙ座標
 
-#define PRIORITY		(10)
 #define NUM_VERTEX		(4)
 #define NUM_POLYGON		(2)
 
-#define MAX_POLYGON		(2048)
-#define MAX_NUMBER		(4)
-
 #define	FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define FVF_VERTEX_3D	(D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_DIFFUSE|D3DFVF_TEX1)
-
-//ポリゴンサイズ
-#define PLAYER_WIDTH	(50)
-#define PLAYER_HEIGHT	(50)
-#define BULLET_WIDHT	(25)
-#define BULLET_HEIGHT	(25)
 
 //=============================================================================
 // 構造体定義
