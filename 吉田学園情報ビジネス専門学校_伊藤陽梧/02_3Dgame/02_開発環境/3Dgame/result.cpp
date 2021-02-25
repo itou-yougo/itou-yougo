@@ -66,8 +66,8 @@ void CResult::Update(void)
 {
 	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
-		{ //Enterキー または Bボタンを押したとき
+		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_START))
+		{
 			//サウンドの再生
 			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);
 

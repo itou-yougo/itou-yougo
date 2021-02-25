@@ -46,11 +46,11 @@ CEnemyremainder * CEnemyremainder::Create(D3DXVECTOR3 pos)
 HRESULT CEnemyremainder::Init(void)
 {
 	// あと何体の配置
-	CUi::Create(m_pos, D3DXVECTOR3(422.5f, 65.5f, 0.0f), CUi::TYPE_ENEMYREMAINDER);
+	CUi::Create(m_pos, ENEMYREMAINDER_SIZE, CUi::TYPE_ENEMYREMAINDER);
 
 	// 数字の配置
-	m_apNumber[0] = CNumber::Create(m_pos - D3DXVECTOR3(30.0f, 0.0f, 0.0f), D3DXVECTOR3(70.0f, 95.5f, 0.0f));
-	m_apNumber[1] = CNumber::Create(m_pos + D3DXVECTOR3(30.0f, 0.0f, 0.0f), D3DXVECTOR3(70.0f, 95.5f, 0.0f));
+	m_apNumber[0] = CNumber::Create(m_pos - ENEMYREMAINDER_POS_DISTANCE, ENEMYREMAINDER_NUM_SIZE);
+	m_apNumber[1] = CNumber::Create(m_pos + ENEMYREMAINDER_POS_DISTANCE, ENEMYREMAINDER_NUM_SIZE);
 	return E_NOTIMPL;
 }
 

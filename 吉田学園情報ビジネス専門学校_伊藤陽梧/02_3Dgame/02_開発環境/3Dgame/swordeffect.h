@@ -14,7 +14,7 @@
 #define SWORD_EFFECT_LIFE (120)									// 剣のエフェクトのライフ
 #define SWORD_EFFECT_SIZE (D3DXVECTOR3(2.0f, 2.0f, 0.0f))		// 剣のエフェクトの大きさ
 #define SWORD_EFFECT_COLOR (D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f))	// 剣のエフェクトの色
-#define SWORD_EFFECT_ALPHA_SUBTRACT (0.005f)					// 透明度を減らす量
+#define SWORD_EFFECT_ALPHA_SUBTRACT (0.01f)					// 透明度を減らす量
 #define SWORD_EFFECT_SPEED (5.0f)								// 加速度
 #define SWORD_EFFECT_CREATE_TIME (10)							// 生成する時間
 

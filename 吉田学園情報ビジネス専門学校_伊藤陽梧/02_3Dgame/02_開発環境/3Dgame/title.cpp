@@ -42,7 +42,7 @@ HRESULT CTitle::Init(void)
 
 	//ゲームタイトルのUIの生成
 	CUi::Create(D3DXVECTOR3(SCREEN_CENTER_X, SCREEN_CENTER_Y, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f), CUi::TYPE_TITLE);
-
+	CUi::Create(PRESSSTART_POS, PRESSSTART_SIZE, CUi::TYPE_PRESSSTART);
 	return S_OK;
 }
 
@@ -62,8 +62,7 @@ void CTitle::Update(void)
 {
 	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		//Enterキー または Bボタンを押したとき
-		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
+		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_START))
 		{
 			//サウンドの再生
 			CManager::GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DECISION);

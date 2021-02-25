@@ -91,6 +91,8 @@ void CPlayer::Update(void)
 {
 	CCharacter::Update();
 
+	D3DXVECTOR3 pos = GetPos();
+
 	// モーションの時間が0以下だったら
 	if (m_fMotionTime <= 0.0f)
 	{
@@ -130,7 +132,7 @@ void CPlayer::Update(void)
 		Swordeffect(Distance);
 	}
 
-
+	// モーションの時間を減らしていく
 	m_fMotionTime -= SUBTRACT_FLAME;
 
 	// ダメージを受ける時間を減算する
@@ -141,6 +143,33 @@ void CPlayer::Update(void)
 	{
 		m_fSpGauge = PLAYER_SP_MAX;
 	}
+
+	// 移動量を加算
+	pos += m_move;
+
+	// 敵との当たり判定
+	pos = EnemyCollision(pos);
+
+	// マップ制限
+	if (pos.x - GetSize().x < -PLAYER_MOVE_MAP_LIMIT)
+	{
+		pos.x = -PLAYER_MOVE_MAP_LIMIT + GetSize().x;
+	}
+	if (pos.x + GetSize().x > PLAYER_MOVE_MAP_LIMIT)
+	{
+		pos.x = PLAYER_MOVE_MAP_LIMIT - GetSize().x;
+	}
+	if (pos.z - GetSize().z < -PLAYER_MOVE_MAP_LIMIT)
+	{
+		pos.z = -PLAYER_MOVE_MAP_LIMIT + GetSize().z;
+	}
+	if (pos.z + GetSize().z > PLAYER_MOVE_MAP_LIMIT)
+	{
+		pos.z = PLAYER_MOVE_MAP_LIMIT - GetSize().z;
+	}
+
+	// 座標のセット
+	SetPos(pos);
 
 #ifdef _DEBUG
 	// 当たり判定の可視化
@@ -241,7 +270,10 @@ void CPlayer::GamePad(void)
 				CSpesialattackeffect::Create(GetPos(), SPESIALATTACKEFFECT_SIZE,
 					SPESIALATTACKEFFECT_COLOR, SPESIALATTACKEFFECT_COUNTANIM * SPESIALATTACKEFFECT_PATTERNANIM * SPESIALATTACKEFFECT_TIMEANIM);
 
+				// ゲージの量と移動量を0に
 				m_fSpGauge = 0.0f;
+				m_move.x = 0.0f;
+				m_move.z = 0.0f;
 
 				CScene::SetbUpdate(true, CScene::OBJTYPE_ENEMY);
 
@@ -252,32 +284,7 @@ void CPlayer::GamePad(void)
 		}
 	}
 
-	// 移動量を加算
-	pos += m_move;
-
-	// 敵との当たり判定
-	pos = EnemyCollision(pos);
-
-	// マップ制限
-	if (pos.x - GetSize().x < -PLAYER_MOVE_MAP_LIMIT)
-	{
-		pos.x = -PLAYER_MOVE_MAP_LIMIT + GetSize().x;
-	}
-	if (pos.x + GetSize().x > PLAYER_MOVE_MAP_LIMIT)
-	{
-		pos.x = PLAYER_MOVE_MAP_LIMIT - GetSize().x;
-	}
-	if (pos.z - GetSize().z < -PLAYER_MOVE_MAP_LIMIT)
-	{
-		pos.z = -PLAYER_MOVE_MAP_LIMIT + GetSize().z;
-	}
-	if (pos.z + GetSize().z > PLAYER_MOVE_MAP_LIMIT)
-	{
-		pos.z = PLAYER_MOVE_MAP_LIMIT - GetSize().z;
-	}
-
-	// 座標と回転のセット
-	SetPos(pos);
+	// 回転のセット
 	SetRot(rot);
 }
 

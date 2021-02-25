@@ -62,8 +62,8 @@ void CTutorial::Update(void)
 {
 	if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 	{
-		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_B))
-		{ //Enterキー または Bボタンを押したとき
+		if (CManager::GetInputKeyboard()->GetKeyTrigger(DIK_RETURN) || CManager::GetInputJoystick()->GetJoystickTrigger(CInputJoystick::BUTTON_START))
+		{
 			if (m_nCountTexture == TEXTURE_END_NUM)
 			{
 				//フェードの生成
