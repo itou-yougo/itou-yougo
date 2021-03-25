@@ -156,13 +156,14 @@ HRESULT CMap::Init(void)
 //=============================================================================
 void CMap::Uninit(void)
 {
-		if (m_pModel != NULL)
-		{
-			//モデルクラスの終了処理
-			m_pModel->Uninit();
-			m_pModel = NULL;
-		}
-		Release();
+	if (m_pModel != NULL)
+	{
+		//モデルクラスの終了処理
+		m_pModel->Uninit();
+		m_pModel = NULL;
+	}
+
+	Release();
 }
 
 //=============================================================================
@@ -189,5 +190,5 @@ void CMap::SetMap(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
 	m_pos = pos;			//場所
 	m_rot = rot;				//角度
 	m_size = size;			//大きさ
-	SetObjType(OBJTYPE_NONE); //オブジェクトタイプの設定
+	SetObjType(OBJTYPE_SKYBOX); //オブジェクトタイプの設定
 }

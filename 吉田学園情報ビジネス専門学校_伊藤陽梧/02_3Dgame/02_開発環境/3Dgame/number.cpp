@@ -18,16 +18,18 @@ LPDIRECT3DTEXTURE9 CNumber::m_pTexture = NULL;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CNumber::CNumber()
+CNumber::CNumber(int nPriority)
 {
 	m_pVtxBuff = NULL;
 }
+
 //=============================================================================
 // デストラクタ
 //=============================================================================
 CNumber::~CNumber()
 {
 }
+
 //=============================================================================
 // 生成処理
 //=============================================================================
@@ -38,11 +40,14 @@ CNumber * CNumber::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 	if (pNumber == NULL)
 	{
 		pNumber = new CNumber;
-		pNumber->Init(pos, size);
+		pNumber->m_pos = pos;
+		pNumber->m_size = size;
+		pNumber->Init();
 	}
 
 	return pNumber;
 }
+
 //=============================================================================
 // テクスチャロード
 //=============================================================================
@@ -55,6 +60,7 @@ HRESULT CNumber::Load(void)
 	D3DXCreateTextureFromFile(pDevice, TEXTURE_NUMBER, &m_pTexture);
 	return S_OK;
 }
+
 //=============================================================================
 // テクスチャアンロード
 //=============================================================================
@@ -66,14 +72,12 @@ void CNumber::Unload(void)
 		m_pTexture = NULL;
 	}
 }
+
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CNumber::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size)
+HRESULT CNumber::Init()
 {
-	m_pos = pos;
-	m_size = size;
-
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// 頂点バッファの生成
@@ -126,6 +130,9 @@ void CNumber::Uninit(void)
 		m_pVtxBuff->Release();
 		m_pVtxBuff = NULL;
 	}
+
+	// 破棄
+	Release();
 }
 
 //=============================================================================
@@ -133,6 +140,17 @@ void CNumber::Uninit(void)
 //=============================================================================
 void CNumber::Update(void)
 {
+	VERTEX_2D *pVtx = NULL;
+
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y - (m_size.y / 2), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x - (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + (m_size.x / 2), m_pos.y + (m_size.y / 2), 0.0f);
+
+	m_pVtxBuff->Unlock();
 }
 
 //=============================================================================

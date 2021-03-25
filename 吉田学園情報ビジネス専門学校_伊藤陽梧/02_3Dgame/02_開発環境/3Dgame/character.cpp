@@ -66,7 +66,7 @@ HRESULT CCharacter::Init(void)
 		// モデルのバインド
 		m_apModel[nCount]->BindModel(CLoadmodeldata::GetMesh(m_Type, nCount), CLoadmodeldata::GetBuffMat(m_Type, nCount), CLoadmodeldata::GetNumMat(m_Type, nCount));
 
-		for (int nCntMat = 0; nCntMat < (signed)CLoadmodeldata::GetNumMat(m_Type, nCount); nCntMat++)
+		for (int nCntMat = 0; nCntMat < (int)CLoadmodeldata::GetNumMat(m_Type, nCount); nCntMat++)
 		{
 			// テクスチャのバインド
 			m_apModel[nCount]->BindTexture(CLoadmodeldata::GetTextureData(m_Type, nCount), nCntMat);

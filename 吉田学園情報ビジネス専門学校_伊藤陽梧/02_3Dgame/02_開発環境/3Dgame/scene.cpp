@@ -163,6 +163,8 @@ void CScene::UpdateAll(void)
 		while (pScene != NULL)
 		{
 			CScene *pSave = pScene->m_pNext;
+
+			// 死亡フラグが立ってたら
 			if (pScene->m_bDeath == true)
 			{
 				// リストのつなぎなおしをして消す

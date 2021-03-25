@@ -58,6 +58,9 @@
     <Filter Include="ソース ファイル\scene\character">
       <UniqueIdentifier>{96d59b60-7791-47a1-a783-654987c8aa86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\scene\character">
+      <UniqueIdentifier>{2d83da1e-1331-45b3-a8e2-2bcd74fc1435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -83,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="billboard.cpp">
-      <Filter>ソース ファイル\scene\scene3d</Filter>
     </ClCompile>
     <ClCompile Include="debugcollision.cpp">
       <Filter>ソース ファイル\scene\scene3d</Filter>
@@ -113,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="magiccircle.cpp">
       <Filter>ソース ファイル\scene\scene3d\particle</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>ソース ファイル\scene\scene3d</Filter>
     </ClCompile>
     <ClCompile Include="mode.cpp">
       <Filter>ソース ファイル\mode</Filter>
@@ -171,24 +168,24 @@
     <ClCompile Include="character.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="number.cpp">
-      <Filter>ソース ファイル\scene\scene2d</Filter>
-    </ClCompile>
-    <ClCompile Include="enemyremainder.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
     <ClCompile Include="enemydeatheffect.cpp">
       <Filter>ソース ファイル\scene\scene3d\particle</Filter>
     </ClCompile>
     <ClCompile Include="hiteffect.cpp">
       <Filter>ソース ファイル\scene\scene3d\particle</Filter>
     </ClCompile>
+    <ClCompile Include="number.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="character.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="collision.h">
@@ -257,25 +254,7 @@
     <ClInclude Include="swordeffect.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
-    <ClInclude Include="billboard.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
     <ClInclude Include="debugcollision.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>ヘッダー ファイル\scene\scene3d</Filter>
-    </ClInclude>
-    <ClInclude Include="skybox.h">
       <Filter>ヘッダー ファイル\scene\scene3d</Filter>
     </ClInclude>
     <ClInclude Include="fade.h">
@@ -296,17 +275,35 @@
     <ClInclude Include="renderer.h">
       <Filter>ヘッダー ファイル\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="number.h">
-      <Filter>ヘッダー ファイル\scene\scene2d</Filter>
-    </ClInclude>
-    <ClInclude Include="enemyremainder.h">
-      <Filter>ヘッダー ファイル\scene</Filter>
-    </ClInclude>
     <ClInclude Include="enemydeatheffect.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
     </ClInclude>
     <ClInclude Include="hiteffect.h">
       <Filter>ヘッダー ファイル\scene\scene3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="number.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="billboard.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>ヘッダー ファイル\scene\character</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ヘッダー ファイル\scene\character</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,7 +25,6 @@
 #include "skybox.h"
 #include "fire.h"
 #include "number.h"
-#include "enemyremainder.h"
 #include "magiccircle.h"
 
 //=============================================================================
@@ -40,8 +39,11 @@ int CGame::m_nEnemyDeathTotal = 0;
 //=============================================================================
 CGame::CGame()
 {
+	memset(m_apNumber, NULL, sizeof(m_apNumber));
 	m_bEnemyCreate = true;
 	m_nEnemyCreateTime = ENEMY_CREATE_TIME;
+	m_nDisplace = 0;
+	m_nEnemyDeathTotalOld = 0;
 }
 
 //=============================================================================
@@ -83,7 +85,13 @@ HRESULT CGame::Init(void)
 	CUi::Create(PLAYER_SP_GAUGE, PLAYER_SP_GAUGE_SIZE, CUi::TYPE_PLAYER_SP);
 	CUi::Create(PLAYER_SP_GAUGE, PLAYER_SP_GAUGE_SIZE, CUi::TYPE_SPFLAME);
 
-	CEnemyremainder::Create(ENEMYREMAINDER_POS);
+	// あと何体の配置
+	CUi::Create(ENEMYREMAINDER_POS, ENEMYREMAINDER_SIZE, CUi::TYPE_ENEMYREMAINDER);
+
+	// 数字の配置
+	m_apNumber[TWO_DIGITS_SPOT] = CNumber::Create(ENEMYREMAINDER_POS - ENEMYREMAINDER_POS_DISTANCE, ENEMYREMAINDER_NUM_SIZE);
+	m_apNumber[ONE_DIGITS_SPOT] = CNumber::Create(ENEMYREMAINDER_POS + ENEMYREMAINDER_POS_DISTANCE, ENEMYREMAINDER_NUM_SIZE);
+
 	return S_OK;
 }
 
@@ -104,6 +112,14 @@ void CGame::Uninit(void)
 
 	m_bEnemyCreate = false;
 	m_nEnemyCreateTime = 0;
+
+	for (int nCount = 0; nCount < MAX_NUMBER_CREATE; nCount++)
+	{
+		if (m_apNumber[nCount] != NULL)
+		{
+			m_apNumber[nCount] = NULL;
+		}
+	}
 }
 
 //=============================================================================
@@ -149,7 +165,7 @@ void CGame::Update(void)
 	}
 
 	// 倒した数が上回ったなら
-	if (m_nEnemyDeathTotal >= MAX_ENEMY_NUM)
+	if (m_nEnemyDeathTotal >= MAX_DEATH_ENEMY_NUM)
 	{
 		if (CManager::GetFade()->GetFadeState() == CFade::FADE_NONE)
 		{
@@ -160,6 +176,107 @@ void CGame::Update(void)
 			CManager::GetFade()->SetFade(CManager::MODE_RESULT);
 		}
 	}
+
+	// 数字を大きくするフラグが立っているなら
+	if (m_bNumberScaling == true)
+	{
+		// 座標をずらす
+		D3DXVECTOR3 pos = m_apNumber[TWO_DIGITS_SPOT]->GetPos();
+		pos.x -= ENEMYREMAINDER_POS_DISPLACE.x;
+		m_apNumber[TWO_DIGITS_SPOT]->SetPos(pos);
+
+		pos = m_apNumber[ONE_DIGITS_SPOT]->GetPos();
+		pos.x += ENEMYREMAINDER_POS_DISPLACE.x;
+		m_apNumber[ONE_DIGITS_SPOT]->SetPos(pos);
+
+		// サイズを変える
+		for (int nCount = 0; nCount < MAX_NUMBER_CREATE; nCount++)
+		{
+			D3DXVECTOR3 size = m_apNumber[nCount]->GetSize();
+			size += ENEMYREMAINDER_SIZE_DISPLACE;
+			m_apNumber[nCount]->SetSize(size);
+		}
+
+		// ずらす時間の加算
+		m_nDisplace++;
+
+		// ずらす時間が超えたら
+		if (m_nDisplace >= DISPLACE_TIME)
+		{
+			// 初期化して小さくする
+			m_nDisplace = 0;
+			m_bNumberScaling = false;
+		}
+	}
+	else
+	{
+		// 二桁目
+		// 座標を元に戻す
+		D3DXVECTOR3 pos = m_apNumber[TWO_DIGITS_SPOT]->GetPos();
+		pos.x += ENEMYREMAINDER_POS_DISPLACE.x * 2;
+
+		// 元の位置を超えないようにする
+		if (pos.x >= ENEMYREMAINDER_POS.x - ENEMYREMAINDER_POS_DISTANCE.x)
+		{
+			pos.x = ENEMYREMAINDER_POS.x - ENEMYREMAINDER_POS_DISTANCE.x;
+		}
+		// 座標のセット
+		m_apNumber[TWO_DIGITS_SPOT]->SetPos(pos);
+
+		// 一桁目
+		pos = m_apNumber[ONE_DIGITS_SPOT]->GetPos();
+		pos.x -= ENEMYREMAINDER_POS_DISPLACE.x * 2;
+		// 元の位置を超えないようにする
+		if (pos.x <= ENEMYREMAINDER_POS.x + ENEMYREMAINDER_POS_DISTANCE.x)
+		{
+			pos.x = ENEMYREMAINDER_POS.x + ENEMYREMAINDER_POS_DISTANCE.x;
+		}
+		// 座標のセット
+		m_apNumber[ONE_DIGITS_SPOT]->SetPos(pos);
+
+		// サイズを変える
+		for (int nCount = 0; nCount < MAX_NUMBER_CREATE; nCount++)
+		{
+			D3DXVECTOR3 size = m_apNumber[nCount]->GetSize();
+			size -= ENEMYREMAINDER_SIZE_DISPLACE * 2;
+
+			// 元のサイズを超えないようにする
+			if (size.x <= ENEMYREMAINDER_NUM_SIZE.x || size.y <= ENEMYREMAINDER_NUM_SIZE.y)
+			{
+				size = ENEMYREMAINDER_NUM_SIZE;
+			}
+			m_apNumber[nCount]->SetSize(size);
+		}
+	}
+
+	// 1フレーム前の敵の倒した数が現在の倒した数より少なかったら
+	if (m_nEnemyDeathTotalOld < CGame::GetEnemyDeathTotal())
+	{
+		// 加算して大きくする
+		m_nEnemyDeathTotalOld++;
+
+		// 1フレーム前の敵の倒した数が最大値を超えないように
+		if (m_nEnemyDeathTotalOld >= MAX_DEATH_ENEMY_NUM)
+		{
+			m_nEnemyDeathTotalOld = MAX_DEATH_ENEMY_NUM;
+			m_bNumberScaling = false;
+		}
+		else
+		{
+			m_bNumberScaling = true;
+		}
+	}
+
+	// 数字の設定
+	for (int nCount = 0; nCount < MAX_NUMBER_CREATE; nCount++)
+	{
+		int nScore = (int)pow(10.0f, MAX_NUMBER_CREATE - nCount);
+		int nScore2 = (int)pow(10.0f, MAX_NUMBER_CREATE - nCount - 1);
+		int nAnswer = (MAX_DEATH_ENEMY_NUM - m_nEnemyDeathTotalOld) % nScore / nScore2;
+
+		// 各ナンバーのセット
+		m_apNumber[nCount]->SetNumber(nAnswer);
+	}
 }
 
 //=============================================================================
@@ -167,6 +284,11 @@ void CGame::Update(void)
 //=============================================================================
 void CGame::Draw(void)
 {
+	// 描画処理
+	for (int nCount = 0; nCount < MAX_NUMBER_CREATE; nCount++)
+	{
+		m_apNumber[nCount]->Draw();
+	}
 }
 
 //=============================================================================

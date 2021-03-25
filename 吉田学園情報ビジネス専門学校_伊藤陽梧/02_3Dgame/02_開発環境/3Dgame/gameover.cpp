@@ -20,11 +20,6 @@
 #include "fade.h"
 
 //=============================================================================
-// 静的メンバ変数初期化
-//=============================================================================
-LPDIRECT3DTEXTURE9 CGameover::m_pTexture = NULL;
-
-//=============================================================================
 // コンストラクタ
 //=============================================================================
 CGameover::CGameover()
@@ -43,10 +38,6 @@ CGameover::~CGameover()
 //=============================================================================
 HRESULT CGameover::Load(void)
 {
-	CRenderer * pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, TEXTURE_GAMEOVER, &m_pTexture);
 	return S_OK;
 }
 
@@ -55,11 +46,6 @@ HRESULT CGameover::Load(void)
 //=============================================================================
 void CGameover::Unload(void)
 {
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
 }
 //=============================================================================
 // 初期化処理

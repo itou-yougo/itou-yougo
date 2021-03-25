@@ -134,7 +134,7 @@ HRESULT CBillboard::Init(void)
 //=============================================================================
 void CBillboard::Uninit(void)
 {
-	//”jŠü
+	// ”jŠü
 	Release();
 }
 

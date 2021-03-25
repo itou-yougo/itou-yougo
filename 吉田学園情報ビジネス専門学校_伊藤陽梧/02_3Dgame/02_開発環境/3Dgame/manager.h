@@ -63,15 +63,15 @@ public:
 
 	void SetNumFPS(int nCountFPS) { m_nCountFPS = nCountFPS; }
 
-	static CRenderer *GetRenderer(void);			//レンダラー
-	static CInputKeyboard *GetInputKeyboard(void);	//キーボード
-	static CInputMouse *GetInputMouse(void);		//マウス
-	static CInputJoystick *GetInputJoystick(void);	//ゲームパッド
-	static CCamera *GetCamera(void);				//カメラ
-	static CLight *GetLight(void);					//ライト
-	static CFade *GetFade(void);					//フェード
-	static MODE GetMode(void);						//モード
-	static CSound *GetSound(void);					//サウンド
+	static CRenderer *GetRenderer(void) { return m_pRenderer; }					//レンダラー
+	static CInputKeyboard *GetInputKeyboard(void) { return m_pInputKeyboard; }	//キーボード
+	static CInputMouse *GetInputMouse(void) { return m_pInputMouse; }			//マウス
+	static CInputJoystick *GetInputJoystick(void) { return m_pInputJoystick; }	//ゲームパッド
+	static CCamera *GetCamera(void) { return m_pCamera; }						//カメラ
+	static CLight *GetLight(void) { return m_pLight; }							//ライト
+	static CFade *GetFade(void) { return m_pFade; }								//フェード
+	static MODE GetMode(void) { return m_mode; }								//モード
+	static CSound *GetSound(void) { return m_pSound; }							//サウンド
 
 private:								  
 	static CRenderer *m_pRenderer;				//レンダラー

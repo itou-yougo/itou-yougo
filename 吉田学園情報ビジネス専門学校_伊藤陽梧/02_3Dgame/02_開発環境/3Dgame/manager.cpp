@@ -91,6 +91,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindouw)
 			return -1;
 		}
 	}
+
 	//テクスチャの読み込み
 	LoadAll();
 
@@ -108,9 +109,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindouw)
 //=============================================================================
 void CManager::Uninit(void)
 {
+	// すべての終了
 	CScene::ReleaseAll();
+
 	//テクスチャの破棄
 	UnloadAll();
+
 	//ライトの終了
 	if (m_pLight != NULL)
 	{
@@ -118,6 +122,7 @@ void CManager::Uninit(void)
 		delete m_pLight;
 		m_pLight = NULL;
 	}
+
 	//カメラの終了
 	if (m_pCamera != NULL)
 	{
@@ -125,6 +130,7 @@ void CManager::Uninit(void)
 		delete m_pCamera;
 		m_pCamera = NULL;
 	}
+
 	//ゲームパッドの終了
 	if (m_pInputJoystick != NULL)
 	{
@@ -132,6 +138,7 @@ void CManager::Uninit(void)
 		delete m_pInputJoystick;
 		m_pInputJoystick = NULL;
 	}
+
 	//キーボードの終了
 	if (m_pInputKeyboard != NULL)
 	{
@@ -170,7 +177,7 @@ void CManager::Uninit(void)
 //=============================================================================
 void CManager::Update(void)
 {
-	if (m_pInputJoystick != NULL)
+	if (m_pInputKeyboard != NULL)
 	{
 		//キーボードの更新処理
 		m_pInputKeyboard->Update();
@@ -363,60 +370,4 @@ void CManager::CreateFade(void)
 	{
 		m_pFade = CFade::Create();
 	}
-}
-
-//=============================================================================
-// 受け渡し処理
-//=============================================================================
-//レンダラー
-CRenderer *CManager::GetRenderer(void)
-{
-	return m_pRenderer;	
-}
-
-//キーボード
-CInputKeyboard *CManager::GetInputKeyboard(void)
-{
-	return m_pInputKeyboard;
-}
-
-CInputMouse * CManager::GetInputMouse(void)
-{
-	return m_pInputMouse;
-}
-
-//ゲームパッド
-CInputJoystick * CManager::GetInputJoystick(void)
-{
-	return m_pInputJoystick;
-}
-
-//カメラ
-CCamera * CManager::GetCamera(void)
-{
-	return m_pCamera;
-}
-
-//ライト
-CLight * CManager::GetLight(void)
-{
-	return m_pLight;
-}
-
-//フェード
-CFade * CManager::GetFade(void)
-{
-	return m_pFade;
-}
-
-//モードの取得
-CManager::MODE CManager::GetMode(void)
-{
-	return m_mode;
-}
-
-//サウンドの取得
-CSound * CManager::GetSound(void)
-{
-	return m_pSound;
 }

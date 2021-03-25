@@ -22,7 +22,7 @@
 #define ENEMY_MOVE_SPEED (1.0f)										// 移動量
 #define ENEMY_DAMAGE_MOVE_SPEED (0.5f)								// ダメージを受けた時の移動量
 #define ENEMY_DISTANCE_PLAYER (45.0f)								// プレイヤーとの距離
-#define ENEMY_CREATE_NUM (10)										// 敵を生成する数
+#define ENEMY_CREATE_NUM (99)										// 敵を生成する数
 #define ENEMY_CREATE_ANGLE (360)									// 敵を生成する角度
 #define ENEMY_CREATE_DISTANCE (D3DXVECTOR3(1000.0f, 0.0f, 1000.0f))	// 敵を生成する距離
 #define ENEMY_CREATE_TIME (20)										// 敵を生成する時間

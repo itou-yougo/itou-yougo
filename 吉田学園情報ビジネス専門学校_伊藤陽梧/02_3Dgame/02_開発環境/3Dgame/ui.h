@@ -50,7 +50,7 @@
 class CUi :public CScene2D
 {
 public:
-	CUi(int nPriority);
+	CUi(int nPriority = OBJTYPE_UI);
 	~CUi();
 
 	typedef enum

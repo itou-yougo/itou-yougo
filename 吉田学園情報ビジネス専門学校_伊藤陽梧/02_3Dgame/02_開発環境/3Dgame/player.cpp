@@ -147,8 +147,8 @@ void CPlayer::Update(void)
 	// ˆÚ“®—Ê‚ğ‰ÁZ
 	pos += m_move;
 
-	// “G‚Æ‚Ì“–‚½‚è”»’è
-	pos = EnemyCollision(pos);
+	//// “G‚Æ‚Ì“–‚½‚è”»’è
+	//pos = EnemyCollision(pos);
 
 	// ƒ}ƒbƒv§ŒÀ
 	if (pos.x - GetSize().x < -PLAYER_MOVE_MAP_LIMIT)

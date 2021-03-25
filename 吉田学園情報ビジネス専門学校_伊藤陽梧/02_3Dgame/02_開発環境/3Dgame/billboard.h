@@ -18,7 +18,7 @@
 class CBillboard : public CScene
 {
 public:
-	CBillboard(int nPriority = 3);
+	CBillboard(int nPriority);
 	~CBillboard();
 	HRESULT Init(void);
 	void Uninit(void);
