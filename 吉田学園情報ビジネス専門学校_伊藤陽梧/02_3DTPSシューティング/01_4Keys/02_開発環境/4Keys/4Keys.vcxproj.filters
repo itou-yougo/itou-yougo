@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\mode">
+      <UniqueIdentifier>{25d36ecc-600e-446d-b53f-4f4e0ed554c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\input">
+      <UniqueIdentifier>{dc4bf85f-44e5-4e65-a15a-0f137675fdda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{8d882f8e-9bc9-4c5e-83c7-eb80ef5b5d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\2D">
+      <UniqueIdentifier>{a029d8ff-8092-4e9e-818f-490df7641ccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\3D">
+      <UniqueIdentifier>{d51644f8-afda-4cb1-9ec9-25967f4ac30f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene\3D\particle">
+      <UniqueIdentifier>{3160407f-fded-4cd5-a136-ed2eabf76401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\input">
+      <UniqueIdentifier>{f6b2d0fb-e2e4-4f0e-90bd-2dc84db33f70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\mode">
+      <UniqueIdentifier>{25e9ba63-c2bf-4ab0-97f3-8663778c5f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene">
+      <UniqueIdentifier>{6ffb4d50-98fe-4446-af04-0847f3f9d438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene\2D">
+      <UniqueIdentifier>{96d52820-8eb5-46e2-af19-edb531b283cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene\3D">
+      <UniqueIdentifier>{badf0663-1cea-4b3b-b51a-4adc7b5cd26a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene\3D\particle">
+      <UniqueIdentifier>{f29944f1-abf2-40d2-b462-b8a47fda7256}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="manager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="blood.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="box.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="boxeffect.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="circleparticle.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="explosion.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="heal.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="kira.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="mazleflash.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="smoke.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="spark.cpp">
+      <Filter>ソース ファイル\scene\3D\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="reticle.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="skybox.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet_ui.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="button_ui.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="key.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="key_ui.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="life.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="number.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル\scene\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorial.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="gameover.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="mode.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene2d.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene3d.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="gate.cpp">
+      <Filter>ソース ファイル\scene\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="joystick.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="mouse.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="manager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ヘッダー ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="mouse.h">
+      <Filter>ヘッダー ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="joystick.h">
+      <Filter>ヘッダー ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboard.h">
+      <Filter>ヘッダー ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="gameover.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="result.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="mode.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="blood.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="boxeffect.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="circleparticle.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="explosion.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="mazleflash.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="kira.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="spark.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="smoke.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="billboard.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="heal.h">
+      <Filter>ヘッダー ファイル\scene\3D\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="reticle.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="scene3d.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene2d.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet_ui.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="button_ui.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="key.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="key_ui.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="life.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="number.h">
+      <Filter>ヘッダー ファイル\scene\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="gate.h">
+      <Filter>ヘッダー ファイル\scene\3D</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
