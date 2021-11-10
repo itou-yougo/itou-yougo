@@ -299,7 +299,7 @@ void CManager::Update(void)
             m_pInputJoypad = NULL;
         }
         HWND hWnd = FindWindow(CLASS_NAME, NULL);	//ウィンドウハンドル取得
-        HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);	//インスタンスハンドル取得
+        HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);	//インスタンスハンドル取得
         //再生成
         m_pInputJoypad = new CInputJoypad;
         m_pInputJoypad->Init(hInstance, hWnd);
