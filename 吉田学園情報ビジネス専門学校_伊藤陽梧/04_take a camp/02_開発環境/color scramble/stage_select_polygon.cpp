@@ -1,0 +1,242 @@
+////////////////////////////////////////////////////
+//
+//    ステージ選択ポリゴンクラスの処理[stage_select_polygon.cpp]
+//    Author:増澤 未来
+//
+////////////////////////////////////////////////////
+
+//=============================
+// インクルード
+//=============================
+#include "stage_select_polygon.h"
+#include "scene2d.h"
+#include "dynamic_texture.h"
+#include "resource_texture.h"
+#include "resource_shader.h"
+#include "manager.h"
+#include "light.h"
+
+//=============================
+// マクロ定義
+//=============================
+#define POS  (D3DXVECTOR3( SCREEN_WIDTH/2.0f,SCREEN_HEIGHT/2.0f, 0.0f))  // Y座標
+#define SIZE_0  (D3DXVECTOR3( SCREEN_WIDTH*1.3f,SCREEN_HEIGHT*1.3f, 0.0f)) // サイズ
+#define SIZE_1 SIZE_2*1.2f
+#define SIZE_2 (D3DXVECTOR3( SCREEN_WIDTH*0.6f,SCREEN_HEIGHT*0.6f, 0.0f)) // サイズ
+#define MAP_WIDTH  600
+#define MAP_HEIGHT 600
+#define BLUR_WEIGHT 5.0f
+
+//=============================
+// 静的メンバ変数宣言
+//=============================
+const std::vector<int> CStageSelectPolygon::m_anDrawObjNum =
+{
+	CScene::OBJTYPE_BG,
+	CScene::OBJTYPE_TILE,
+	CScene::OBJTYPE_COLOR_TILE,
+	CScene::OBJTYPE_MAP,
+};
+
+//=============================
+// コンストラクタ
+//=============================
+CStageSelectPolygon::CStageSelectPolygon()
+{
+	// 変数のクリア
+	ZeroMemory(&m_apPolygon, sizeof(m_apPolygon));
+	ZeroMemory(&m_afWeight, sizeof(m_afWeight));
+	m_pDynamicTex = NULL;
+	m_weightHandle = NULL;
+}
+
+//=============================
+// デストラクタ
+//=============================
+CStageSelectPolygon::~CStageSelectPolygon()
+{
+}
+
+//=============================
+// クリエイト
+//=============================
+CStageSelectPolygon * CStageSelectPolygon::Create(void)
+{
+	// メモリの確保
+	CStageSelectPolygon *pPointa = new CStageSelectPolygon;
+	// 初期化
+	pPointa->Init();
+
+	return pPointa;
+}
+
+//=============================
+// 初期化処理
+//=============================
+HRESULT CStageSelectPolygon::Init(void)
+{
+
+	for (int nCntUi = 0; nCntUi < STAGE_SELECT_POLYGON_NUM; nCntUi++)
+	{
+		// ポリゴン生成
+		m_apPolygon[nCntUi] = CScene2d::Create();
+		m_apPolygon[nCntUi]->SetPos(POS);
+		
+		m_apPolygon[nCntUi]->OutList();
+	}
+
+	// サイズの設定
+	m_apPolygon[0]->SetSize(SIZE_0);
+	m_apPolygon[1]->SetSize(SIZE_1);
+	m_apPolygon[2]->SetSize(SIZE_2);
+
+	// 背景テクスチャ
+	m_apPolygon[1]->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_STAGE_SELECT_BG));
+	SetPriority(OBJTYPE_UI_1);
+
+	m_pDynamicTex = CDynamicTexture::Create(D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+
+	// ライトの向きの設定
+	CManager::GetLight()->SetDir(LIGHT_DIR_BASE);
+
+	return S_OK;
+}
+
+//=============================
+// 終了処理
+//=============================
+void CStageSelectPolygon::Uninit(void)
+{
+	for (int nCntUi = 0; nCntUi < STAGE_SELECT_POLYGON_NUM; nCntUi++)
+	{
+		if (m_apPolygon[nCntUi] != NULL)
+		{
+			m_apPolygon[nCntUi]->Uninit();
+			delete m_apPolygon[nCntUi];
+			m_apPolygon[nCntUi] = NULL;
+		}
+	}
+
+	// テクスチャクラスの破棄
+	if (m_pDynamicTex != NULL)
+	{
+		m_pDynamicTex->Uninit();
+		delete m_pDynamicTex;
+		m_pDynamicTex = NULL;
+	}
+
+	// 開放処理
+	Release();
+}
+
+//=============================
+// 更新処理
+//=============================
+void CStageSelectPolygon::Update(void)
+{
+}
+
+//=============================
+// 描画処理
+//=============================
+void CStageSelectPolygon::Draw(void)
+{
+	if (m_pDynamicTex == NULL) return;
+	
+	// テクスチャにオブジェクトを書き込む
+	m_pDynamicTex->Begin();
+	for (int nCntObj = 0; nCntObj < (int)m_anDrawObjNum.size(); nCntObj++)
+	{
+		CScene*pScene = GetTop(m_anDrawObjNum[nCntObj]);
+		while (pScene != NULL)
+		{
+			// 描画
+			pScene->Draw();
+
+			// ネクスト
+			pScene = pScene->GetNext();
+		}
+	}
+	// レンダーターゲットを戻す
+	m_pDynamicTex->End();
+
+	for (int nCntUi = 0; nCntUi < STAGE_SELECT_POLYGON_NUM; nCntUi++)
+	{
+		if (m_apPolygon[nCntUi] != NULL)
+		{
+			if (nCntUi != 1)m_apPolygon[nCntUi]->BindTexture(m_pDynamicTex->GetTexture());
+
+			// ブラー
+			if (nCntUi == 0) DrawBlur();
+			// 通常描画
+			else             m_apPolygon[nCntUi]->Draw();
+		}
+	}
+}
+
+//=============================
+// 描画処理*ブラー
+//=============================
+void CStageSelectPolygon::DrawBlur(void)
+{
+	// シェーダー情報の取得
+	CResourceShader::Shader shader = CResourceShader::GetShader(CResourceShader::SHADER_BLUR);
+
+	if (shader.pEffect != NULL)
+	{
+		if (m_weightHandle == NULL)
+		{
+			m_weightHandle = shader.pEffect->GetParameterByName(NULL, "weight");
+			UpdateWeight(BLUR_WEIGHT);
+		}
+
+		// パス数の取得
+		UINT numPass = 0;
+		shader.pEffect->Begin(&numPass, 0);
+
+		shader.pEffect->SetFloat("MAP_WIDTH", MAP_WIDTH);
+		shader.pEffect->SetFloat("MAP_HEIGHT", MAP_HEIGHT);
+		// パス数分描画処理のループ
+		for (int nCntPass = 0; nCntPass < (int)numPass; nCntPass++)
+		{
+			// シェーダパスの描画開始
+			shader.pEffect->BeginPass(nCntPass);
+
+			m_apPolygon[0]->Draw();
+
+			shader.pEffect->EndPass();
+		}
+		shader.pEffect->End();
+	}
+}
+
+void CStageSelectPolygon::UpdateWeight(float fDispersion)
+{
+	float fTotal = 0;
+	for (int nCntWeight = 0; nCntWeight<WEIGHT_MUN; nCntWeight++)
+	{
+		m_afWeight[nCntWeight] = expf(-0.5f*(FLOAT)(nCntWeight*nCntWeight) / fDispersion);
+		if (0 == nCntWeight)
+		{
+			fTotal += m_afWeight[nCntWeight];
+		}
+		else
+		{
+			// 中心以外は、２回同じ係数を使うので２倍
+			fTotal += 2.0f*m_afWeight[nCntWeight];
+		}
+	}
+	// 規格化
+	for (int nCntWeight = 0; nCntWeight < WEIGHT_MUN; nCntWeight++)
+	{
+		m_afWeight[nCntWeight] /= fTotal;
+	}
+
+	CResourceShader::Shader shader = CResourceShader::GetShader(CResourceShader::SHADER_BLUR);
+
+	if (shader.pEffect)
+	{
+		shader.pEffect->SetFloatArray(m_weightHandle, m_afWeight, WEIGHT_MUN);
+	}
+}

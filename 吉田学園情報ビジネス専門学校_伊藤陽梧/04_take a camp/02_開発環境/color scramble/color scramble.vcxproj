@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6CEE7761-1A93-4D83-B625-02C32D764E03}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>cひな形</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>color scramble</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/flipparty/flag_raicing_game_rule;$(SolutionDir)/flipparty/fly_game;$(SolutionDir)/flipparty;$(SolutionDir)/flipparty/remember_game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)/flipparty/flag_raicing_game_rule;$(SolutionDir)/flipparty/fly_game;$(SolutionDir)/flipparty;$(SolutionDir)/flipparty/remember_game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="act_range.cpp" />
+    <ClCompile Include="attack.cpp" />
+    <ClCompile Include="attack_archer.cpp" />
+    <ClCompile Include="attack_knight.cpp" />
+    <ClCompile Include="attack_area.cpp" />
+    <ClCompile Include="attack_lancer.cpp" />
+    <ClCompile Include="attack_magician.cpp" />
+    <ClCompile Include="attack_thief.cpp" />
+    <ClCompile Include="attack_wizard.cpp" />
+    <ClCompile Include="building.cpp" />
+    <ClCompile Include="button.cpp" />
+    <ClCompile Include="camera_charaselect.cpp" />
+    <ClCompile Include="character_polygon.cpp" />
+    <ClCompile Include="chara_select.cpp" />
+    <ClCompile Include="chara_select_ui.cpp" />
+    <ClCompile Include="button_title.cpp" />
+    <ClCompile Include="dash_item.cpp" />
+    <ClCompile Include="dynamic_texture.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="kill_count.cpp" />
+    <ClCompile Include="max_color_effect.cpp" />
+    <ClCompile Include="move_around_tile.cpp" />
+    <ClCompile Include="move_sideways_tile.cpp" />
+    <ClCompile Include="move_tile.cpp" />
+    <ClCompile Include="needle_tile.cpp" />
+    <ClCompile Include="paintnum.cpp" />
+    <ClCompile Include="paint_time.cpp" />
+    <ClCompile Include="peint_collision.cpp" />
+    <ClCompile Include="player_model.cpp" />
+    <ClCompile Include="resource_attack.cpp" />
+    <ClCompile Include="bg.cpp" />
+    <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="camera_base.cpp" />
+    <ClCompile Include="camera_tps.cpp" />
+    <ClCompile Include="collision.cpp" />
+    <ClCompile Include="color_manager.cpp" />
+    <ClCompile Include="color_tile.cpp" />
+    <ClCompile Include="debug_log.cpp" />
+    <ClCompile Include="fade.cpp" />
+    <ClCompile Include="game.cpp" />
+    <ClCompile Include="gauge.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="joypad.cpp" />
+    <ClCompile Include="keyboard.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="manager.cpp" />
+    <ClCompile Include="resource_character.cpp" />
+    <ClCompile Include="resource_map.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="model_hierarchy.cpp" />
+    <ClCompile Include="motion.cpp" />
+    <ClCompile Include="mouse.cpp" />
+    <ClCompile Include="number.cpp" />
+    <ClCompile Include="number_array.cpp" />
+    <ClCompile Include="object3d_shader.cpp" />
+    <ClCompile Include="particle.cpp" />
+    <ClCompile Include="pause.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="polygon.cpp" />
+    <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="resource_model.cpp" />
+    <ClCompile Include="resource_model_hierarchy.cpp" />
+    <ClCompile Include="resource_shader.cpp" />
+    <ClCompile Include="result.cpp" />
+    <ClCompile Include="result_graph.cpp" />
+    <ClCompile Include="reverse_item.cpp" />
+    <ClCompile Include="scene.cpp" />
+    <ClCompile Include="scene2d.cpp" />
+    <ClCompile Include="scene3d.cpp" />
+    <ClCompile Include="score.cpp" />
+    <ClCompile Include="shadow.cpp" />
+    <ClCompile Include="base_Cylinder.cpp" />
+    <ClCompile Include="skill_circle.cpp" />
+    <ClCompile Include="skill_effect.cpp" />
+    <ClCompile Include="skill_gauge.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="resource_texture.cpp" />
+    <ClCompile Include="map.cpp" />
+    <ClCompile Include="spawn_tile.cpp" />
+    <ClCompile Include="stage_name_ui.cpp" />
+    <ClCompile Include="stage_select.cpp" />
+    <ClCompile Include="stage_select_polygon.cpp" />
+    <ClCompile Include="tile.cpp" />
+    <ClCompile Include="tile_effect.cpp" />
+    <ClCompile Include="tile_effect_charge.cpp" />
+    <ClCompile Include="tile_factory.cpp" />
+    <ClCompile Include="time.cpp" />
+    <ClCompile Include="title.cpp" />
+    <ClCompile Include="total_result.cpp" />
+    <ClCompile Include="total_score.cpp" />
+    <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="warp_tile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="act_range.h" />
+    <ClInclude Include="attack.h" />
+    <ClInclude Include="attack_archer.h" />
+    <ClInclude Include="attack_knight.h" />
+    <ClInclude Include="attack_area.h" />
+    <ClInclude Include="attack_lancer.h" />
+    <ClInclude Include="attack_magician.h" />
+    <ClInclude Include="attack_thief.h" />
+    <ClInclude Include="attack_wizard.h" />
+    <ClInclude Include="building.h" />
+    <ClInclude Include="camera_charaselect.h" />
+    <ClInclude Include="character_polygon.h" />
+    <ClInclude Include="chara_select.h" />
+    <ClInclude Include="chara_select_ui.h" />
+    <ClInclude Include="button.h" />
+    <ClInclude Include="button_title.h" />
+    <ClInclude Include="color_tile.h" />
+    <ClInclude Include="dash_item.h" />
+    <ClInclude Include="dynamic_texture.h" />
+    <ClInclude Include="item.h" />
+    <ClInclude Include="kill_count.h" />
+    <ClInclude Include="max_color_effect.h" />
+    <ClInclude Include="move_sideways_tile.h" />
+    <ClInclude Include="move_tile.h" />
+    <ClInclude Include="move_around_tile.h" />
+    <ClInclude Include="needle_tile.h" />
+    <ClInclude Include="paintnum.h" />
+    <ClInclude Include="paint_time.h" />
+    <ClInclude Include="peint_collision.h" />
+    <ClInclude Include="player_model.h" />
+    <ClInclude Include="resource_attack.h" />
+    <ClInclude Include="bg.h" />
+    <ClInclude Include="billboard.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="camera_base.h" />
+    <ClInclude Include="camera_tps.h" />
+    <ClInclude Include="collision.h" />
+    <ClInclude Include="color_manager.h" />
+    <ClInclude Include="debug_log.h" />
+    <ClInclude Include="fade.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="resource_character.h" />
+    <ClInclude Include="resource_map.h" />
+    <ClInclude Include="number_array.h" />
+    <ClInclude Include="gauge.h" />
+    <ClInclude Include="object3d_shader.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="joypad.h" />
+    <ClInclude Include="keyboard.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="manager.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="model_hierarchy.h" />
+    <ClInclude Include="motion.h" />
+    <ClInclude Include="mouse.h" />
+    <ClInclude Include="number.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="pause.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="polygon.h" />
+    <ClInclude Include="renderer.h" />
+    <ClInclude Include="resource_model.h" />
+    <ClInclude Include="resource_model_hierarchy.h" />
+    <ClInclude Include="resource_shader.h" />
+    <ClInclude Include="result.h" />
+    <ClInclude Include="result_graph.h" />
+    <ClInclude Include="reverse_item.h" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="scene2d.h" />
+    <ClInclude Include="scene3d.h" />
+    <ClInclude Include="score.h" />
+    <ClInclude Include="shadow.h" />
+    <ClInclude Include="base_Cylinder.h" />
+    <ClInclude Include="skill_circle.h" />
+    <ClInclude Include="skill_effect.h" />
+    <ClInclude Include="skill_gauge.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="resource_texture.h" />
+    <ClInclude Include="map.h" />
+    <ClInclude Include="spawn_tile.h" />
+    <ClInclude Include="stage_name_ui.h" />
+    <ClInclude Include="stage_select.h" />
+    <ClInclude Include="stage_select_polygon.h" />
+    <ClInclude Include="tile.h" />
+    <ClInclude Include="tile_effect.h" />
+    <ClInclude Include="tile_effect_charge.h" />
+    <ClInclude Include="tile_factory.h" />
+    <ClInclude Include="time.h" />
+    <ClInclude Include="title.h" />
+    <ClInclude Include="total_result.h" />
+    <ClInclude Include="total_score.h" />
+    <ClInclude Include="tutorial.h" />
+    <ClInclude Include="warp_tile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\HLSL\BlurShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="data\HLSL\PlayerShader.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="data\HLSL\TileShader.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

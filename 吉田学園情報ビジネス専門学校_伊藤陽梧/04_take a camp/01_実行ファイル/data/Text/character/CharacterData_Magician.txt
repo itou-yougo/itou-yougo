@@ -1,0 +1,24 @@
+CHARACTER_DATA
+
+	LABEL = MAGICIAN
+	MOVE_FRAME = 15
+	MOVE_FRAME_DASH = 10
+	MOVE_FRAME_INITIAL = 20
+	MOVE_COUNT = 3
+	ATTACK_PATH = data/Text/attack/attack_Magician.csv
+	FINAL_ATTACK_PATH = data/Text/final_attack/
+	FINAL_ATTACK_TIME = 30
+	
+	CHARGE_TIME_LIST
+		0 = 0
+		1 = 60
+		2 = 170
+	CHARGE_TIME_LIST_END
+	
+	MOTION_LIST
+		IDLE   = data/Text/motion/motion_lancer_neutral.txt
+		CHARGE = data/Text/motion/motion_lancer_neutral.txt
+		ATTACK = data/Text/motion/motion_lancer_attack.txt
+	MOTION_LIST_END
+	
+CHARACTER_DATA_END

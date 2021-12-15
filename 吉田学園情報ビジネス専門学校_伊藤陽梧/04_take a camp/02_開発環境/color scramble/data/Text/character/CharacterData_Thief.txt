@@ -1,0 +1,24 @@
+CHARACTER_DATA
+
+	LABEL = THIEF
+	MOVE_FRAME = 15
+	MOVE_FRAME_DASH = 10
+	MOVE_FRAME_INITIAL = 20
+	MOVE_COUNT = 2 
+	ATTACK_PATH = data/Text/attack/attack_Thief.csv
+	FINAL_ATTACK_PATH = data/Text/final_attack/final_attack_1.csv
+	FINAL_ATTACK_TIME = 30
+
+	CHARGE_TIME_LIST
+		0 = 0
+		1 = 40
+		2 = 100
+	CHARGE_TIME_LIST_END
+	
+	MOTION_LIST
+		IDLE   = data/Text/motion/motion_knight_neutral.txt
+		CHARGE = data/Text/motion/motion_knight_neutral.txt
+		ATTACK = data/Text/motion/motion_knight_attack.txt
+	MOTION_LIST_END
+	
+CHARACTER_DATA_END
