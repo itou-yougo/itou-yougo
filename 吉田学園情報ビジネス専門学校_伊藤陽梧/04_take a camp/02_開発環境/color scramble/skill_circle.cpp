@@ -142,7 +142,8 @@ void CSkill_circle::Update(void)
 	switch (m_type)
 	{
 	case EFFECTTYPE_SKIIL:
-		m_nLife--;
+		
+		m_col.a -= 0.02f;
 		m_fRotAngle += 0.5f;
 		m_rot.y += 0.05f;
 		m_size.x += 0.1f;
@@ -157,7 +158,8 @@ void CSkill_circle::Update(void)
 		}
 		break;
 	case EFFECTTYPE_SKIILMINI:
-		m_nLife--;
+		
+		m_col.a -= 0.02f;
 		m_fRotAngle += 0.075f;
 		m_rot.y -= 0.05f;
 		m_size.x += 0.1f;
@@ -174,7 +176,7 @@ void CSkill_circle::Update(void)
 	default:
 		break;
 	}
-	if (m_nLife <= 0)
+	if (m_nLife <= 0 || m_col.a <= 0)
 	{
 		bUse = false;
 	}

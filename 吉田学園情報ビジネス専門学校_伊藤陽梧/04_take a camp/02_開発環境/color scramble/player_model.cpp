@@ -27,6 +27,7 @@ CPlayerModel::CPlayerModel() :CModelHierarchy(OBJTYPE_BG)
 	m_charaType = CResourceCharacter::CHARACTER_NONE;
 	memset(&m_apMotion, 0, sizeof(m_apMotion));	// アニメーションポインタ
 	m_RimColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_TexColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //******************************
@@ -253,9 +254,9 @@ void CPlayerModel::SetShaderVariable(LPD3DXEFFECT pEffect, CResourceModel::Model
 		pEffect->SetFloatArray("RimColor", (float*)&m_RimColor, 4);
 		pEffect->SetFloat("RimPower", RIM_POWER);
 		// テクスチャカラーの情報を送る
-		pEffect->SetFloatArray("TexColor", (float*)&m_RimColor, 4);
+		pEffect->SetFloatArray("TexColor", (float*)&m_TexColor, 4);
 		// キューブテクスチャ
-		pEffect->SetTexture("CubeTex", CResourceTexture::GetCubeTexture(CResourceTexture::TECTURE_CUBE_SLY));
+		pEffect->SetTexture("CubeTex", CResourceTexture::GetCubeTexture(CResourceTexture::TEXTURE_CUBE_SLY));
 		// トゥーンシャドウテクスチャをシェーダーに送る
 		pEffect->SetTexture("ToonTex", CResourceTexture::GetTexture(CResourceTexture::TEXTURE_TOON_SHADOW));
 	}

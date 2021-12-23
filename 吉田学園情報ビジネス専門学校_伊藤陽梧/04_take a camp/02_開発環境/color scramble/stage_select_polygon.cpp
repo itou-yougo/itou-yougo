@@ -10,7 +10,7 @@
 //=============================
 #include "stage_select_polygon.h"
 #include "scene2d.h"
-#include "dynamic_texture.h"
+#include "stage_texture.h"
 #include "resource_texture.h"
 #include "resource_shader.h"
 #include "manager.h"
@@ -28,17 +28,6 @@
 #define BLUR_WEIGHT 5.0f
 
 //=============================
-// 静的メンバ変数宣言
-//=============================
-const std::vector<int> CStageSelectPolygon::m_anDrawObjNum =
-{
-	CScene::OBJTYPE_BG,
-	CScene::OBJTYPE_TILE,
-	CScene::OBJTYPE_COLOR_TILE,
-	CScene::OBJTYPE_MAP,
-};
-
-//=============================
 // コンストラクタ
 //=============================
 CStageSelectPolygon::CStageSelectPolygon()
@@ -46,7 +35,6 @@ CStageSelectPolygon::CStageSelectPolygon()
 	// 変数のクリア
 	ZeroMemory(&m_apPolygon, sizeof(m_apPolygon));
 	ZeroMemory(&m_afWeight, sizeof(m_afWeight));
-	m_pDynamicTex = NULL;
 	m_weightHandle = NULL;
 }
 
@@ -94,9 +82,6 @@ HRESULT CStageSelectPolygon::Init(void)
 	m_apPolygon[1]->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_STAGE_SELECT_BG));
 	SetPriority(OBJTYPE_UI_1);
 
-	m_pDynamicTex = CDynamicTexture::Create(D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT));
-
-
 	// ライトの向きの設定
 	CManager::GetLight()->SetDir(LIGHT_DIR_BASE);
 
@@ -118,14 +103,6 @@ void CStageSelectPolygon::Uninit(void)
 		}
 	}
 
-	// テクスチャクラスの破棄
-	if (m_pDynamicTex != NULL)
-	{
-		m_pDynamicTex->Uninit();
-		delete m_pDynamicTex;
-		m_pDynamicTex = NULL;
-	}
-
 	// 開放処理
 	Release();
 }
@@ -142,32 +119,15 @@ void CStageSelectPolygon::Update(void)
 //=============================
 void CStageSelectPolygon::Draw(void)
 {
-	if (m_pDynamicTex == NULL) return;
-	
-	// テクスチャにオブジェクトを書き込む
-	m_pDynamicTex->Begin();
-	for (int nCntObj = 0; nCntObj < (int)m_anDrawObjNum.size(); nCntObj++)
-	{
-		CScene*pScene = GetTop(m_anDrawObjNum[nCntObj]);
-		while (pScene != NULL)
-		{
-			// 描画
-			pScene->Draw();
-
-			// ネクスト
-			pScene = pScene->GetNext();
-		}
-	}
-	// レンダーターゲットを戻す
-	m_pDynamicTex->End();
+	CStageTexture::GetStateTexturePointa()->DrawStageInTex();
 
 	for (int nCntUi = 0; nCntUi < STAGE_SELECT_POLYGON_NUM; nCntUi++)
 	{
 		if (m_apPolygon[nCntUi] != NULL)
 		{
-			if (nCntUi != 1)m_apPolygon[nCntUi]->BindTexture(m_pDynamicTex->GetTexture());
+			if (nCntUi != 1)m_apPolygon[nCntUi]->BindTexture(CStageTexture::GetStateTexturePointa()->GetTexture());
 
-			// ブラー
+			// ブラー描画
 			if (nCntUi == 0) DrawBlur();
 			// 通常描画
 			else             m_apPolygon[nCntUi]->Draw();

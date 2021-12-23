@@ -22,6 +22,7 @@
 class CPolygon;
 class CPlayer;
 class CRankUI;
+class CResultGraph;
 
 //*****************************
 //クラス定義
@@ -31,10 +32,7 @@ class CRankUI;
 class CResult : public CScene
 {
 public:
-	//============
-	// 構造体
-	//============
-	
+
 	//============
 	// メンバ関数
 	//============
@@ -54,6 +52,9 @@ private:
 	// メンバ変数
 	//============
 	float m_fFloat;
+	CResultGraph* m_pGraph;
+	CPolygon * m_pBackGroundPolygon;
+
 };
 
 #endif

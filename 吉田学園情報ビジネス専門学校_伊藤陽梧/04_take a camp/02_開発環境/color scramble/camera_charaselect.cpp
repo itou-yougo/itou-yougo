@@ -85,7 +85,7 @@ void CCharaSelectCamera::SetCamera(void)
 	D3DXMatrixIdentity(mtxProjection);
 
 	D3DXMatrixPerspectiveFovLH(mtxProjection,
-		GetFov(), (float)CHARACTER_POLYGON_SIZE.x / (float)CHARACTER_POLYGON_SIZE.y, CAMERA_VIEW_MIN, CAMERA_VIEW_MAX);
+		GetFov(), (float)DEFAULT_CHARACTER_POLYGON_SIZE.x / (float)DEFAULT_CHARACTER_POLYGON_SIZE.y, CAMERA_VIEW_MIN, CAMERA_VIEW_MAX);
 
 	//プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, mtxProjection);

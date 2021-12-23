@@ -25,6 +25,7 @@ class CAttackBased;
 class CMotion;
 class CKillCount;
 class CSkillgauge;
+class CTutorial;
 
 //*****************************
 // マクロ定義
@@ -128,13 +129,17 @@ public:
 	void SetState(PLAYER_STATE PlayerState) { m_PlayerState = PlayerState; }	
 	PLAYER_STATE GetState(void) { return m_PlayerState; }			
 	// 無敵状態取得
-	bool GetInvincible(void) { return m_bInvincible; }		
+	bool GetInvincible(void) { return m_bInvincible; }	
+	void SetInvincible(bool bInvincible) { m_bInvincible = bInvincible; }
 	//向きと位置の移動量
 	D3DXVECTOR3 GetRotDest(void) { return m_rotDest; }					
 	D3DXVECTOR3 GetPosDest(void) { return MoveData.m_Move; }
 	// アイテム状態
 	void SetItemState(ITEM_STATE ItemState) { m_ItemState = ItemState; }	
 	ITEM_STATE GetItemState(void) { return m_ItemState; }		
+	// 更新フラグ
+	bool GetUpdateFlag(void) { return m_bUpdate; }
+	void SetUpdateFlag(bool bFlag) { m_bUpdate = bFlag; }
 	// キルカウントポインタ
 	CKillCount * GetKillCount(void) { return m_pKillCount; }
 	// 移動フラグ
@@ -157,8 +162,10 @@ private:
 	void ManageRot(void);		// 向きの管理
 	void Respawn(void);			// リスポーン処理
 	void Invincible(void);		// 無敵処理
+	void ManageState(void);     // ステート管理
 	void ManageItemState(void); // アイテムステートの管理
-
+	bool TutorialControll(int nTutorialphase);	// チュートリアルの操作処理
+void Flip(void);				// はじく処理
 	//*****************************
 	// メンバ変数
 	//*****************************
@@ -174,6 +181,7 @@ private:
 	CAttackBased* m_pAttack;	// 攻撃用クラス
 	ATTACK_DATA m_AttackData;	// 攻撃用データ
 	bool m_bInvincible;			// 無敵フラグ
+	bool m_bUpdate;             // 更新フラグ
 	int m_nInvincibleCount;		// 無敵時間のカウント
 	int	m_nRespawnCount;		// リスポーンまでのカウント
 	bool m_bMove;				// 移動可否フラグ

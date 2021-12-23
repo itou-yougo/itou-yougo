@@ -18,7 +18,6 @@
 // 前方宣言
 //*****************************
 class CScene2d;
-class CDynamicTexture;
 
 //=============================
 // マクロ定義
@@ -53,9 +52,7 @@ private:
 	void DrawBlur(void);
 	void UpdateWeight(float fDispersion);
 	// メンバ変数
-	const static std::vector<int> m_anDrawObjNum;         // 描画するオブジェクト番号
 	CScene2d * m_apPolygon[STAGE_SELECT_POLYGON_NUM]; // 名前ポリゴン
-	CDynamicTexture *m_pDynamicTex; // 動的テクスチャ
 	D3DXHANDLE	m_weightHandle;	// 重みの配列シェーダーに送るよう
 	float		m_afWeight[WEIGHT_MUN];// 重みの配列
 };

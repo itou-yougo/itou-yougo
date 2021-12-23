@@ -63,7 +63,7 @@ HRESULT CDynamicTexture::Init(D3DXVECTOR2 size)
 
 	m_size = size;
 	//新規テクスチャ作成*****************************
-	pDevice->CreateTexture(m_size.x, m_size.y,
+	pDevice->CreateTexture((UINT)m_size.x, (UINT)m_size.y,
 		8,
 		D3DUSAGE_RENDERTARGET,
 		D3DFMT_A8R8G8B8,
@@ -73,7 +73,7 @@ HRESULT CDynamicTexture::Init(D3DXVECTOR2 size)
 
 	//新規テクスチャの深度バッファ作成***************
 	pDevice->CreateDepthStencilSurface(
-		m_size.x, m_size.y,
+        (UINT)m_size.x, (UINT)m_size.y,
 		D3DFMT_D16,
 		D3DMULTISAMPLE_NONE,
 		0,
@@ -165,7 +165,7 @@ void CDynamicTexture::Begin(void)
 		D3DCOLOR_RGBA(255, 255, 255, 0), 1.0f, 0);
 
 	//ビューポートをセット*************************************
-	D3DVIEWPORT9 viewport2 = { 0, 0, m_size.x, m_size.y, 0.0f, 1.0f };
+	D3DVIEWPORT9 viewport2 = { 0, 0, (DWORD)m_size.x, (DWORD)m_size.y, 0.0f, 1.0f };
 	pDevice->SetViewport(&viewport2);
 }
 

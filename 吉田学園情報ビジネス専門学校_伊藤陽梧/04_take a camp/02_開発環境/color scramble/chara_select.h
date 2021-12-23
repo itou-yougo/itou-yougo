@@ -46,6 +46,7 @@ public:
 		int nColorNum;    // カラー番号
 		CResourceCharacter::CHARACTER_TYPE charaType; // キャラタイプ
 		bool bEntry;      // エントリー状態
+		bool bReady;
 	};
 
 	//*****************************
@@ -65,6 +66,7 @@ public:
 	static int GetEntryPlayerNum(void) { return m_nEntryPlayerNum; }
 	static void ResetEntryPlayer(void);
 private:
+	void FadeGameScene(void);
 	void EntryPlayer(void);
 	void CountEntryPlayerNum(void);
 	void CharacterSelect(int nCntData);

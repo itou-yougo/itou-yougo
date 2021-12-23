@@ -1,0 +1,27 @@
+newmtl anisotropic2SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.31 0.31 0.31
+Tf 0.20 0.20 0.20
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl anisotropic6SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl anisotropic8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00

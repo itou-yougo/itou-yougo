@@ -32,11 +32,14 @@
 #include "tile_factory.h"
 #include "resource_character.h"
 #include "stage_select.h"
+#include "stage_texture.h"
+#include "resource_text.h"
 
 //=============================
 // 静的メンバ変数宣言
 //=============================
-CManager::MODE   CManager::m_mode = MODE_TITLE;       // ゲームモード
+CManager::MODE   CManager::m_mode = MODE_TITLE;      // ゲームモード
+CManager::MODE   CManager::m_Decmode = MODE_TITLE;   // 判定用モード
 CRenderer       *CManager::m_pRenderer = NULL;       // レンダラーポインタ
 CInputKeyboard  *CManager::m_pInputKeyboard = NULL;  // キーボード
 CInputJoypad    *CManager::m_pJoypad = NULL;         // ジョイパッド
@@ -156,6 +159,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	// タイルファクトリーの生成
 	CTileFactory::Create();
 
+	//　ステージテクスチャクラス
+	CStageTexture::Create(D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+	// チュートリアルに使うテキストの読み込み
+	CResourceText::Create();
+
 	// ポーズ状態の時
 	return S_OK;
 }
@@ -186,6 +195,10 @@ void CManager::Uninit(void)
 	CColorManager::Release();
 	// タイルファクトリーの破棄
 	CTileFactory::Release();
+	// ステージテクスチャの
+	CStageTexture::Release();
+	// チュートリアルに使うテキストの破棄
+	CResourceText::Release();
 
 	// テクスチャのアンロード
 	CPause::Unload();    // ポーズ
@@ -454,6 +467,14 @@ void CManager::SetMode(MODE mode)
 	default:
 		break;
 	}
+}
+
+//=============================
+// 判定用モードセット
+//=============================
+void CManager::SetDecMode(MODE mode)
+{
+	m_Decmode = mode;
 }
 
 //=============================

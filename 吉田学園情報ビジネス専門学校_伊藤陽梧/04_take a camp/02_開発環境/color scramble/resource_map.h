@@ -47,8 +47,11 @@ public:
 		BLOCK_TYPE_4P_START,	// 4Pスタート位置
 		BLOCK_TYPE_BLOCK,		// ノーマルブロック
 		BLOCK_TYPE_NEEDLE_BLOCK,// とげブロック
-		BLOCK_TYPE_AROUND_MOVE_BLOCK,	// 前後移動ブロック
-		BLOCK_TYPE_SIDEWAYS_MOVE_BLOCK, // 横移動ブロック
+		BLOCK_TYPE_AROUND_MOVE,	// 前後移動ブロック
+		BLOCK_TYPE_SIDEWAYS_MOVE, // 横移動ブロック
+		BLOCK_TYPE_WARP_1,		// ワープタイル1
+		BLOCK_TYPE_WARP_2,		// ワープタイル2
+		BLOCK_TYPE_DUMMY,		// ダミー
 	}BLOCK_TYPE;
 
 	typedef enum	//マップの種類

@@ -48,6 +48,7 @@ public:
 		MOTION_IDLE = 0,     // ニュートラル
 		MOTION_CHARGE,       // チャージ
 		MOTION_ATTACK,       // 攻撃
+		MOTION_ROLL,         // カランカラン
 		MOTION_MAX
 	}MOTION_TYPE;
 

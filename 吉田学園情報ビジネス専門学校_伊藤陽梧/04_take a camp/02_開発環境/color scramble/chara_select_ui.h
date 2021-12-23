@@ -45,6 +45,7 @@ public:
 		CScene2d * pBack;         // 背景
 		CScene2d * pPlayerNumber; // プレイヤー番号
 		CScene2d * pControllIcon; // コントローラータイプアイコン
+		CScene2d * pReadyIcon; // コントローラータイプアイコン
 		CCharacterPolygon * pCharaPolygon;
 		D3DXVECTOR3 pos;          // 座標
 	};

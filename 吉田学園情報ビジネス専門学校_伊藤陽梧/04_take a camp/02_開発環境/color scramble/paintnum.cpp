@@ -1,7 +1,7 @@
 //===================================================
 //
 // 塗った数のUIの処理[paintnum.cpp]
-// Author:伊藤陽梧
+// Author : 伊藤陽梧
 //
 //====================================================
 
@@ -16,6 +16,7 @@
 #include "polygon.h"
 #include "color_tile.h"
 #include "chara_select.h"
+#include "resource_texture.h"
 
 //==================================
 // マクロ定義
@@ -28,7 +29,8 @@
 CPaintnum::CPaintnum()
 {
 	m_pVtxBuff = nullptr;
-	ZeroMemory(&m_pPolygon, sizeof(m_pPolygon));
+	ZeroMemory(&m_apPolygon, sizeof(m_apPolygon));
+	m_pColorGauge = nullptr;
 	ZeroMemory(&m_pos, sizeof(m_pos));
 	ZeroMemory(&m_size, sizeof(m_size));
 	ZeroMemory(&m_PaintInfo, sizeof(m_nRank));
@@ -74,13 +76,13 @@ HRESULT CPaintnum::Init()
 		{
 			// ポリゴンの各情報の設定
 			m_PaintInfo[nCount].size = D3DXVECTOR3(m_size.x / (float)CCharaSelect::GetEntryPlayerNum(), m_size.y / 2.0f, m_size.z);
-			m_PaintInfo[nCount].pos = D3DXVECTOR3(m_PaintInfo[nCount].size.x + ShiftSize(nCount), m_pos.y, 0.0f);
+			m_PaintInfo[nCount].pos = D3DXVECTOR3(m_PaintInfo[nCount].size.x + ShiftSize(nCount) - m_pos.x + SUBTRACT_GAUGE_SIZE.x, m_pos.y, 0.0f);
 			m_PaintInfo[nCount].col = GET_COLORMANAGER->GetIconColor(nCount);
 
-			if (!m_pPolygon[nCount])
+			if (!m_apPolygon[nCount])
 			{
 				// ポリゴンの生成
-				m_pPolygon[nCount] = CPolygon::Create(
+				m_apPolygon[nCount] = CPolygon::Create(
 					m_PaintInfo[nCount].pos,
 					m_PaintInfo[nCount].size,
 					m_PaintInfo[nCount].col);
@@ -93,6 +95,13 @@ HRESULT CPaintnum::Init()
 			SetPolygonPos(nCount);
 		}
 	}
+
+	if (!m_pColorGauge)
+	{
+		m_pColorGauge = CPolygon::Create(m_pos, m_size + SUBTRACT_GAUGE_SIZE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pColorGauge->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_COLOR_GAUGE));
+	}
+
 	return S_OK;
 }
 
@@ -103,15 +112,25 @@ void CPaintnum::Uninit()
 {
 	for (int nCount = 0; nCount < MAX_PLAYER; nCount++)
 	{
-		if (m_pPolygon[nCount])
+		if (m_apPolygon[nCount])
 		{
 			// 終了処理
-			m_pPolygon[nCount]->Uninit();
+			m_apPolygon[nCount]->Uninit();
 
 			// メモリの解放
-			delete m_pPolygon[nCount];
-			m_pPolygon[nCount] = nullptr;
+			delete m_apPolygon[nCount];
+			m_apPolygon[nCount] = nullptr;
 		}
+	}
+
+	if (m_pColorGauge)
+	{
+		// 終了処理
+		m_pColorGauge->Uninit();
+
+		// メモリの解放
+		delete m_pColorGauge;
+		m_pColorGauge = nullptr;
 	}
 
 	// オブジェクトの破棄
@@ -150,7 +169,7 @@ void CPaintnum::Update()
 			m_fChangeSize[nCount] += fDist * SIZE_CHANGE_RATE;
 
 			// 座標をずらす処理
-			m_PaintInfo[nCount].pos = D3DXVECTOR3(m_fChangeSize[nCount] + ShiftSize(nCount), m_pos.y, 0.0f);
+			m_PaintInfo[nCount].pos = D3DXVECTOR3(m_fChangeSize[nCount] + ShiftSize(nCount) + (SUBTRACT_GAUGE_SIZE.x / 2.0f), m_pos.y, 0.0f);
 
 			// ポリゴンの座標をセット
 			SetPolygonPos(nCount);
@@ -169,10 +188,15 @@ void CPaintnum::Draw()
 	// 描画
 	for (int nCount = 0; nCount < MAX_PLAYER; nCount++)
 	{
-		if (m_pPolygon[nCount])
+		if (m_apPolygon[nCount])
 		{
-			m_pPolygon[nCount]->Draw();
+			m_apPolygon[nCount]->Draw();
 		}
+	}
+
+	if (m_pColorGauge)
+	{
+		m_pColorGauge->Draw();
 	}
 }
 
@@ -232,9 +256,9 @@ void CPaintnum::SetPolygonPos(int nCount)
 	Pos[2] = D3DXVECTOR3(m_PaintInfo[nCount].pos.x - m_fChangeSize[nCount] / 2.0f, m_PaintInfo[nCount].pos.y + m_PaintInfo[nCount].size.y, 0.0f);
 	Pos[3] = D3DXVECTOR3(m_PaintInfo[nCount].pos.x + m_fChangeSize[nCount] / 2.0f, m_PaintInfo[nCount].pos.y + m_PaintInfo[nCount].size.y, 0.0f);
 
-	if (m_pPolygon[nCount])
+	if (m_apPolygon[nCount])
 	{
 		// 頂点ごとの情報をセット
-		m_pPolygon[nCount]->SetVertexPos(Pos);
+		m_apPolygon[nCount]->SetVertexPos(Pos);
 	}
 }

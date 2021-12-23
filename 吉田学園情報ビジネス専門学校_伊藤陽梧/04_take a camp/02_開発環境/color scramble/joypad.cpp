@@ -1,7 +1,7 @@
 //====================================================
 //
 // ジョイパッドクラスの処理[joypad.cpp]
-// Author:伊藤陽梧
+// Author : 伊藤陽梧
 //
 //====================================================
 
@@ -65,7 +65,7 @@ void CInputJoypad::Update(void)
 	memset(m_aJoyStateTriggerLTRT, 0, sizeof(m_aJoyStateTriggerLTRT));
 	memset(m_aJoyStateReleaseLTRT, 0, sizeof(m_aJoyStateReleaseLTRT));
 
-	for (int nCountJoystick = 0; nCountJoystick < MAX_JOYSTICK_NUM; nCountJoystick++)
+	for (int nCountJoystick = 0; nCountJoystick < XUSER_MAX_COUNT; nCountJoystick++)
 	{
 		// ジョイパッドの情報の取得
 		if (GetPadState(state, nCountJoystick) == ERROR_SUCCESS)

@@ -65,7 +65,7 @@ CHARACTERSET
 	PARTSSET
 		INDEX = 3					# ì™
 		PARENT = 1					# (êe)è„îºêg
-		POS = 0.0 3.5 0.0
+		POS = 0.0 3.0 0.0
 		ROT = 0.00 0.00 0.00
 	END_PARTSSET
 

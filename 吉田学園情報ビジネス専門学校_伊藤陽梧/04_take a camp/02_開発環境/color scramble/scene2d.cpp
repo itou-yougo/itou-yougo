@@ -10,10 +10,7 @@
 //******************************
 #include "scene2d.h"
 #include "renderer.h"
-#include "scene.h"
 #include "manager.h"
-#include "keyboard.h"
-#include "joypad.h"
 
 //******************************
 // マクロ定義
@@ -200,6 +197,16 @@ void CScene2d::SetPos(const D3DXVECTOR3 pos)
 
 	// アンロック
 	m_pVtxBuff->Unlock();
+}
+
+//===================================
+// 角度のセット
+//===================================
+void CScene2d::SetAngle(const float fAngle)
+{
+	m_fAngle = fAngle;
+
+	SetPos(m_pos);
 }
 
 //===================================

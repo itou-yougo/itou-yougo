@@ -20,6 +20,7 @@
 //=============================
 class CScene2d;
 class CScoreKill;
+class CPolygon;
 
 //=============================
 // クラス定義
@@ -51,6 +52,7 @@ private:
 	CScene2d * m_pBg;						// 背景ポリゴン
 	CScoreKill* m_pScoreKill;	// キルスコア
 	D3DXVECTOR3 m_ScorePos[MAX_PLAYER];
+	CPolygon * m_pBackGroundPolygon;
 
 };
 

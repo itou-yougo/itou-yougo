@@ -45,6 +45,8 @@ public:
 
 	D3DXCOLOR GetRimColor(void) { return m_RimColor; }
 	void SetRimColor(D3DXCOLOR col) { m_RimColor = col; }
+	D3DXCOLOR GetTexColor(void) { return m_TexColor; }
+	void SetTexColor(D3DXCOLOR col) { m_TexColor = col; }
 	CResourceCharacter::CHARACTER_TYPE GetCharacterType(void) { return m_charaType; }
 	void SetCharacterType(CResourceCharacter::CHARACTER_TYPE type);
 
@@ -58,6 +60,7 @@ private:
 	CResourceCharacter::CHARACTER_TYPE m_charaType;
 	CMotion *m_apMotion[CResourceCharacter::MOTION_MAX];  // アニメーションポインタ
 	D3DXCOLOR m_RimColor; // リムから―
+	D3DXCOLOR m_TexColor; // テクスチャカラー
 };
 
 #endif

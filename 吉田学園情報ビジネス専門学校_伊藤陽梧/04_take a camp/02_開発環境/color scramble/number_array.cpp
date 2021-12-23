@@ -26,6 +26,7 @@
 #define ODD_NUMBER_DIVISION (2.0f * KERNING_DIVISION)		// 奇数を割る数
 #define EVEN_NUMBER_DIVISION (20.0f * KERNING_DIVISION)	    // 偶数を割る数
 #define NUMBER_POS_Y 35.0f
+
 //==================================
 // コンストラクタ
 //==================================
@@ -219,6 +220,9 @@ void CNumberArray::SetNumber(void)
 			// 行列から角度を取得
 			const float fAngle = atan2f(mtxRot._31, mtxRot._33);
 			const float fAngle2 = atan2f(mtxRot._11, mtxRot._13);
+
+			//// 座標の設定
+			//m_apNumber[nIndex]->SetPos(D3DXVECTOR3(/*cosf(fAngle) * */(m_pos.x + fKerning), m_pos.y, /*sinf(fAngle) * */(m_pos.z + fKerning)));
 
 			// 座標の設定
 			m_apNumber[nIndex]->SetPos(Getpos +

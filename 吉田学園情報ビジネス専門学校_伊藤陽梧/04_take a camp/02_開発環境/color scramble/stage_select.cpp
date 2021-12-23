@@ -234,4 +234,12 @@ void CStageSelect::SelectStageType(void)
 	}
 
 	m_nWaitCnt = 0;
+
+	// Œˆ’èƒL[
+	if (!entryData.bController && pKey->GetKeyTrigger(CPlayer::GetPlayerControllKey(entryData.nControllNum, CPlayer::KEY_RECESSION))
+		|| entryData.bController && pJoy->GetButtonState(XINPUT_GAMEPAD_A, pJoy->BUTTON_TRIGGER, entryData.nControllNum))
+	{
+		CGame::SetMapType(m_selectStageType);
+		CManager::GetFade()->SetFade(CManager::MODE_GAME);
+	}
 }

@@ -20,7 +20,7 @@
 //*****************************
 #define NORMAL_SKIIL_HIGHROT (1.0f)
 #define NORMAL_SKIIL_ROWROT (1.7f)
-#define NORMAL_SKIIL_SIZE D3DXVECTOR3(10.5f,9.5f,10.5f)
+#define NORMAL_SKIIL_SIZE D3DXVECTOR3(8.5f,6.5f,8.5f)
 #define NORMAL_SKIIL_POS D3DXVECTOR3(0.0f,0.0f,0.0f)
 #define NORMAL_SKIIL_COL D3DXCOLOR(0.0f,0.0f,0.0f)
 
@@ -58,7 +58,7 @@ public:
 	virtual void Uninit(void);  // èIóπ
 	virtual void Update(void);  // çXêV
 	virtual	void Draw(void);    // ï`âÊ
-	LPDIRECT3DTEXTURE9 GetTexture(void) { return m_apTexture[EFFECTTYPE_MAX]; }
+	LPDIRECT3DTEXTURE9 GetTexture(int nIndex) { return m_apTexture[nIndex]; }
 
 
 private:

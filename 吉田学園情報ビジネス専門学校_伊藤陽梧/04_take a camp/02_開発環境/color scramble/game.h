@@ -22,6 +22,7 @@
 class CCamera;
 class CRuleManager;
 class CMapManager;
+class CGameStart;
 //*****************************
 //マクロ定義
 //*****************************
@@ -56,6 +57,7 @@ public:
 	static CMap* GetStage(void) { return m_pMap; }
 	static CMapManager::MAP_TYPE GetMapType(void) { return m_MapType; }
 	static void SetMapType(CMapManager::MAP_TYPE MapType) { m_MapType = MapType; }
+
 private:
 
 	//*****************************
@@ -64,6 +66,7 @@ private:
 	static CRuleManager* m_pRuleManager; // ルールマネージャー
 	static CMap *m_pMap;			 // ステージポインタ
 	static CMapManager::MAP_TYPE m_MapType;// マップのタイプ
-};
+	CGameStart * m_pGameStart;
+};	
 
 #endif

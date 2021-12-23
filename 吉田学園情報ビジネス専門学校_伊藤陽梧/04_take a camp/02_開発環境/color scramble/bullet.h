@@ -42,6 +42,7 @@ public:
 	void Draw(void);		// •`‰æˆ—
 
 	void CollisionPlayer(void);	// “–‚½‚è”»’è
+	void CollisionDummy(void);	// “–‚½‚è”»’è
 	void KillCount(void);
 
 	CCollision* GetCollision(void) { return m_pCollision; }

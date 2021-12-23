@@ -33,7 +33,7 @@ const std::string CResourceModel::m_aModelPath[CResourceModel::MODEL_MAX]
 	"data/Models/needle.x",	// ‚Æ‚°
 	"data/Models/00_speedup.x",	// ƒ_ƒbƒVƒ…
 	"data/Models/00_hatena.x",	// ”½“]
-	"data/Models/stage/desk.x",	// Š÷
+	"data/Models/stage/01_stage.x",	// Š÷
 
 	"data/Models/bgobject/03_x/00_tree.x",
 	"data/Models/bgobject/03_x/01_matoari.x",
@@ -46,6 +46,7 @@ const std::string CResourceModel::m_aModelPath[CResourceModel::MODEL_MAX]
 	"data/Models/bgobject/03_x/09_enogu.x",
 	"data/Models/bgobject/03_x/10_enpitu.x",
 	"data/Models/bgobject/03_x/11_magcup.x",
+	"data/Models/dummy.x",
 };
 
 //===================================

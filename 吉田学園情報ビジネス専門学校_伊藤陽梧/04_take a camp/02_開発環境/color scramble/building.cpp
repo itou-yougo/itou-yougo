@@ -22,7 +22,7 @@
 //******************************
 // コンストラクタ
 //******************************
-CBuilding::CBuilding() : CModel(OBJTYPE_ITEM)
+CBuilding::CBuilding() : CModel(OBJTYPE_BULDING)
 {
 	m_rot = D3DXVECTOR3(0.5f, 0.5f, 0.5f);//角度
 	m_move = D3DXVECTOR3(0.5f, 0.5f, 0.5f);//移動

@@ -42,15 +42,18 @@ public:
 		OBJTYPE_TILE,          // タイル
 		OBJTYPE_COLOR_TILE,    // 色付きタイル
 		OBJTYPE_PLAYER,        // プレイヤー
+		OBJTYPE_DUMMY,         // ダミー
 		OBJTYPE_BULLET,        // 弾
 		OBJTYPE_PEINT,		   // 塗り判定用
 		OBJTYPE_ITEM,          // アイテム
 		OBJTYPE_MAP,           // マップ
+		OBJTYPE_BULDING,       // マップ
 		OBJTYPE_EFFECT,        // エフェクト
 		OBJTYPE_PARTICLE,      // パーティクル
 		OBJTYPE_MOTION,        // モーション
-		OBJTYPE_UI_1,            // UI
-		OBJTYPE_UI_2,            // UI
+		OBJTYPE_UI_1,          // UI
+		OBJTYPE_UI_2,          // UI
+        OBJTYPE_EFFECT_2,      // UIより前に出すエフェクト
 		OBJTYPE_ACT_RANGE,	   // 行動範囲
 		OBJTYPE_COLLISION,     // コリジョン
 		OBJTYPE_SYSTEM,        // システム

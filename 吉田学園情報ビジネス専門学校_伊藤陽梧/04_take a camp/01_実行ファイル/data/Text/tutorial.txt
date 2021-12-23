@@ -1,0 +1,59 @@
+SCRIPT		# この行は絶対消さないこと！
+
+//================================================================
+//
+// POS        :ウィンドウを表示する中心の座標
+// WINDOWRANGE:ウィンドウを表示する範囲
+//             左から「左上のX座標、Y座標、右上のX座標、Y座標」
+// FONTSIZE   :フォントのサイズ
+// COLOR      :フォントの色
+// SAY        :表示する文字(セリフ)
+// NR         :改行
+// ENTER      :もじの表示を止める
+//             ENTERのあとにSAYを書いていたらその文字を表示する
+//
+// 表示する文字はTEXT_DATASETとEND_TEXT_DATASETの間に書いてください
+// 文字はウィンドウの大きさに合わせて改行するので気をつけてください
+//================================================================
+
+TEXT_DATASET
+POS = 640 620
+WINDOWRANGE = -330 -40 330 40
+FONTSIZE = 40
+COLOR = 0.0 0.0 0.0 1.0
+SAY = 移動してタイルを10マス塗ってみよう！
+NR
+SAY = 移動はスティック、十字キーだよ！
+ENTER
+END_TEXT_DATASET
+
+TEXT_DATASET
+POS = 640 640
+WINDOWRANGE = -320 -20 320 20
+SAY = タイルを10マス重ね塗りしてみよう！
+ENTER
+END_TEXT_DATASET
+
+TEXT_DATASET
+WINDOWRANGE = -300 -40 300 40
+SAY = 攻撃してかかしを倒してみよう！
+NR
+SAY = 攻撃はXボタンだよ！
+ENTER
+END_TEXT_DATASET
+
+TEXT_DATASET
+WINDOWRANGE = -300 -40 300 40
+SAY = 必殺技でかかしを倒してみよう！
+NR
+SAY = 必殺技はYボタンだよ！
+ENTER
+END_TEXT_DATASET
+
+TEXT_DATASET
+WINDOWRANGE = -90 -20 90 20
+SAY = 自由だよ!
+ENTER
+END_TEXT_DATASET
+
+END_SCRIPT		# この行は絶対消さないこと！

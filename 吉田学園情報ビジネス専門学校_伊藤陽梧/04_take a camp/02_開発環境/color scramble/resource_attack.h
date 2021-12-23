@@ -16,8 +16,8 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MAX_ATTACK_SIZE_X	(20)	//最大ブロック数
-#define MAX_ATTACK_SIZE_Y	(20)	//最大ステージサイズ
+#define MAX_ATTACK_SIZE_X	(50)	//最大ブロック数
+#define MAX_ATTACK_SIZE_Y	(50)	//最大ステージサイズ
 #define MAX_ATTACK_LEVEL	(4)		//攻撃の最大レベル
 #define MAX_HIT_TYPE		(8)		//ヒットマスタイプフレーム数の最大数
 #define MIN_HIT_TYPE		(0)		//ヒットマスタイプフレーム数の最小数
@@ -66,6 +66,7 @@ public:
 		int			nMaxHitRange;										// 最大ヒットマス
 		SQUARE_DATA SquareData[MAX_ATTACK_SIZE_Y*MAX_ATTACK_SIZE_X];	// 攻撃のマスデータ[読み込み限界の縦横]
 		int			nAttackFrame[MAX_HIT_TYPE];							// 攻撃速度
+		int			nTypeHitRange;										// タイプごとのヒットマス数
 	}ATTACK_SQUARE_DATA;
 
 	//関数定義

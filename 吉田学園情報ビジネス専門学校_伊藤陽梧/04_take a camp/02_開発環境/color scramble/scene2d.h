@@ -42,7 +42,7 @@ public:
 	void SetPos(const D3DXVECTOR3 pos);
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	// 回転角度のセット、取得
-	void SetAngle(const float fAngle) { m_fAngle = fAngle; }
+	void SetAngle(const float fAngle);
 	float GetAngle(void) { return m_fAngle; }
 	// サイズのセット、取得
 	void SetSize(const D3DXVECTOR3 size);

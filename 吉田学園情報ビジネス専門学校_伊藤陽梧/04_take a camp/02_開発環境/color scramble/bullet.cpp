@@ -14,6 +14,7 @@
 #include "collision.h"
 #include "peint_collision.h"
 #include "kill_count.h"
+#include "dummy.h"
 
 //=============================================================================
 // マクロ定義
@@ -139,8 +140,16 @@ void CBullet::Update()
 	{
 		m_pCollision->SetPos(D3DXVECTOR3(BulletPos.x, BulletPos.y + BULLET_ONE_SIDE / 2, BulletPos.z));
 	}
-	// プレイヤーとの当たり判定
-	CollisionPlayer();
+
+	// チュートリアルだけプレイヤーの判定をしないようにする
+	if (CManager::GetMode() != CManager::MODE_TUTORIAL)
+	{
+		// プレイヤーとの当たり判定
+		CollisionPlayer();
+	}
+
+	// ダミーとの当たり判定
+	CollisionDummy();
 
 	// 位置に移動量を加算する
 	BulletPos += m_move;
@@ -158,7 +167,6 @@ void CBullet::Update()
 		Uninit();
 	}
 }
-
 //=============================================================================
 // 描画処理
 //=============================================================================
@@ -205,6 +213,36 @@ void CBullet::CollisionPlayer(void)
 			}
 		}
 			pPlayer = (CPlayer*)pPlayer->GetNext();
+	}
+}
+
+//=============================================================================
+// 当たり判定の処理
+//=============================================================================
+void CBullet::CollisionDummy(void)
+{
+	CDummy * pDummy = (CDummy*)GetTop(OBJTYPE_DUMMY);
+
+	while (pDummy != NULL)
+	{
+		//当たり判定処理
+		if (CCollision::CollisionSphere(m_pCollision, pDummy->GetCollision()))
+		{
+			// 死亡状態にする
+			pDummy->Death();
+
+			//キル時のカウント
+			KillCount();
+
+			//タイルを塗る用の当たり判定生成
+			for (int nPeint = 0; nPeint < MAX_PEINT; nPeint++)
+			{
+				m_pPeintCollision[nPeint] = CPeintCollision::Create(m_PeintPos[nPeint] + GetPos(), m_nPlayerNum);
+			}
+
+			return;
+		}
+		pDummy = (CDummy*)pDummy->GetNext();
 	}
 }
 

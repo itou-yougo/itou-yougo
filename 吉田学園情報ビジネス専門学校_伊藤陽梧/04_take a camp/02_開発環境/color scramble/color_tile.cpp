@@ -397,7 +397,7 @@ void CColorTile::Peint(int nColorNumber, int nPlayerNum)
 		{
 			// カウントの初期化
 			m_nCntStep = PEINT_COUNT;
-		//	m_pPaintTime->SetPaintTime(PEINT_COUNT);
+			m_pPaintTime->SetPaintTime(PEINT_COUNT);
 
 			// 最後に当たったプレイヤーの保存
 			m_nLastHitPlayerNum = nPlayerNum;

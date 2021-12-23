@@ -1,7 +1,7 @@
 //====================================================
 //
 // ジョイパッドヘッダ [joypad.h]
-// Author:伊藤陽梧
+// Author : 伊藤陽梧
 //
 //====================================================
 
@@ -9,16 +9,16 @@
 #ifndef _JOYPAD_H_
 #define _JOYPAD_H_
 
-//====================================================
+//=============================
 // インクルードファイル
-//====================================================
+//=============================
 #include "main.h"
 #include "input.h"
 
-//====================================================
+//=============================
 //マクロ定義
-//====================================================
-#define MAX_JOYSTICK_NUM (4)			// JOYPAD接続上限
+//=============================
+
 
 //ジョイパッドクラス
 class CInputJoypad : public CInput
@@ -113,14 +113,14 @@ private:
 	//============
 	// メンバ変数
 	//============
-	WORD m_aJoyState[MAX_JOYSTICK_NUM][MAX_PAD_BUTTON];			// ジョイパッドの入力情報ワーク
-	WORD m_aJoyStateTrigger[MAX_JOYSTICK_NUM][MAX_PAD_BUTTON];	// ジョイパッドのトリガー情報
-	WORD m_aJoyStateRelease[MAX_JOYSTICK_NUM][MAX_PAD_BUTTON];	// ジョイパッドのリリース情報
+	WORD m_aJoyState[XUSER_MAX_COUNT][MAX_PAD_BUTTON];			// ジョイパッドの入力情報ワーク
+	WORD m_aJoyStateTrigger[XUSER_MAX_COUNT][MAX_PAD_BUTTON];	// ジョイパッドのトリガー情報
+	WORD m_aJoyStateRelease[XUSER_MAX_COUNT][MAX_PAD_BUTTON];	// ジョイパッドのリリース情報
 
-	bool m_aJoyStateLTRT[MAX_JOYSTICK_NUM][MAX_PAD_TRIGGER];		// LTRTの入力情報ワーク
-	bool m_aJoyStateTriggerLTRT[MAX_JOYSTICK_NUM][MAX_PAD_TRIGGER];	// LTRTのトリガー情報
-	bool m_aJoyStateReleaseLTRT[MAX_JOYSTICK_NUM][MAX_PAD_TRIGGER];	// LTRTのリリース情報
+	bool m_aJoyStateLTRT[XUSER_MAX_COUNT][MAX_PAD_TRIGGER];		// LTRTの入力情報ワーク
+	bool m_aJoyStateTriggerLTRT[XUSER_MAX_COUNT][MAX_PAD_TRIGGER];	// LTRTのトリガー情報
+	bool m_aJoyStateReleaseLTRT[XUSER_MAX_COUNT][MAX_PAD_TRIGGER];	// LTRTのリリース情報
 
-	float m_fVibrationTime[MAX_JOYSTICK_NUM];	// 振動する時間
+	float m_fVibrationTime[XUSER_MAX_COUNT];	// 振動する時間
 };
 #endif

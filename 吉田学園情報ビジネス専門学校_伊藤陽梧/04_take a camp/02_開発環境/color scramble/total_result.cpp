@@ -17,15 +17,17 @@
 #include "fade.h"
 #include "scene2d.h"
 #include "camera_charaselect.h"
+#include "polygon.h"
+#include "stage_texture.h"
 
 //**********************************
 // マクロ定義
 //**********************************
+#define BG_COLOR D3DXCOLOR(0.4f,0.4f,0.4f,0.6f)
 
 //**********************************
 // 静的メンバ変数宣言
 //**********************************
-
 
 //=============================
 // コンストラクタ
@@ -69,8 +71,8 @@ HRESULT CTotalResult::Init(void)
 {
 	// 背景の生成
 	m_pBg = CScene2d::Create();
-	m_pBg->SetSize(D3DXVECTOR3(SCREEN_WIDTH - 15, SCREEN_HEIGHT - 20, 0.0f));
-	m_pBg->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
+	m_pBg->SetSize(D3DXVECTOR3(SCREEN_WIDTH - 15.0f, SCREEN_HEIGHT - 20.0f, 0.0f));
+	m_pBg->SetColor(BG_COLOR);
 	m_pBg->SetPriority(OBJTYPE_BG);
 
 	// カメラ生成
@@ -78,6 +80,9 @@ HRESULT CTotalResult::Init(void)
 
 	//スコア生成
 	CTotalScore::Create();
+
+	m_pBackGroundPolygon = CPolygon::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f));
+	m_pBackGroundPolygon->BindTexture(CStageTexture::GetStateTexturePointa()->GetTexture());
 	return S_OK;
 }
 
@@ -86,6 +91,13 @@ HRESULT CTotalResult::Init(void)
 //=============================
 void CTotalResult::Uninit(void)
 {
+	if (m_pBackGroundPolygon != NULL)
+	{
+		m_pBackGroundPolygon->Uninit();
+		delete m_pBackGroundPolygon;
+		m_pBackGroundPolygon = NULL;
+	}
+
 	// カメラクラスの解放処理
 	CCamera * pCamera = CManager::GetCamera();
 	if (pCamera != NULL)
@@ -133,5 +145,7 @@ void CTotalResult::Draw(void)
 	{
 		pCamera->SetCamera();
 	}
+
+	m_pBackGroundPolygon->Draw();
 }
 

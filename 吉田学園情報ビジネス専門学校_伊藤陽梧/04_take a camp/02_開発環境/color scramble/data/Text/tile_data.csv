@@ -1,4 +1,4 @@
-Tile_Data_Num,,9
+Tile_Data_Num,,12
 0,なし,TILE_NONE
 1,1Pスポーン,TILE_PLAYER
 2,2Pスポーン,TILE_PLAYER
@@ -8,3 +8,6 @@ Tile_Data_Num,,9
 6,とげ,TILE_NEEDLE
 7,前後移動,TILE_AROUND_MOVE
 8,横移動,TILE_SIDEWAYS_MOVE
+9,ワープ床1,TILE_WARP_1
+10,ワープ床2,TILE_WARP_2
+11,案山子スポーン,TILE_DUMMY

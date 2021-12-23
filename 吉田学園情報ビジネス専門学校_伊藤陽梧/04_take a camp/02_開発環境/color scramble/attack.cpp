@@ -152,7 +152,10 @@ void CAttackBased::Update(void)
 		{
 			m_nLevel = 0;
 			m_nChargeCount = 0;
+			m_nAttackCount = 0;
+			m_nType = 0;
 		}
+		
 		//攻撃範囲のリセット
 		ResetAttackArea();
 		//チャージタイルフラグが立っている際
@@ -245,7 +248,7 @@ void CAttackBased::Attack(int AttackType)
 			//位置取得
 			D3DXVECTOR3 pos = m_pPlayer->GetPos();
 			//向き取得
-			D3DXVECTOR3 rot = m_pPlayer->GetRot();
+			D3DXVECTOR3 rot = m_pPlayer->GetRotDest();
 
 			//攻撃位置
 			D3DXVECTOR3 AttackPos = m_AttackSquare[m_nLevel].SquareData[nAttack].AttackPos * TILE_ONE_SIDE;
@@ -456,25 +459,23 @@ void CAttackBased::AttackCreate(void)
 		{
 			//攻撃処理
 			Attack(m_nType);
-
-			//スキルエフェクトの生成
-			if (m_nType == MIN_HIT_TYPE)
+      
+			for (int nCnt = 0; nCnt < m_AttackSquare[m_nLevel].nMaxHitRange; nCnt++)
 			{
-				for (int nCnt = 0; nCnt < GetAttackSquare().nMaxHitRange; nCnt++)
+				if (GetAttackSquare().SquareData[nCnt].RangeType == m_nType + 2)
 				{
-
 					//行列計算
 					D3DXVECTOR3 CreatePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					D3DXVECTOR3 AttackPos = GetAttackSquare().SquareData[nCnt].AttackPos * TILE_ONE_SIDE;
-					CreatePos.x = ((cosf(pPlaryer->GetRot().y)*AttackPos.x) + (sinf(pPlaryer->GetRot().y)*AttackPos.z));
+					CreatePos.x = ((cosf(pPlaryer->GetRotDest().y)*AttackPos.x) + (sinf(pPlaryer->GetRotDest().y)*AttackPos.z));
 					CreatePos.y = 1 * AttackPos.y;
-					CreatePos.z = ((-sinf(pPlaryer->GetRot().y)*AttackPos.x) + (cosf(pPlaryer->GetRot().y)*AttackPos.z));
+					CreatePos.z = ((-sinf(pPlaryer->GetRotDest().y)*AttackPos.x) + (cosf(pPlaryer->GetRotDest().y)*AttackPos.z));
 
 					CreateEffect(CreatePos);
 				}
-
 			}
-
+					
+				
 			//タイプが一定になったら
 			if (m_nType == MAX_HIT_TYPE)
 			{

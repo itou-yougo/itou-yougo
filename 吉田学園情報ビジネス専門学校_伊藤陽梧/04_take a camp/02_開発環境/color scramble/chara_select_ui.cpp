@@ -21,15 +21,17 @@
 #define BACK_SIZE D3DXVECTOR3(320.0f,720.0f,0.0f)            // ボードサイズ
 #define CONTOROll_ICON_SIZE D3DXVECTOR3(180.0f,180.0f,0.0f)  // コントローラーアイコンのサイズ
 #define PLAYERNUMBER_SIZE D3DXVECTOR3(240.0f,60.0f,0.0f)     // プレイヤー番号のサイズ
+#define READY_SIZE D3DXVECTOR3(48.0f*5.0f,18.6f*5.0f,0.0f)            // ボードサイズ
 #define PLAYERNUMBER_TEX_ANIM_MAX_X 1                        // 順位テクスチャ分割数*横
 #define PLAYERNUMBER_TEX_ANIM_MAX_Y 4                        // 順位テクスチャ分割数*縦
 #define ANIMATION_INTERVAL 15                                // アニメーション移行フレーム数
 #define UI_SPACE 320.0f                                      // UI間の左右のスペース
 #define BACK_DEFAULT_COLOR D3DXCOLOR(0.7f,0.7f,0.7f,1.0f)    // デフォルトのカラー
-#define ICON_COLOR_ON      D3DXCOLOR(1.0f,1.0f,1.0f,0.7f)    // アイコンのカラー
+#define ICON_COLOR_ON      D3DXCOLOR(1.0f,1.0f,1.0f,1.7f)    // アイコンのカラー
 #define ICON_COLOR_OFF     D3DXCOLOR(1.0f,1.0f,1.0f,0.0f)    // アイコンのカラー
 #define PLAYER_NUMBER_POS_Y 60.0f
 #define CHARACTER_MODEL_POS_Y 340.0f
+#define READY_ICON_POS_Y  450.0f
 
 //=============================
 // 静的メンバ変数宣言
@@ -92,7 +94,7 @@ HRESULT CCharaSelectUi::Init(void)
 		m_aPolygon[nCntPlayer].pBack->SetColor(BACK_DEFAULT_COLOR);
 		m_aPolygon[nCntPlayer].pBack->SetPriority(OBJTYPE_UI_2);
 		m_aPolygon[nCntPlayer].pBack->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_CHARASELECT_BACK));
-		
+
 		// アイコンの生成
 		m_aPolygon[nCntPlayer].pControllIcon = CScene2d::Create();
 		m_aPolygon[nCntPlayer].pControllIcon->SetSize(CONTOROll_ICON_SIZE);
@@ -105,11 +107,19 @@ HRESULT CCharaSelectUi::Init(void)
 		m_aPolygon[nCntPlayer].pPlayerNumber->SetSize(PLAYERNUMBER_SIZE);
 		m_aPolygon[nCntPlayer].pPlayerNumber->SetPos(D3DXVECTOR3(boardPos.x, PLAYER_NUMBER_POS_Y, boardPos.z));
 		m_aPolygon[nCntPlayer].pPlayerNumber->SetPriority(OBJTYPE_UI_2);
-		m_aPolygon[nCntPlayer].pPlayerNumber->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_NONE));
+		m_aPolygon[nCntPlayer].pPlayerNumber->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_NONE_UI));
 		m_aPolygon[nCntPlayer].pPlayerNumber->SetTextureUV(uv);
-		
+
 		// モデルポリゴンの生成
-		m_aPolygon[nCntPlayer].pCharaPolygon = CCharacterPolygon::Create(D3DXVECTOR3(boardPos.x, CHARACTER_MODEL_POS_Y, boardPos.z));
+		m_aPolygon[nCntPlayer].pCharaPolygon = CCharacterPolygon::Create(D3DXVECTOR3(boardPos.x, CHARACTER_MODEL_POS_Y, boardPos.z),CCharacterPolygon::MODE_ROTATION);
+
+		// アイコンの生成
+		m_aPolygon[nCntPlayer].pReadyIcon = CScene2d::Create();
+		m_aPolygon[nCntPlayer].pReadyIcon->SetSize(READY_SIZE);
+		m_aPolygon[nCntPlayer].pReadyIcon->SetPos(D3DXVECTOR3(boardPos.x, READY_ICON_POS_Y, boardPos.z));
+		m_aPolygon[nCntPlayer].pReadyIcon->SetColor(ICON_COLOR_OFF);
+		m_aPolygon[nCntPlayer].pReadyIcon->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_READEY));
+		m_aPolygon[nCntPlayer].pReadyIcon->SetPriority(OBJTYPE_UI_2);
 
 		boardPos.x += UI_SPACE;
 	}
@@ -159,7 +169,12 @@ void CCharaSelectUi::Update(void)
 		{// エントリー時
 			m_aPolygon[nCntPlayer].pBack->SetColor(GET_COLORMANAGER->GetIconColor(entryData.nColorNum));
 			m_aPolygon[nCntPlayer].pCharaPolygon->SetRimColor(GET_COLORMANAGER->GetStepColor(entryData.nColorNum,1));
+			m_aPolygon[nCntPlayer].pCharaPolygon->SetTexColor(GET_COLORMANAGER->GetIconColor(entryData.nColorNum));
 			m_aPolygon[nCntPlayer].pControllIcon->SetColor(ICON_COLOR_ON);
+
+			if (entryData.bReady) m_aPolygon[nCntPlayer].pReadyIcon->SetColor(ICON_COLOR_ON);
+			else m_aPolygon[nCntPlayer].pReadyIcon->SetColor(ICON_COLOR_OFF);
+
 			if (entryData.bController)
 			{
 				m_aPolygon[nCntPlayer].pControllIcon->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_CONTROLLER));
@@ -185,8 +200,9 @@ void CCharaSelectUi::Update(void)
 		{// 非エントリー時
 			m_aPolygon[nCntPlayer].pBack->SetColor(BACK_DEFAULT_COLOR);
 			m_aPolygon[nCntPlayer].pControllIcon->SetColor(ICON_COLOR_OFF);
+			m_aPolygon[nCntPlayer].pReadyIcon->SetColor(ICON_COLOR_OFF);
 			m_aPolygon[nCntPlayer].pPlayerNumber->SetTextureUV(uv);
-			m_aPolygon[nCntPlayer].pPlayerNumber->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_NONE));
+			m_aPolygon[nCntPlayer].pPlayerNumber->BindTexture(CResourceTexture::GetTexture(CResourceTexture::TEXTURE_NONE_UI));
 		}
 
 		// キャラタイプの設定

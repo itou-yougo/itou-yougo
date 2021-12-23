@@ -155,12 +155,14 @@ void CButton_Title::Select(void)
 		{
 			// ゲーム画面に遷移
 			CManager::GetFade()->SetFade(CManager::MODE_CHARA_SELECT);
+			CManager::SetDecMode(CManager::MODE_GAME);
 		}
 		// ボタンの種類がチュートリアルだった場合
 		if (m_nButton == BUTTON_TUTORIAL)
 		{
 			// チュートリアル画面に遷移
-			CManager::GetFade()->SetFade(CManager::MODE_TUTORIAL);
+			CManager::GetFade()->SetFade(CManager::MODE_CHARA_SELECT);
+			CManager::SetDecMode(CManager::MODE_TUTORIAL);
 		}
 	}
 }

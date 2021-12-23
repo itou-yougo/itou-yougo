@@ -25,6 +25,8 @@ CNumber::CNumber()
 {
 	m_pVtxBuff = NULL;
 	m_nNumber = 0;
+	m_pos = VEC3_ZERO;
+	m_size = VEC3_ZERO;
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -44,8 +46,11 @@ CNumber * CNumber::Create(const int nNum, const D3DXVECTOR3 pos, const D3DXVECTO
 	CNumber * pNumber = new CNumber;
 	
 	// 初期化処理
-	pNumber->Init(pos, size, col);
-	pNumber->SetNumber(nNum);
+	pNumber->m_pos = pos;
+	pNumber->m_size = size;
+	pNumber->m_col = col;
+	pNumber->m_nNumber = nNum;
+	pNumber->Init();
 
 	return pNumber;
 }
@@ -53,7 +58,7 @@ CNumber * CNumber::Create(const int nNum, const D3DXVECTOR3 pos, const D3DXVECTO
 //==================================
 // 初期化処理
 //==================================
-HRESULT CNumber::Init(const D3DXVECTOR3 pos, const D3DXVECTOR3 size, const D3DXCOLOR col)
+HRESULT CNumber::Init()
 {
 	VERTEX_2D *pVtx;// 頂点情報ポインタ
 
@@ -66,10 +71,10 @@ HRESULT CNumber::Init(const D3DXVECTOR3 pos, const D3DXVECTOR3 size, const D3DXC
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(pos.x - size.x, pos.y - size.y, 0);
-	pVtx[1].pos = D3DXVECTOR3(pos.x + size.x, pos.y - size.y, 0);
-	pVtx[2].pos = D3DXVECTOR3(pos.x - size.x, pos.y + size.y, 0);
-	pVtx[3].pos = D3DXVECTOR3(pos.x + size.x, pos.y + size.y, 0);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x, m_pos.y - m_size.y, 0);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x, m_pos.y - m_size.y, 0);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x - m_size.x, m_pos.y + m_size.y, 0);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x, m_pos.y + m_size.y, 0);
 
 	// テクスチャUV座標の設定
 	pVtx[0].tex = D3DXVECTOR2(0.0f + (0.1f * m_nNumber), 0.0f);
@@ -77,7 +82,6 @@ HRESULT CNumber::Init(const D3DXVECTOR3 pos, const D3DXVECTOR3 size, const D3DXC
 	pVtx[2].tex = D3DXVECTOR2(0.0f + (0.1f * m_nNumber), 1.0f);
 	pVtx[3].tex = D3DXVECTOR2(0.1f + (0.1f * m_nNumber), 1.0f);
 
-	m_col = col;
 	for (int nCnt = 0; nCnt < NUM_VERTEX; nCnt++)
 	{
 		pVtx[nCnt].col = m_col;
@@ -152,18 +156,23 @@ void CNumber::SetNumber(const int nNumber)
 	m_pVtxBuff->Unlock();
 }
 
-void CNumber::SetPos(const D3DXVECTOR3 pos, const D3DXVECTOR3 size)
+//==================================
+// 位置セッター
+//==================================
+void CNumber::SetPos(const D3DXVECTOR3 pos)
 {
 	VERTEX_2D *pVtx;// 頂点情報ポインタ
+
+	m_pos = pos;
 
 	// ロック
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(pos.x - size.x, pos.y - size.y, 0);
-	pVtx[1].pos = D3DXVECTOR3(pos.x + size.x, pos.y - size.y, 0);
-	pVtx[2].pos = D3DXVECTOR3(pos.x - size.x, pos.y + size.y, 0);
-	pVtx[3].pos = D3DXVECTOR3(pos.x + size.x, pos.y + size.y, 0);
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x, m_pos.y - m_size.y, 0);
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x, m_pos.y - m_size.y, 0);
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x - m_size.x, m_pos.y + m_size.y, 0);
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x, m_pos.y + m_size.y, 0);
 
 	// アンロック
 	m_pVtxBuff->Unlock();

@@ -105,7 +105,7 @@ HRESULT CTotalScore::Init(void)
 			m_pBg->SetPriority(OBJTYPE_BG);
 
 			// ƒLƒƒƒ‰ƒ|ƒŠƒSƒ“‚Ì¶¬
-			CCharacterPolygon*pCharaPolygon = CCharacterPolygon::Create(D3DXVECTOR3(fPosX, CHARACTER_POLYGON_POS_Y, 0.0f));
+			CCharacterPolygon*pCharaPolygon = CCharacterPolygon::Create(D3DXVECTOR3(fPosX, CHARACTER_POLYGON_POS_Y, 0.0f), CCharacterPolygon::MODE_ROTATION);
 			pCharaPolygon->SetCharaType(CCharaSelect::GetEntryData(nPlayer).charaType);
 			pCharaPolygon->SetRimColor(pColor->GetStepColor(CCharaSelect::GetEntryData(nPlayer).nColorNum, 1));
 

@@ -18,7 +18,7 @@
 // クラス定義
 //*****************************
 
-//カメラクラス
+//動的テクスチャクラス
 class CDynamicTexture
 {
 public:
@@ -31,8 +31,8 @@ public:
 	// static
 	static CDynamicTexture *Create(D3DXVECTOR2 size);  // クラス生成
 
-	HRESULT Init(D3DXVECTOR2 size);   // 初期化
-	void Uninit(void);	  // 終了
+	virtual HRESULT Init(D3DXVECTOR2 size);   // 初期化
+	virtual void Uninit(void);	  // 終了
 	void Begin(void);     // 開始
 	void End(void);       // 終了
 

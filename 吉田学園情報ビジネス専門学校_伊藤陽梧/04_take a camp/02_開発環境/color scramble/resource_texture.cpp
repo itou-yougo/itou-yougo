@@ -12,6 +12,7 @@
 #include "renderer.h"
 #include "manager.h"
 #include <assert.h>
+
 //******************************
 // マクロ定義
 //******************************
@@ -30,7 +31,7 @@ const std::string CResourceTexture::m_aTexPath[CResourceTexture::TEXTURE_MAX]
     "./data/Textures/tutorial_3.png",   // チュートリアル
 	"./data/Textures/frame/knight_flame.png",	   // リザルト(ナイトの背景)
 	"./data/Textures/frame/lancer_flame.png",	   // リザルト(ランサーの背景)
-	"./data/Textures/frame/wizard_flame.png.png",  // リザルト(ウィザードの背景)
+	"./data/Textures/frame/wizard_flame.png",	   // リザルト(ウィザードの背景)
 	"./data/Textures/frame/thief_flame.png",	   // リザルト(シーフの背景)
 	"./data/Textures/frame/magician_flame.png.png",// リザルト(奇術師の背景)
 	"./data/Textures/frame/archer_flame.png",	   // リザルト(アーチャーの背景)
@@ -38,8 +39,8 @@ const std::string CResourceTexture::m_aTexPath[CResourceTexture::TEXTURE_MAX]
 	"./data/Textures/tile.png",			// リザルトのタイルUI
 	"./data/Textures/effect/kirakira.png",	// パーティクル*四角
 	"./data/Textures/effect/00_wave.png",	// パーティクル*波紋
-	"./data/Textures/particle004.png",		// パーティクル*円
-	"./data/Textures/guruguru.png",			// パーティクル*円
+	"./data/Textures/effect/shoot.png",		// パーティクル*円
+	"./data/Textures/effect/meteor.png",			// パーティクル*円
 	"./data/Textures/number.png",			// ナンバー
 	"./data/Textures/frame.png",              // 枠
 	"./data/Textures/cross_mark.png",         // バツマーク
@@ -62,7 +63,17 @@ const std::string CResourceTexture::m_aTexPath[CResourceTexture::TEXTURE_MAX]
 	"./data/Textures/sword_icon.png",	      // 剣アイコン
 	"./data/Textures/stage_name.png",	      // ステージ名
 	"./data/Textures/stage_polygon_bg.png",	      // ステージ選択背景
-	
+	"./data/Textures/00_ready.png",	          // ready
+	"./data/Textures/01_go.png",			  // go
+	"./data/Textures/00_finish.png",		  // finish
+	"./data/Textures/00_nanbyou.png",		  // 残り何秒
+	"./data/Textures/lance_icon.png",         // 槍アイコン
+	"./data/Textures/arrow_icon.png",         // 矢アイコン
+	"./data/Textures/magicstick_icon.png",    // 魔法杖アイコン
+	"./data/Textures/knife_icon.png",         // ナイフアイコン
+	"./data/Textures/stick_icon.png",         // 杖アイコン
+	"./data/Textures/effect_explosion.png",   // リザルトエクスプロージョン
+	"./data/Textures/color_gauge_ui.png",	  // 色のゲージの枠
 };
 // テクスチャのパス
 const std::string CResourceTexture::m_aCubeTexPath[CResourceTexture::TEXTURE_CUBE_MAX]

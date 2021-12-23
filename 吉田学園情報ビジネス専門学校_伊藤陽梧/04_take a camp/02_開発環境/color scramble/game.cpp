@@ -29,6 +29,9 @@
 #include "kill_count.h"
 #include "paintnum.h"
 #include "player_model.h"
+#include "building.h"
+#include "game_start.h"
+#include "stage_texture.h"
 
 //=============================
 // ƒ}ƒNƒ’è‹`
@@ -47,6 +50,7 @@ CMapManager::MAP_TYPE CGame::m_MapType = CMapManager::MAP_TYPE_1; // ƒ}ƒbƒvƒ^ƒCƒ
 CGame::CGame()
 {
 	// •Ï”‚ÌƒNƒŠƒA
+	m_pGameStart = NULL;
 }
 
 //=============================
@@ -83,18 +87,20 @@ HRESULT CGame::Init(void)
 
 	// ”wŒi‚Ì¶¬
 	CBg::Create();
-	CModel::Create(D3DXVECTOR3(0.0f, -13.0f, 0.0f), CResourceModel::MODEL_DESK,D3DXVECTOR3(0.4f, 0.4f, 0.4f));
+	CModel::Create(D3DXVECTOR3(0.0f, -13.0f, 0.0f), CResourceModel::MODEL_DESK, D3DXVECTOR3(0.4f, 0.4f, 0.4f))->SetPriority(OBJTYPE_MAP);
 	//ƒXƒe[ƒW¶¬
 	m_pMap = CMap::Create(m_MapType);
 	
 	// ƒvƒŒƒCƒ„[‚²‚Æ‚ÌF‚ÌŠ„‡‚Ì•\Ž¦
-	CPaintnum::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 25.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, 50.0f, 0.0f));
-
+	CPaintnum::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 40.0f, 0.0f), D3DXVECTOR3(SCREEN_WIDTH, 50.0f, 0.0f) - SUBTRACT_GAUGE_SIZE);
 	// §ŒÀŽžŠÔƒNƒ‰ƒX
-	CTime::Create();
-
+	//CTime::Create();
+	CBuilding::Load();
 	// ƒ‰ƒCƒg‚ÌŒü‚«‚ÌÝ’è
 	CManager::GetLight()->SetDir(LIGHT_DIR_BASE);
+	// ready go‚Ì¶¬
+	m_pGameStart=CGameStart::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, START_UI_POS_Y, 0.0f), START_UI_SIZE);
+
 	return S_OK;
 }
 
@@ -140,6 +146,7 @@ void CGame::Update(void)
 	{
 		CManager::SetCamera(CCamera::Create());
 	}
+
 	CKillCount::AddTotalKill();
 	CColorTile::CountColorTile();
 
@@ -168,4 +175,7 @@ void CGame::Draw(void)
     {
 		pCamera->SetCamera();
     }
+
+	// ƒXƒe[ƒW‚Ì‘‚«ž‚Ý
+	CStageTexture::GetStateTexturePointa()->DrawStageInTex();
 }

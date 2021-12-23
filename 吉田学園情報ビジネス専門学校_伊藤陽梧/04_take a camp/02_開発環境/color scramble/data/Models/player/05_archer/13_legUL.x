@@ -244,7 +244,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/head.png";
+    "head.png";
    }
   }
   Material {

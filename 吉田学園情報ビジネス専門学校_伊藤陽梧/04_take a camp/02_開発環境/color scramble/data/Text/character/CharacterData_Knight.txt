@@ -7,8 +7,8 @@ CHARACTER_DATA
 	MOVE_COUNT = 2 
 	ATTACK_PATH = data/Text/attack/attack_Knight.csv
 	FINAL_ATTACK_PATH = data/Text/final_attack/final_attack_1.csv
-	FINAL_ATTACK_TIME = 30
-
+	FINAL_ATTACK_TIME = 80
+	
 	CHARGE_TIME_LIST
 		0 = 0
 		1 = 60
@@ -16,9 +16,10 @@ CHARACTER_DATA
 	CHARGE_TIME_LIST_END
 	
 	MOTION_LIST
-		IDLE   = data/Text/motion/motion_knight_neutral.txt
-		CHARGE = data/Text/motion/motion_knight_neutral.txt
-		ATTACK = data/Text/motion/motion_knight_attack.txt
+		IDLE   = data/Text/motion/00_knight/motion_knight_neutral.txt
+		CHARGE = data/Text/motion/00_knight/motion_knight_neutral.txt
+		ATTACK = data/Text/motion/00_knight/motion_knight_attack.txt
+		ROLL   = data/Text/motion/00_knight/motion_knight_roll.txt
 	MOTION_LIST_END
 	
 CHARACTER_DATA_END
